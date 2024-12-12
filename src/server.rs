@@ -1,11 +1,11 @@
-﻿use std::net::IpAddr;
-use crate::database_components::diesel::database_diesel::{init_db_pool, test_connection, DbPool};
-use log::LevelFilter;
-use rocket::{routes, Config};
-use rocket::figment::Figment;
-use rocket_cors::{AllowedHeaders, AllowedOrigins, Cors, CorsOptions};
 use crate::api_query::pong::pong;
+use crate::database_components::diesel::database_diesel::{init_db_pool, DbPool};
 use crate::utils::env_configuration::EnvConfiguration;
+use log::LevelFilter;
+use rocket::figment::Figment;
+use rocket::{routes, Config};
+use rocket_cors::{AllowedHeaders, AllowedOrigins, Cors, CorsOptions};
+use std::net::IpAddr;
 
 pub async fn set_up_rocket() {
     configure_logging();
@@ -33,7 +33,10 @@ fn get_server_config() -> Result<Config, rocket::figment::Error> {
 }
 
 fn parse_address_port() -> (IpAddr, u16) {
-    ("0.0.0.0".parse().unwrap(), EnvConfiguration::get().server_port)
+    (
+        "0.0.0.0".parse().unwrap(),
+        EnvConfiguration::get().server_port,
+    )
 }
 
 fn configure_cors() -> Cors {
@@ -48,8 +51,8 @@ fn configure_cors() -> Cors {
         allow_credentials: true,
         ..Default::default()
     }
-        .to_cors()
-        .expect("Error while building CORS")
+    .to_cors()
+    .expect("Error while building CORS")
 }
 
 async fn build_rocket(db_pool: DbPool, config: Config, cors: Cors) {
