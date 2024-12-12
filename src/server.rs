@@ -1,30 +1,28 @@
-﻿extern crate rocket;
-use crate::utils::env_configuration::EnvConfiguration;
+﻿use std::net::IpAddr;
+use crate::database_components::diesel::database_diesel::{init_db_pool, test_connection, DbPool};
 use log::LevelFilter;
-use reqwest::Client;
-use rocket::figment::Figment;
 use rocket::{routes, Config};
+use rocket::figment::Figment;
 use rocket_cors::{AllowedHeaders, AllowedOrigins, Cors, CorsOptions};
-use sqlx::PgPool;
-use std::net::IpAddr;
-#[allow(dead_code)]
-pub async fn set_up_rocket(db_pool: PgPool) {
+use crate::api_query::pong::pong;
+use crate::utils::env_configuration::EnvConfiguration;
+
+pub async fn set_up_rocket() {
     configure_logging();
 
     let config = get_server_config().expect("Failed to configure Rocket server");
     let cors = configure_cors();
-    let client = Client::new();
+    let pool = init_db_pool();
 
-    build_rocket(db_pool, config, cors, client).await;
+    build_rocket(pool, config, cors).await;
 }
 
-#[allow(dead_code)]
 fn configure_logging() {
     env_logger::Builder::new()
         .filter_level(LevelFilter::Info)
         .init();
 }
-#[allow(dead_code)]
+
 fn get_server_config() -> Result<Config, rocket::figment::Error> {
     let (address, port) = parse_address_port();
 
@@ -34,15 +32,12 @@ fn get_server_config() -> Result<Config, rocket::figment::Error> {
         .extract()
 }
 
-#[allow(dead_code)]
 fn parse_address_port() -> (IpAddr, u16) {
-    let port = EnvConfiguration::get().server_port;
-
-    ("0.0.0.0".parse().unwrap(), port)
+    ("0.0.0.0".parse().unwrap(), EnvConfiguration::get().server_port)
 }
-#[allow(dead_code)]
+
 fn configure_cors() -> Cors {
-    let exact = &[&format!("https://{}", EnvConfiguration::get().main_url)];
+    let exact = &[&format!("https://{}", "your_main_url.com")];
     CorsOptions {
         allowed_origins: AllowedOrigins::some_exact(exact),
         allowed_methods: vec!["GET", "POST", "PUT", "DELETE"]
@@ -53,17 +48,15 @@ fn configure_cors() -> Cors {
         allow_credentials: true,
         ..Default::default()
     }
-    .to_cors()
-    .expect("Error while building CORS")
+        .to_cors()
+        .expect("Error while building CORS")
 }
-#[allow(dead_code)]
-async fn build_rocket(db_pool: PgPool, config: Config, cors: Cors, client: Client) {
+
+async fn build_rocket(db_pool: DbPool, config: Config, cors: Cors) {
     rocket::custom(config)
         .attach(cors)
-        .attach(rocket::shield::Shield::default())
         .manage(db_pool)
-        .manage(client)
-        .mount("/api", routes![])
+        .mount("/api", routes![pong])
         .launch()
         .await
         .expect("Failed to launch Rocket server");

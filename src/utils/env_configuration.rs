@@ -8,13 +8,14 @@ pub struct EnvConfiguration {
     pub database_password: String,
     pub database_host: String,
     pub database_port: u16,
+    #[allow(dead_code)]
     pub main_url: String,
     pub server_port: u16,
 }
 
 impl EnvConfiguration {
     pub fn get() -> &'static EnvConfiguration {
-        dotenv::dotenv().ok();
+        dotenvy::dotenv().ok();
         CONFIG.get_or_init(|| EnvConfiguration {
             database_name: EnvConfiguration::unwrap_env("DATABASE_NAME", None),
             database_user: EnvConfiguration::unwrap_env("DATABASE_USER", None),

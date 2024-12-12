@@ -38,11 +38,10 @@ pub async fn init_db_pool() -> Result<PgPool> {
         .await?;
 
     pool.execute(
-        r#" CREATE TABLE IF NOT EXISTS test {
-            id SERIAL PRIMARY KEY,
-            test VARCHAR(255)
-        }         
-        "#,
+        r#"CREATE TABLE IF NOT EXISTS test (
+        id SERIAL PRIMARY KEY,
+        test VARCHAR(255)
+    );"#,
     )
     .await?;
 
