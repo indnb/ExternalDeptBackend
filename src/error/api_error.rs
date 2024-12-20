@@ -12,7 +12,7 @@ pub enum ApiError {
     NotFound,
     #[allow(dead_code)]
     #[error("Database error occurred")]
-    DatabaseError(#[from] sqlx::Error),
+    DatabaseError(#[from] diesel::result::Error),
     #[allow(dead_code)]
     #[error("Internal server error")]
     InternalServerError,

@@ -3,6 +3,7 @@ use std::env;
 
 static CONFIG: OnceCell<EnvConfiguration> = OnceCell::new();
 pub struct EnvConfiguration {
+    #[allow(dead_code)]
     pub database_name: String,
     pub database_user: String,
     pub database_password: String,
@@ -10,6 +11,7 @@ pub struct EnvConfiguration {
     pub database_port: u16,
     #[allow(dead_code)]
     pub main_url: String,
+    #[allow(dead_code)]
     pub server_port: u16,
 }
 

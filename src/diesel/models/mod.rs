@@ -1,6 +1,3 @@
-pub mod users;
-pub mod hackathon;
-pub mod news;
-pub mod news_media;
-pub mod announcement;
-mod users_role;
+pub mod hackathon_data;
+pub mod info_data;
+pub mod users_data;

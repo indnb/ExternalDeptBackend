@@ -19,7 +19,8 @@ CREATE TABLE users (
                        last_name VARCHAR(50) NOT NULL,
                        password_hash VARCHAR(255) NOT NULL,
                        phone VARCHAR(20) NOT NULL UNIQUE,
-                       role user_role DEFAULT 'User',
+                       email VARCHAR(255) NOT NULL UNIQUE,
+                       role user_role NOT NUll,
                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
