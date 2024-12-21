@@ -22,6 +22,24 @@ pub enum ApiError {
     #[allow(dead_code)]
     #[error("HTTP error")]
     HttpError,
+    #[allow(dead_code)]
+    #[error("Hashing error")]
+    HashingError(String),
+    #[allow(dead_code)]
+    #[error("Validation error")]
+    ValidationError(String),
+    #[allow(dead_code)]
+    #[error("Token generation error")]
+    TokenGenerationError(String),
+    #[allow(dead_code)]
+    #[error("Token decoded error")]
+    TokenDecodeError(String),
+    #[allow(dead_code)]
+    #[error("Unauthorized error")]
+    Unauthorized,
+    #[allow(dead_code)]
+    #[error("Invalid claims error")]
+    InvalidClaims,
 }
 
 impl<'r> Responder<'r, 'static> for ApiError {
@@ -34,6 +52,12 @@ impl<'r> Responder<'r, 'static> for ApiError {
             ApiError::InternalServerError => (Status::InternalServerError, "Internal server error"),
             ApiError::BadRequest => (Status::BadRequest, "Bad request error"),
             ApiError::HttpError => (Status::InternalServerError, "HTTP error occurred"),
+            ApiError::HashingError(_) => (Status::NotFound, "Hashing error"),
+            ApiError::ValidationError(_) => (Status::NotFound, "Validation error"),
+            ApiError::TokenGenerationError(_) => (Status::NotFound, "Token generation error"),
+            ApiError::TokenDecodeError(_) => (Status::NotFound, "Token decoded error"),
+            ApiError::Unauthorized => (Status::Unauthorized, "Unauthorized error"),
+            ApiError::InvalidClaims => (Status::Unauthorized, "Invalid claims error"),
         };
 
         let body = serde_json::to_string(&ApiErrorBody {

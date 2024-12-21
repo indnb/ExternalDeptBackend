@@ -67,7 +67,9 @@ impl Server {
                     // test
                     api::test::get::ping,
                     // user
-                    api::user::post::create_user,
+                    api::user::post::try_registration,
+                    api::user::get::confirm_new_user,
+                    api::user::get::get_role,
                     // hackathon
                     api::hackathon::post::create_hackathon,
                     // other

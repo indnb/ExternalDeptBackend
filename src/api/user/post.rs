@@ -1,30 +1,41 @@
-use crate::diesel::database_diesel::{get_connection, DbPool};
+use crate::data::user::UserJwt;
 use crate::diesel::models::users_data::users::UserInsertable;
 use crate::error::api_error::ApiError;
-use diesel::prelude::*;
+use crate::utils::env_configuration::CONFIG;
+use crate::utils::validation;
+use jsonwebtoken::{encode, Algorithm, EncodingKey, Header};
 use rocket::serde::json::Json;
-use rocket::{info, post, State};
-#[post("/create_user", data = "<user_data>")]
-pub async fn create_user(
-    db_pool: &State<DbPool>,
-    user_data: Json<UserInsertable<'_>>,
-) -> Result<Json<String>, ApiError> {
-    let mut db_connection = get_connection(db_pool)?;
+use rocket::{info, post};
 
-    let new_user = user_data.into_inner();
+#[post("/user/try_registration", data = "<user_data>")]
+pub async fn try_registration(user_data: Json<UserInsertable<'_>>) -> Result<String, ApiError> {
+    let mut new_user = user_data.into_inner();
 
-    let user_id = diesel::insert_into(crate::diesel::schema::users::table)
-        .values(new_user)
-        .returning(crate::diesel::schema::users::id)
-        .get_result::<i32>(&mut db_connection)
-        .map_err(|err| {
-            log::error!("Error inserting user: {:?}", err);
-            ApiError::DatabaseError(err)
-        })?;
+    let _ = validation::data::user::field(&mut new_user)?;
 
-    info!("Successfully inserted a new user with ID: {}", user_id);
-    Ok(Json(format!(
-        "User created successfully with ID: {}",
-        user_id
-    )))
+    let exp = chrono::Utc::now()
+        .checked_add_signed(chrono::Duration::minutes(5))
+        .expect("Failed to compute expiration time")
+        .timestamp() as usize;
+
+    let jwt_user = UserJwt {
+        first_name: new_user.first_name.to_string(),
+        last_name: new_user.last_name.to_string(),
+        password: new_user.password.to_string(),
+        email: new_user.email.to_string(),
+        phone: new_user.phone.to_string(),
+        role: new_user.role,
+        exp,
+    };
+
+    let token = encode(
+        &Header::new(Algorithm::HS256),
+        &jwt_user,
+        &EncodingKey::from_secret(CONFIG.get().unwrap().jwt_secret.as_ref()),
+    )
+    .map_err(|_| ApiError::InternalServerError)?;
+
+    info!("Token generated: {}", token);
+
+    Ok(format!("Email has been send with token - {}", token).to_string())
 }

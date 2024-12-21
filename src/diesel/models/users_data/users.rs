@@ -1,7 +1,7 @@
 use crate::diesel::models::users_data::users_role::UserRoleEnum;
 use chrono::NaiveDateTime;
 use diesel::{Insertable, Queryable};
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Queryable)]
 #[diesel(table_name = crate::diesel::schema::users)]
@@ -24,12 +24,13 @@ pub struct UserQueryable {
     pub updated_at: Option<NaiveDateTime>,
 }
 
-#[derive(Insertable, Debug, Deserialize)]
+#[derive(Insertable, Debug, Deserialize, Serialize)]
 #[diesel(table_name = crate::diesel::schema::users)]
 pub struct UserInsertable<'a> {
     pub first_name: &'a str,
     pub last_name: &'a str,
-    pub password_hash: &'a str,
+    #[diesel(column_name = "password_hash")]
+    pub password: &'a str,
     pub email: &'a str,
     pub phone: &'a str,
     pub role: UserRoleEnum,
