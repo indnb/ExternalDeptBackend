@@ -5,7 +5,7 @@ use serde::Deserialize;
 
 #[derive(Debug, Queryable)]
 #[diesel(table_name = crate::diesel::schema::users)]
-pub struct User {
+pub struct UserQueryable {
     #[allow(dead_code)]
     pub id: i32,
     #[allow(dead_code)]
@@ -26,7 +26,7 @@ pub struct User {
 
 #[derive(Insertable, Debug, Deserialize)]
 #[diesel(table_name = crate::diesel::schema::users)]
-pub struct InsertableUser<'a> {
+pub struct UserInsertable<'a> {
     pub first_name: &'a str,
     pub last_name: &'a str,
     pub password_hash: &'a str,

@@ -1,5 +1,4 @@
-use crate::api_query::pong::pong;
-use crate::api_query::user::create_user;
+use crate::api;
 use crate::diesel::database_diesel::{init_db_pool, DbPool};
 use crate::utils::env_configuration::EnvConfiguration;
 use log::LevelFilter;
@@ -65,8 +64,13 @@ impl Server {
             .mount(
                 "/api",
                 routes![
-                    pong,        // GET api/pong
-                    create_user  // POST api/user
+                    // test
+                    api::test::get::ping,
+                    // user
+                    api::user::post::create_user,
+                    // hackathon
+                    api::hackathon::post::create_hackathon,
+                    // other
                 ],
             )
             .launch()

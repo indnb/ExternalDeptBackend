@@ -1,13 +1,13 @@
 use crate::diesel::database_diesel::{get_connection, DbPool};
-use crate::diesel::models::users_data::users::InsertableUser;
+use crate::diesel::models::users_data::users::UserInsertable;
 use crate::error::api_error::ApiError;
 use diesel::prelude::*;
 use rocket::serde::json::Json;
 use rocket::{info, post, State};
-#[post("/user", data = "<user_data>")]
+#[post("/create_user", data = "<user_data>")]
 pub async fn create_user(
     db_pool: &State<DbPool>,
-    user_data: Json<InsertableUser<'_>>,
+    user_data: Json<UserInsertable<'_>>,
 ) -> Result<Json<String>, ApiError> {
     let mut db_connection = get_connection(db_pool)?;
 
