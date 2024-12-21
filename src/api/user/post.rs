@@ -15,7 +15,7 @@ use rocket::{info, post, State};
 pub async fn try_registration(user_data: Json<UserInsertable<'_>>) -> Result<String, ApiError> {
     let mut new_user = user_data.into_inner();
 
-    let _ = validation::data::user::field(&mut new_user)?;
+    validation::data::user::field(&mut new_user)?;
 
     let exp = chrono::Utc::now()
         .checked_add_signed(chrono::Duration::minutes(5))

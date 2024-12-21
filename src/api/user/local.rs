@@ -17,7 +17,7 @@ pub async fn create_user(db_pool: &State<DbPool>, new_user: UserJwt) -> Result<S
         phone: new_user.phone.as_str(),
         role: new_user.role,
     };
-    let _ = validation::data::user::field(&mut new_user)?;
+    validation::data::user::field(&mut new_user)?;
 
     let hashed_password = &hashing_data(&mut new_user.password.to_string())?;
     new_user.password = hashed_password;

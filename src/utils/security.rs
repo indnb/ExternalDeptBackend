@@ -19,9 +19,9 @@ pub fn verify_password(password: &str, hash: &str) -> Result<bool, ApiError> {
         ApiError::HashingError(err.to_string())
     })
 }
-pub fn decoded_data<T: DeserializeOwned>(jwt_token: &String) -> Result<TokenData<T>, ApiError> {
+pub fn decoded_data<T: DeserializeOwned>(jwt_token: &str) -> Result<TokenData<T>, ApiError> {
     decode::<T>(
-        &jwt_token,
+        jwt_token,
         &DecodingKey::from_secret(CONFIG.get().unwrap().jwt_secret.as_ref()),
         &Validation::new(Algorithm::HS512),
     )
