@@ -2,10 +2,10 @@ use crate::data::user::UserJwt;
 use crate::diesel::database_diesel::{get_connection, DbPool};
 use crate::diesel::models::users_data::users::UserInsertable;
 use crate::error::api_error::ApiError;
+use crate::utils::security::hashing_data;
 use crate::utils::validation;
 use diesel::RunQueryDsl;
 use rocket::{info, State};
-use crate::utils::security::hashing_data;
 
 pub async fn create_user(db_pool: &State<DbPool>, new_user: UserJwt) -> Result<String, ApiError> {
     let mut db_connection = get_connection(db_pool)?;

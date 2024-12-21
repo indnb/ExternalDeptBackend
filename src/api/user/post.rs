@@ -2,14 +2,14 @@ use crate::data::claims::Claims;
 use crate::data::user::{UserJwt, UserLoginRequest, UserLoginResponse};
 use crate::diesel::database_diesel::{get_connection, DbPool};
 use crate::diesel::models::users_data::users::{UserInsertable, UserQueryable};
-use crate::diesel::schema::users::dsl::{users, email};
+use crate::diesel::schema::users::dsl::{email, users};
 use crate::error::api_error::ApiError;
+use crate::utils::security::{encoded_data, verify_password};
 use crate::utils::validation;
+use diesel::QueryDsl;
 use diesel::{ExpressionMethods, RunQueryDsl};
 use rocket::serde::json::Json;
 use rocket::{info, post, State};
-use diesel::QueryDsl;
-use crate::utils::security::{encoded_data, verify_password};
 
 #[post("/user/try_registration", data = "<user_data>")]
 pub async fn try_registration(user_data: Json<UserInsertable<'_>>) -> Result<String, ApiError> {
@@ -63,7 +63,9 @@ pub async fn login_user(
                 Err(ApiError::Unauthorized("Password mismatched".to_string()))
             }
         }
-        Err(diesel::result::Error::NotFound) => Err(ApiError::Unauthorized("Email mismatched".to_string())),
+        Err(diesel::result::Error::NotFound) => {
+            Err(ApiError::Unauthorized("Email mismatched".to_string()))
+        }
         Err(e) => Err(ApiError::DatabaseError(e)),
     }
 }

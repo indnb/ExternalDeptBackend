@@ -1,4 +1,4 @@
-﻿use rocket::http::Status;
+use rocket::http::Status;
 use rocket::response::{Responder, Response};
 use rocket::Request;
 use serde::Serialize;
@@ -48,15 +48,29 @@ impl<'r> Responder<'r, 'static> for ApiError {
 
         let (status, message) = match self {
             ApiError::NotFound => (Status::NotFound, "Error not found".to_string()),
-            ApiError::DatabaseError(_) => (Status::InternalServerError, "Database error occurred".to_string()),
-            ApiError::InternalServerError => (Status::InternalServerError, "Internal server error".to_string()),
+            ApiError::DatabaseError(_) => (
+                Status::InternalServerError,
+                "Database error occurred".to_string(),
+            ),
+            ApiError::InternalServerError => (
+                Status::InternalServerError,
+                "Internal server error".to_string(),
+            ),
             ApiError::BadRequest => (Status::BadRequest, "Bad request error".to_string()),
-            ApiError::HttpError => (Status::InternalServerError, "HTTP error occurred".to_string()),
+            ApiError::HttpError => (
+                Status::InternalServerError,
+                "HTTP error occurred".to_string(),
+            ),
             ApiError::HashingError(_) => (Status::NotFound, "Hashing error".to_string()),
             ApiError::ValidationError(_) => (Status::NotFound, "Validation error".to_string()),
-            ApiError::TokenGenerationError(_) => (Status::NotFound, "Token generation error".to_string()),
+            ApiError::TokenGenerationError(_) => {
+                (Status::NotFound, "Token generation error".to_string())
+            }
             ApiError::TokenDecodeError(_) => (Status::NotFound, "Token decoded error".to_string()),
-            ApiError::Unauthorized(err) => (Status::Unauthorized, format!("Unauthorized error - {}", err).to_string()),
+            ApiError::Unauthorized(err) => (
+                Status::Unauthorized,
+                format!("Unauthorized error - {}", err).to_string(),
+            ),
             ApiError::InvalidClaims => (Status::Unauthorized, "Invalid claims error".to_string()),
         };
 
