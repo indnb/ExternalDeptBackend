@@ -3,7 +3,7 @@ use chrono::NaiveDateTime;
 use diesel::{Insertable, Queryable};
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Queryable)]
+#[derive(Debug, Queryable, Serialize)]
 #[diesel(table_name = crate::diesel::schema::users)]
 pub struct UserQueryable {
     #[allow(dead_code)]
@@ -14,6 +14,8 @@ pub struct UserQueryable {
     pub last_name: String,
     #[allow(dead_code)]
     pub password_hash: String,
+    #[allow(dead_code)]
+    pub email: String,
     #[allow(dead_code)]
     pub phone: String,
     #[allow(dead_code)]

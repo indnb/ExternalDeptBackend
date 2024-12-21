@@ -3,9 +3,9 @@ use crate::diesel::database_diesel::{get_connection, DbPool};
 use crate::diesel::models::users_data::users::UserInsertable;
 use crate::error::api_error::ApiError;
 use crate::utils::validation;
-use bcrypt::{hash, DEFAULT_COST};
 use diesel::RunQueryDsl;
 use rocket::{info, State};
+use crate::utils::security::hashing_data;
 
 pub async fn create_user(db_pool: &State<DbPool>, new_user: UserJwt) -> Result<String, ApiError> {
     let mut db_connection = get_connection(db_pool)?;
@@ -19,10 +19,7 @@ pub async fn create_user(db_pool: &State<DbPool>, new_user: UserJwt) -> Result<S
     };
     let _ = validation::data::user::field(&mut new_user)?;
 
-    let hashed_password = &hash(new_user.password, DEFAULT_COST).map_err(|err| {
-        log::error!("Error hashing password: {:?}", err);
-        ApiError::HashingError(err.to_string())
-    })?;
+    let hashed_password = &hashing_data(&mut new_user.password.to_string())?;
     new_user.password = hashed_password;
 
     let user_id = diesel::insert_into(crate::diesel::schema::users::table)

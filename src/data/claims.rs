@@ -24,7 +24,7 @@ impl Claims {
             .into_inner()
             != CONFIG.get().unwrap().admin_role
         {
-            return Err(ApiError::Unauthorized);
+            return Err(ApiError::Unauthorized("Claims not authorized".to_string()));
         }
         Ok(())
     }

@@ -1,11 +1,15 @@
-use crate::data::user::UserJwt;
-use crate::diesel::models::users_data::users::UserInsertable;
+use crate::data::claims::Claims;
+use crate::data::user::{UserJwt, UserLoginRequest, UserLoginResponse};
+use crate::diesel::database_diesel::{get_connection, DbPool};
+use crate::diesel::models::users_data::users::{UserInsertable, UserQueryable};
+use crate::diesel::schema::users::dsl::{users, email};
 use crate::error::api_error::ApiError;
-use crate::utils::env_configuration::CONFIG;
 use crate::utils::validation;
-use jsonwebtoken::{encode, Algorithm, EncodingKey, Header};
+use diesel::{ExpressionMethods, RunQueryDsl};
 use rocket::serde::json::Json;
-use rocket::{info, post};
+use rocket::{info, post, State};
+use diesel::QueryDsl;
+use crate::utils::security::{encoded_data, verify_password};
 
 #[post("/user/try_registration", data = "<user_data>")]
 pub async fn try_registration(user_data: Json<UserInsertable<'_>>) -> Result<String, ApiError> {
@@ -28,14 +32,38 @@ pub async fn try_registration(user_data: Json<UserInsertable<'_>>) -> Result<Str
         exp,
     };
 
-    let token = encode(
-        &Header::new(Algorithm::HS256),
-        &jwt_user,
-        &EncodingKey::from_secret(CONFIG.get().unwrap().jwt_secret.as_ref()),
-    )
-    .map_err(|_| ApiError::InternalServerError)?;
+    let token = encoded_data(&jwt_user)?;
 
-    info!("Token generated: {}", token);
+    info!("Email has been send with token - {}", token);
 
     Ok(format!("Email has been send with token - {}", token).to_string())
+}
+#[post("/user/login_user", data = "<login_data>")]
+pub async fn login_user(
+    db_pool: &State<DbPool>,
+    login_data: Json<UserLoginRequest>,
+) -> Result<Json<UserLoginResponse>, ApiError> {
+    let mut connection = get_connection(db_pool)?;
+    let login_data = login_data.into_inner();
+
+    let user: Result<UserQueryable, diesel::result::Error> = users
+        .filter(email.eq(login_data.email))
+        .first::<UserQueryable>(&mut connection);
+
+    match user {
+        Ok(user) => {
+            if verify_password(&login_data.password, &user.password_hash)? {
+                let token = encoded_data(&Claims::new(user.id))?;
+                Ok(Json(UserLoginResponse {
+                    id: user.id,
+                    email: user.email,
+                    token,
+                }))
+            } else {
+                Err(ApiError::Unauthorized("Password mismatched".to_string()))
+            }
+        }
+        Err(diesel::result::Error::NotFound) => Err(ApiError::Unauthorized("Email mismatched".to_string())),
+        Err(e) => Err(ApiError::DatabaseError(e)),
+    }
 }

@@ -36,7 +36,7 @@ pub enum ApiError {
     TokenDecodeError(String),
     #[allow(dead_code)]
     #[error("Unauthorized error")]
-    Unauthorized,
+    Unauthorized(String),
     #[allow(dead_code)]
     #[error("Invalid claims error")]
     InvalidClaims,
@@ -47,22 +47,22 @@ impl<'r> Responder<'r, 'static> for ApiError {
         log::error!("API error occurred: {:?}", self);
 
         let (status, message) = match self {
-            ApiError::NotFound => (Status::NotFound, "Error not found"),
-            ApiError::DatabaseError(_) => (Status::InternalServerError, "Database error occurred"),
-            ApiError::InternalServerError => (Status::InternalServerError, "Internal server error"),
-            ApiError::BadRequest => (Status::BadRequest, "Bad request error"),
-            ApiError::HttpError => (Status::InternalServerError, "HTTP error occurred"),
-            ApiError::HashingError(_) => (Status::NotFound, "Hashing error"),
-            ApiError::ValidationError(_) => (Status::NotFound, "Validation error"),
-            ApiError::TokenGenerationError(_) => (Status::NotFound, "Token generation error"),
-            ApiError::TokenDecodeError(_) => (Status::NotFound, "Token decoded error"),
-            ApiError::Unauthorized => (Status::Unauthorized, "Unauthorized error"),
-            ApiError::InvalidClaims => (Status::Unauthorized, "Invalid claims error"),
+            ApiError::NotFound => (Status::NotFound, "Error not found".to_string()),
+            ApiError::DatabaseError(_) => (Status::InternalServerError, "Database error occurred".to_string()),
+            ApiError::InternalServerError => (Status::InternalServerError, "Internal server error".to_string()),
+            ApiError::BadRequest => (Status::BadRequest, "Bad request error".to_string()),
+            ApiError::HttpError => (Status::InternalServerError, "HTTP error occurred".to_string()),
+            ApiError::HashingError(_) => (Status::NotFound, "Hashing error".to_string()),
+            ApiError::ValidationError(_) => (Status::NotFound, "Validation error".to_string()),
+            ApiError::TokenGenerationError(_) => (Status::NotFound, "Token generation error".to_string()),
+            ApiError::TokenDecodeError(_) => (Status::NotFound, "Token decoded error".to_string()),
+            ApiError::Unauthorized(err) => (Status::Unauthorized, format!("Unauthorized error - {}", err).to_string()),
+            ApiError::InvalidClaims => (Status::Unauthorized, "Invalid claims error".to_string()),
         };
 
         let body = serde_json::to_string(&ApiErrorBody {
             error: status.to_string(),
-            message: message.to_string(),
+            message,
         })
         .expect("Failed to serialize error body");
 
