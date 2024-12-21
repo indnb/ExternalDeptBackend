@@ -47,23 +47,5 @@ jobs:
       - name: Run Clippy
         run: cargo clippy -- -D warnings
 
-      - name: Build
-        run: cargo build --release --verbose
-
       - name: Run Tests
         run: cargo test --verbose
-
-      - name: Upload Build Artifacts
-        if: >
-          matrix.rust == 'stable' &&
-          github.event_name == 'push' &&
-          (
-            github.ref == 'refs/heads/main' ||
-            github.ref == 'refs/heads/master' ||
-            github.ref == 'refs/heads/dev' ||
-            github.ref == 'refs/heads/develop'
-          )
-        uses: actions/upload-artifact@v3
-        with:
-          name: build-artifacts
-          path: target/release/
