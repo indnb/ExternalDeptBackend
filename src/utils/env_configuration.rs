@@ -1,7 +1,8 @@
+use crate::diesel::models::users_data::users_role::UserRoleEnum;
 use once_cell::sync::OnceCell;
 use std::env;
 
-static CONFIG: OnceCell<EnvConfiguration> = OnceCell::new();
+pub static CONFIG: OnceCell<EnvConfiguration> = OnceCell::new();
 pub struct EnvConfiguration {
     #[allow(dead_code)]
     pub database_name: String,
@@ -13,6 +14,10 @@ pub struct EnvConfiguration {
     pub main_url: String,
     #[allow(dead_code)]
     pub server_port: u16,
+    #[allow(dead_code)]
+    pub admin_role: UserRoleEnum,
+    #[allow(dead_code)]
+    pub jwt_secret: String,
 }
 
 impl EnvConfiguration {
@@ -36,6 +41,10 @@ impl EnvConfiguration {
             server_port: EnvConfiguration::unwrap_env("SERVER_PORT", Some(8080.to_string()))
                 .parse()
                 .expect("Invalid SERVER_PORT"),
+            admin_role: UserRoleEnum::Admin,
+            jwt_secret: EnvConfiguration::unwrap_env("JWT_SECRET", Some("jwt_secret".to_string()))
+                .parse()
+                .expect("Invalid JWT_SECRET"),
         })
     }
     fn unwrap_env(name: &str, default: Option<String>) -> String {

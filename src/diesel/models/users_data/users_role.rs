@@ -6,12 +6,12 @@ use diesel::pg::Pg;
 use diesel::serialize::{Output, ToSql};
 use diesel::{serialize, FromSqlRow};
 use log::info;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use serialize::IsNull;
 use std::fmt::Debug;
 use std::io::Write;
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, FromSqlRow, AsExpression, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, FromSqlRow, AsExpression, Deserialize, Serialize)]
 #[diesel(sql_type = crate::diesel::schema::sql_types::UserRole)]
 pub enum UserRoleEnum {
     Admin,

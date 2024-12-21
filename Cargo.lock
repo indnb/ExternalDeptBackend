@@ -17,6 +17,7 @@ dependencies = [
  "native-tls",
  "once_cell",
  "postgres-native-tls",
+ "regex",
  "reqwest",
  "rocket",
  "rocket_cors",

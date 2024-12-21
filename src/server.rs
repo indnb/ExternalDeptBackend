@@ -64,13 +64,17 @@ impl Server {
             .mount(
                 "/api",
                 routes![
-                    // test
+                    // /test/*
                     api::test::get::ping,
-                    // user
-                    api::user::post::create_user,
-                    // hackathon
+                    // /user/*
+                    api::user::post::try_registration,
+                    api::user::post::login_user,
+                    api::user::get::confirm_new_user,
+                    api::user::get::get_role,
+                    api::user::get::get_authorization_user,
+                    // /hackathon/*
                     api::hackathon::post::create_hackathon,
-                    // other
+                    // /other/*
                 ],
             )
             .launch()
