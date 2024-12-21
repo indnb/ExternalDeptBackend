@@ -1,5 +1,5 @@
 use crate::server::Server;
-mod api_query;
+mod api;
 mod data;
 mod diesel;
 mod error;
