@@ -7,6 +7,7 @@ name = "ExternalDeptBackend"
 version = "0.1.0"
 dependencies = [
  "bcrypt",
+ "chrono",
  "diesel",
  "dotenvy",
  "env_logger",
@@ -330,7 +331,10 @@ checksum = "a21f936df1771bf62b77f047b726c4625ff2e8aa607c01ec06e5a05bd8463401"
 dependencies = [
  "android-tzdata",
  "iana-time-zone",
+ "js-sys",
  "num-traits",
+ "serde",
+ "wasm-bindgen",
  "windows-targets 0.52.6",
 ]
 
@@ -555,10 +559,14 @@ checksum = "ccf1bedf64cdb9643204a36dd15b19a6ce8e7aa7f7b105868e9f1fad5ffa7d12"
 dependencies = [
  "bitflags",
  "byteorder",
+ "chrono",
  "diesel_derives",
  "itoa",
+ "libsqlite3-sys",
  "pq-sys",
  "r2d2",
+ "serde_json",
+ "time",
 ]
 
 [[package]]
