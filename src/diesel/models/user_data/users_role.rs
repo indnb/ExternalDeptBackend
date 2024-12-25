@@ -1,3 +1,4 @@
+/* WILL UNCOMMENT WHEN IN SCHEMA.RS EXISTS USER_ROLE!!!
 use crate::diesel::schema::sql_types::UserRole;
 use diesel::backend::Backend;
 use diesel::deserialize::FromSql;
@@ -10,7 +11,6 @@ use serde::{Deserialize, Serialize};
 use serialize::IsNull;
 use std::fmt::Debug;
 use std::io::Write;
-
 #[derive(Debug, Clone, Copy, PartialEq, Eq, FromSqlRow, AsExpression, Deserialize, Serialize)]
 #[diesel(sql_type = crate::diesel::schema::sql_types::UserRole)]
 pub enum UserRoleEnum {
@@ -39,3 +39,4 @@ impl FromSql<UserRole, Pg> for UserRoleEnum {
         }
     }
 }
+*/

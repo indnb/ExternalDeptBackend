@@ -2,16 +2,12 @@
 
 pub mod sql_types {
     #[derive(diesel::query_builder::QueryId, Clone, diesel::sql_types::SqlType)]
-    #[diesel(postgres_type(name = "hackathon_category"))]
-    pub struct HackathonCategory;
+    #[diesel(postgres_type(name = "hackathon_category_2024"))]
+    pub struct HackathonCategory2024;
 
     #[derive(diesel::query_builder::QueryId, Clone, diesel::sql_types::SqlType)]
     #[diesel(postgres_type(name = "type_media"))]
     pub struct TypeMedia;
-
-    #[derive(diesel::query_builder::QueryId, Clone, diesel::sql_types::SqlType)]
-    #[diesel(postgres_type(name = "user_role"))]
-    pub struct UserRole;
 }
 
 diesel::table! {
@@ -31,15 +27,33 @@ diesel::table! {
 }
 
 diesel::table! {
-    use diesel::sql_types::*;
-    use super::sql_types::HackathonCategory;
-
-    hackathon (id) {
+    hackathon_university_2024 (id) {
         id -> Int4,
-        user_id -> Int4,
-        category -> HackathonCategory,
+        #[max_length = 255]
+        name -> Varchar,
         created_at -> Nullable<Timestamp>,
         updated_at -> Nullable<Timestamp>,
+    }
+}
+
+diesel::table! {
+    use diesel::sql_types::*;
+    use super::sql_types::HackathonCategory2024;
+
+    hackathon_user_2024 (id) {
+        id -> Int4,
+        #[max_length = 50]
+        first_name -> Varchar,
+        #[max_length = 50]
+        last_name -> Varchar,
+        #[max_length = 20]
+        phone -> Varchar,
+        #[max_length = 255]
+        email -> Varchar,
+        created_at -> Nullable<Timestamp>,
+        updated_at -> Nullable<Timestamp>,
+        category -> HackathonCategory2024,
+        university -> Nullable<Int4>,
     }
 }
 
@@ -70,35 +84,13 @@ diesel::table! {
     }
 }
 
-diesel::table! {
-    use diesel::sql_types::*;
-    use super::sql_types::UserRole;
-
-    users (id) {
-        id -> Int4,
-        #[max_length = 50]
-        first_name -> Varchar,
-        #[max_length = 50]
-        last_name -> Varchar,
-        #[max_length = 255]
-        password_hash -> Varchar,
-        #[max_length = 20]
-        phone -> Varchar,
-        #[max_length = 255]
-        email -> Varchar,
-        role -> UserRole,
-        created_at -> Nullable<Timestamp>,
-        updated_at -> Nullable<Timestamp>,
-    }
-}
-
-diesel::joinable!(hackathon -> users (user_id));
+diesel::joinable!(hackathon_user_2024 -> hackathon_university_2024 (university));
 diesel::joinable!(news_media -> news (news_id));
 
 diesel::allow_tables_to_appear_in_same_query!(
     announcement_banner,
-    hackathon,
+    hackathon_university_2024,
+    hackathon_user_2024,
     news,
     news_media,
-    users,
 );
