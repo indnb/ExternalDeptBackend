@@ -66,14 +66,10 @@ impl Server {
                 routes![
                     // /test/*
                     api::test::get::ping,
-                    // /user/*
-                    api::user::post::try_registration,
-                    api::user::post::login_user,
-                    api::user::get::confirm_new_user,
-                    api::user::get::get_role,
-                    api::user::get::get_authorization_user,
-                    // /hackathon/*
-                    api::hackathon::post::create_hackathon,
+                    // /hackathon_2024/user/*
+                    api::hackathon_2024::user::post::try_registration,
+                    api::hackathon_2024::user::get::confirm_new_user,
+                    api::hackathon_2024::user::get::get_authorization_user,
                     // /other/*
                 ],
             )

@@ -1,3 +1,3 @@
-pub mod hackathon_data;
+pub mod hackathon_2024;
 pub mod info_data;
-pub mod users_data;
+pub mod user_data;

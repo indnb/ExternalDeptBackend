@@ -7,12 +7,14 @@ use jsonwebtoken::{
 use serde::de::DeserializeOwned;
 use serde::Serialize;
 
+#[allow(dead_code)]
 pub fn hashing_data(value: &mut String) -> Result<String, ApiError> {
     hash(value, DEFAULT_COST).map_err(|err| {
         log::error!("Error hashing password: {:?}", err);
         ApiError::HashingError(err.to_string())
     })
 }
+#[allow(dead_code)]
 pub fn verify_password(password: &str, hash: &str) -> Result<bool, ApiError> {
     verify(password, hash).map_err(|err| {
         log::error!("Error verifying password: {:?}", err);

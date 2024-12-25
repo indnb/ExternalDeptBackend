@@ -1,12 +1,9 @@
-use crate::api::user::get::get_role;
-use crate::diesel::database_diesel::DbPool;
-use crate::error::api_error::ApiError;
 use crate::utils::env_configuration::CONFIG;
 use chrono::{Duration, Utc};
 use jsonwebtoken::{decode, Algorithm, DecodingKey, Validation};
 use rocket::http::Status;
 use rocket::request::FromRequest;
-use rocket::{request, warn, Request, State};
+use rocket::{request, warn, Request};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -16,6 +13,7 @@ pub struct Claims {
 }
 
 impl Claims {
+    /* WILL UNCOMMENT WHEN IN SCHEMA.RS EXISTS USER_ROLE!!!
     #[allow(dead_code)]
     pub async fn check_admin(db_pool: &State<DbPool>, claims: Claims) -> Result<(), ApiError> {
         if get_role(db_pool, claims)
@@ -28,6 +26,7 @@ impl Claims {
         }
         Ok(())
     }
+    */
 }
 
 impl Claims {
