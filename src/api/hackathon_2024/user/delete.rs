@@ -21,7 +21,7 @@ pub async fn delete_by_id(
     let rows_deleted = diesel::delete(hackathon_user_2024.filter(id.eq(user_id)))
         .execute(&mut db_connection)
         .map_err(|err| {
-            log::error!("Error deleting user: {:?}", err);
+            log::error!("Error deleting hackathon_user_2024: {:?}", err);
             ApiError::DatabaseErrorResult(err)
         })?;
 
@@ -30,7 +30,7 @@ pub async fn delete_by_id(
     }
 
     Ok(format!(
-        "Successfully deleted user from hackathon 2024 with id {}",
+        "Successfully deleted hackathon_user_2024 from hackathon 2024 with id {}",
         user_id
     )
     .to_owned())

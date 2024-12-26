@@ -7,10 +7,11 @@ use diesel::prelude::*;
 use rocket::serde::json::Json;
 use rocket::{put, State};
 
-#[put("/hackathon_2024/user/update", data = "<user_data>")]
+#[put("/hackathon_2024/user/update/<user_id>", data = "<user_data>")]
 pub async fn update(
     db_pool: &State<DbPool>,
     user_data: Json<HackathonUser2024Insertable<'_>>,
+    user_id: i32,
     admin_match: AdminMatch,
 ) -> Result<String, ApiError> {
     admin_match.check_admin()?;
@@ -18,12 +19,7 @@ pub async fn update(
     let new_user = user_data.into_inner();
 
     let mut db_connection = get_connection(db_pool)?;
-    let user_id = match new_user.id {
-        None => {
-            return Err(ApiError::NotFound);
-        }
-        Some(user_id) => user_id,
-    };
+
     let rows_affected = diesel::update(hackathon_user_2024.filter(id.eq(user_id)))
         .set((
             first_name.eq(new_user.first_name),
@@ -34,7 +30,7 @@ pub async fn update(
         ))
         .execute(&mut db_connection)
         .map_err(|err| {
-            log::error!("Error updating user: {:?}", err);
+            log::error!("Error updating hackathon_user_2024: {:?}", err);
             ApiError::DatabaseErrorResult(err)
         })?;
 
@@ -42,5 +38,9 @@ pub async fn update(
         return Err(ApiError::NotFound);
     }
 
-    Ok(format!("Successfully updated user with email: {}", new_user.email).to_owned())
+    Ok(format!(
+        "Successfully updated hackathon_user_2024 with email: {}",
+        new_user.email
+    )
+    .to_owned())
 }
