@@ -1,4 +1,4 @@
-use crate::diesel::models::hackathon_2024::hackathon_category::HackathonCategory2024Enum;
+use crate::diesel::models::hackathon_2024::hackathon_category_2024::HackathonCategory2024Enum;
 use chrono::NaiveDateTime;
 use diesel::{Insertable, Queryable};
 use serde::{Deserialize, Serialize};

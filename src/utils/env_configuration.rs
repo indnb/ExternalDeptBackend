@@ -18,6 +18,8 @@ pub struct EnvConfiguration {
     pub admin_role: UserRoleEnum,
     */
     #[allow(dead_code)]
+    pub admin_password: String,
+    #[allow(dead_code)]
     pub jwt_secret: String,
 }
 
@@ -30,14 +32,14 @@ impl EnvConfiguration {
             database_password: EnvConfiguration::unwrap_env("DATABASE_PASSWORD", None),
             database_host: EnvConfiguration::unwrap_env(
                 "DATABASE_HOST",
-                Some("localhost".to_string()),
+                Some("localhost".to_owned()),
             ),
             database_port: EnvConfiguration::unwrap_env("DATABASE_PORT", Some(5432.to_string()))
                 .parse()
                 .expect("Invalid DATABASE_PORT"),
             main_url: EnvConfiguration::unwrap_env(
                 "DATABASE_PASSWORD",
-                Some("http://localhost:3000".to_string()),
+                Some("http://localhost:3000".to_owned()),
             ),
             server_port: EnvConfiguration::unwrap_env("SERVER_PORT", Some(8080.to_string()))
                 .parse()
@@ -45,7 +47,10 @@ impl EnvConfiguration {
             /* WILL UNCOMMENT WHEN IN SCHEMA.RS EXISTS USER_ROLE!!!
             admin_role: UserRoleEnum::Admin,
             */
-            jwt_secret: EnvConfiguration::unwrap_env("JWT_SECRET", Some("jwt_secret".to_string()))
+            admin_password: EnvConfiguration::unwrap_env("ADMIN_PASSWORD", Some("ADMIN_PASSWORD".to_owned()))
+                .parse()
+                .expect("Invalid ADMIN_PASSWORD"),
+            jwt_secret: EnvConfiguration::unwrap_env("JWT_SECRET", Some("jwt_secret".to_owned()))
                 .parse()
                 .expect("Invalid JWT_SECRET"),
         })

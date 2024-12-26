@@ -2,9 +2,9 @@ use crate::data::hackathon_2024::user::UserJwt;
 use crate::diesel::models::hackathon_2024::hackathon_user_2024::HackathonUser2024Insertable;
 use crate::error::api_error::ApiError;
 use crate::utils::security::encoded_data;
-use crate::utils::validation;
 use rocket::serde::json::Json;
 use rocket::{info, post};
+use crate::utils::validation::data;
 
 #[post("/hackathon_2024/user/try_registration", data = "<user_data>")]
 pub async fn try_registration(
@@ -12,7 +12,7 @@ pub async fn try_registration(
 ) -> Result<String, ApiError> {
     let mut new_user = user_data.into_inner();
 
-    validation::data::user::field(&mut new_user)?;
+    data::hackathon_2024::user::field(&mut new_user)?;
 
     let exp = chrono::Utc::now()
         .checked_add_signed(chrono::Duration::minutes(5))
