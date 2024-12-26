@@ -35,7 +35,7 @@ pub async fn get_authorization_user(
         Err(diesel::result::Error::NotFound) => {
             Err(ApiError::Unauthorized("Token or mismatched".to_string()))
         }
-        Err(e) => Err(ApiError::DatabaseError(e)),
+        Err(e) => Err(ApiError::DatabaseErrorResult(e)),
     }
 }
 
@@ -48,7 +48,7 @@ pub async fn get_all(
     let mut db_connection = get_connection(db_pool)?;
     let results = hackathon_user_2024
         .load::<HackathonUser2024Queryable>(&mut db_connection)
-        .map_err(ApiError::DatabaseError)?;
+        .map_err(ApiError::DatabaseErrorResult)?;
 
     Ok(Json(results))
 }

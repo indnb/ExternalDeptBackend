@@ -22,7 +22,7 @@ pub async fn delete_by_id(
         .execute(&mut db_connection)
         .map_err(|err| {
             log::error!("Error deleting user: {:?}", err);
-            ApiError::DatabaseError(err)
+            ApiError::DatabaseErrorResult(err)
         })?;
 
     if rows_deleted == 0 {

@@ -25,7 +25,7 @@ pub fn create_user(db_pool: &State<DbPool>, new_user: UserJwt) -> Result<String,
         .get_result::<i32>(&mut db_connection)
         .map_err(|err| {
             log::error!("Error inserting user: {:?}", err);
-            ApiError::DatabaseError(err)
+            ApiError::DatabaseErrorResult(err)
         })?;
 
     info!("Successfully inserted a new user with ID: {}", user_id);

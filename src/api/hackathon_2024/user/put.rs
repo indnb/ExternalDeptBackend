@@ -35,7 +35,7 @@ pub async fn update(
         .execute(&mut db_connection)
         .map_err(|err| {
             log::error!("Error updating user: {:?}", err);
-            ApiError::DatabaseError(err)
+            ApiError::DatabaseErrorResult(err)
         })?;
 
     if rows_affected == 0 {

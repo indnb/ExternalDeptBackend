@@ -24,7 +24,7 @@ pub async fn create(
             .get_result::<i32>(&mut db_connection)
             .map_err(|err| {
                 log::error!("Error inserting university with id - {:?}", err);
-                ApiError::DatabaseError(err)
+                ApiError::DatabaseErrorResult(err)
             })?;
 
     Ok(format!("Succeed insert new university with id - {}", university_id).to_owned())
