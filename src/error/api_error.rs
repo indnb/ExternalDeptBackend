@@ -11,8 +11,11 @@ pub enum ApiError {
     #[error("Error not found")]
     NotFound,
     #[allow(dead_code)]
-    #[error("Database error occurred")]
-    DatabaseError(#[from] diesel::result::Error),
+    #[error("Database result error occurred")]
+    DatabaseErrorResult(#[from] diesel::result::Error),
+    #[allow(dead_code)]
+    #[error("Database connection error occurred")]
+    DatabaseErrorConnection(String),
     #[allow(dead_code)]
     #[error("Internal server error")]
     InternalServerError,
@@ -47,31 +50,35 @@ impl<'r> Responder<'r, 'static> for ApiError {
         log::error!("API error occurred: {:?}", self);
 
         let (status, message) = match self {
-            ApiError::NotFound => (Status::NotFound, "Error not found".to_string()),
-            ApiError::DatabaseError(_) => (
+            ApiError::NotFound => (Status::NotFound, "Error not found".to_owned()),
+            ApiError::DatabaseErrorResult(_) => (
                 Status::InternalServerError,
-                "Database error occurred".to_string(),
+                "Database error occurred".to_owned(),
             ),
             ApiError::InternalServerError => (
                 Status::InternalServerError,
-                "Internal server error".to_string(),
+                "Internal server error".to_owned(),
             ),
-            ApiError::BadRequest => (Status::BadRequest, "Bad request error".to_string()),
+            ApiError::BadRequest => (Status::BadRequest, "Bad request error".to_owned()),
             ApiError::HttpError => (
                 Status::InternalServerError,
-                "HTTP error occurred".to_string(),
+                "HTTP error occurred".to_owned(),
             ),
-            ApiError::HashingError(_) => (Status::NotFound, "Hashing error".to_string()),
-            ApiError::ValidationError(_) => (Status::NotFound, "Validation error".to_string()),
+            ApiError::HashingError(_) => (Status::NotFound, "Hashing error".to_owned()),
+            ApiError::ValidationError(_) => (Status::NotFound, "Validation error".to_owned()),
             ApiError::TokenGenerationError(_) => {
-                (Status::NotFound, "Token generation error".to_string())
+                (Status::NotFound, "Token generation error".to_owned())
             }
-            ApiError::TokenDecodeError(_) => (Status::NotFound, "Token decoded error".to_string()),
+            ApiError::TokenDecodeError(_) => (Status::NotFound, "Token decoded error".to_owned()),
             ApiError::Unauthorized(err) => (
                 Status::Unauthorized,
-                format!("Unauthorized error - {}", err).to_string(),
+                format!("Unauthorized error - {}", err).to_owned(),
             ),
-            ApiError::InvalidClaims => (Status::Unauthorized, "Invalid claims error".to_string()),
+            ApiError::InvalidClaims => (Status::Unauthorized, "Invalid claims error".to_owned()),
+            ApiError::DatabaseErrorConnection(_) => (
+                Status::InternalServerError,
+                "Database connection error".to_owned(),
+            ),
         };
 
         let body = serde_json::to_string(&ApiErrorBody {

@@ -2,9 +2,9 @@ use crate::data::hackathon_2024::user::UserJwt;
 use crate::diesel::database_diesel::{get_connection, DbPool};
 use crate::diesel::models::hackathon_2024::hackathon_user_2024::HackathonUser2024Insertable;
 use crate::error::api_error::ApiError;
+use crate::utils::validation::data;
 use diesel::RunQueryDsl;
 use rocket::{info, State};
-use crate::utils::validation::data;
 
 pub fn create_user(db_pool: &State<DbPool>, new_user: UserJwt) -> Result<String, ApiError> {
     let mut db_connection = get_connection(db_pool)?;
@@ -23,10 +23,16 @@ pub fn create_user(db_pool: &State<DbPool>, new_user: UserJwt) -> Result<String,
         .returning(crate::diesel::schema::hackathon_user_2024::id)
         .get_result::<i32>(&mut db_connection)
         .map_err(|err| {
-            log::error!("Error inserting user: {:?}", err);
-            ApiError::DatabaseError(err)
+            log::error!("Error inserting hackathon_user_2024: {:?}", err);
+            ApiError::DatabaseErrorResult(err)
         })?;
 
-    info!("Successfully inserted a new user with ID: {}", user_id);
-    Ok(format!("User created successfully with ID: {}", user_id))
+    info!(
+        "Successfully inserted a new hackathon_user_2024 with ID: {}",
+        user_id
+    );
+    Ok(format!(
+        "Hackathon_user_2024 created successfully with ID: {}",
+        user_id
+    ))
 }

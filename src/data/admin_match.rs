@@ -19,7 +19,9 @@ impl AdminMatch {
     pub fn check_admin(&self) -> Result<bool, ApiError> {
         match &self.is_admin {
             true => Ok(true),
-            false => Err(ApiError::Unauthorized("Don't admin matching password".to_owned())),
+            false => Err(ApiError::Unauthorized(
+                "Don't admin matching password".to_owned(),
+            )),
         }
     }
 }
