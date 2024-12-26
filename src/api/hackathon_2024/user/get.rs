@@ -1,4 +1,5 @@
 use crate::api::hackathon_2024::user::local::create_user;
+use crate::data::admin_match::AdminMatch;
 use crate::data::claims::Claims;
 use crate::diesel::database_diesel::{get_connection, DbPool};
 use crate::diesel::models::hackathon_2024::hackathon_user_2024::HackathonUser2024Queryable;
@@ -19,6 +20,7 @@ pub async fn confirm_new_user(
     create_user(db_pool, decoded.claims)
 }
 
+#[allow(dead_code)]
 #[get("/hackathon_2024/user/get_authorization_user")]
 pub async fn get_authorization_user(
     db_pool: &State<DbPool>,
@@ -35,4 +37,18 @@ pub async fn get_authorization_user(
         }
         Err(e) => Err(ApiError::DatabaseError(e)),
     }
+}
+
+#[get("/hackathon_2024/user/get_all")]
+pub async fn get_all(
+    db_pool: &State<DbPool>,
+    admin_match: AdminMatch,
+) -> Result<Json<Vec<HackathonUser2024Queryable>>, ApiError> {
+    admin_match.check_admin()?;
+    let mut db_connection = get_connection(db_pool)?;
+    let results = hackathon_user_2024
+        .load::<HackathonUser2024Queryable>(&mut db_connection)
+        .map_err(ApiError::DatabaseError)?;
+
+    Ok(Json(results))
 }

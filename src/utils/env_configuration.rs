@@ -47,9 +47,12 @@ impl EnvConfiguration {
             /* WILL UNCOMMENT WHEN IN SCHEMA.RS EXISTS USER_ROLE!!!
             admin_role: UserRoleEnum::Admin,
             */
-            admin_password: EnvConfiguration::unwrap_env("ADMIN_PASSWORD", Some("ADMIN_PASSWORD".to_owned()))
-                .parse()
-                .expect("Invalid ADMIN_PASSWORD"),
+            admin_password: EnvConfiguration::unwrap_env(
+                "ADMIN_PASSWORD",
+                Some("ADMIN_PASSWORD".to_owned()),
+            )
+            .parse()
+            .expect("Invalid ADMIN_PASSWORD"),
             jwt_secret: EnvConfiguration::unwrap_env("JWT_SECRET", Some("jwt_secret".to_owned()))
                 .parse()
                 .expect("Invalid JWT_SECRET"),

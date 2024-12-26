@@ -29,6 +29,7 @@ pub struct HackathonUser2024Queryable {
 #[derive(Insertable, Debug, Deserialize, Serialize)]
 #[diesel(table_name = crate::diesel::schema::hackathon_user_2024)]
 pub struct HackathonUser2024Insertable<'a> {
+    pub id: Option<i32>,
     pub first_name: &'a str,
     pub last_name: &'a str,
     pub email: &'a str,

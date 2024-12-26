@@ -2,9 +2,9 @@ use crate::data::hackathon_2024::user::UserJwt;
 use crate::diesel::models::hackathon_2024::hackathon_user_2024::HackathonUser2024Insertable;
 use crate::error::api_error::ApiError;
 use crate::utils::security::encoded_data;
+use crate::utils::validation::data;
 use rocket::serde::json::Json;
 use rocket::{info, post};
-use crate::utils::validation::data;
 
 #[post("/hackathon_2024/user/try_registration", data = "<user_data>")]
 pub async fn try_registration(
