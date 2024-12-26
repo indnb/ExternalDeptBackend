@@ -1,3 +1,4 @@
+use crate::error::api_error::ApiError;
 use crate::utils::env_configuration::CONFIG;
 use rocket::http::Status;
 use rocket::request::FromRequest;
@@ -6,13 +7,20 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct AdminMatch {
-    pub is_admin: bool,
+    is_admin: bool,
 }
 
 impl AdminMatch {
     #[allow(dead_code)]
     pub fn new(is_admin: bool) -> Self {
         AdminMatch { is_admin }
+    }
+    #[allow(dead_code)]
+    pub fn check_admin(&self) -> Result<bool, ApiError> {
+        match &self.is_admin {
+            true => Ok(true),
+            false => Err(ApiError::Unauthorized("Don't admin matching password".to_owned())),
+        }
     }
 }
 
@@ -22,12 +30,12 @@ impl<'r> FromRequest<'r> for AdminMatch {
 
     #[allow(dead_code)]
     async fn from_request(req: &'r Request<'_>) -> request::Outcome<Self, Self::Error> {
-        let token = req.headers().get_one("Admin");
+        let header_password = req.headers().get_one("Admin");
 
-        match token {
-            Some(token) => {
-                let secret = CONFIG.get().unwrap().jwt_secret.as_str();
-                if token == secret {
+        match header_password {
+            Some(header_password) => {
+                let env_password = CONFIG.get().unwrap().admin_password.as_str();
+                if header_password == env_password {
                     request::Outcome::Success(AdminMatch { is_admin: true })
                 } else {
                     warn!("Error admin password");

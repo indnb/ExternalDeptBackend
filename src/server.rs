@@ -70,6 +70,8 @@ impl Server {
                     api::hackathon_2024::user::post::try_registration,
                     api::hackathon_2024::user::get::confirm_new_user,
                     api::hackathon_2024::user::get::get_authorization_user,
+                    // /hackathon_2024/university/*
+                    api::hackathon_2024::university::post::create_university,
                     // /other/*
                 ],
             )

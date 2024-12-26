@@ -2,9 +2,9 @@ use crate::data::hackathon_2024::user::UserJwt;
 use crate::diesel::database_diesel::{get_connection, DbPool};
 use crate::diesel::models::hackathon_2024::hackathon_user_2024::HackathonUser2024Insertable;
 use crate::error::api_error::ApiError;
-use crate::utils::validation;
 use diesel::RunQueryDsl;
 use rocket::{info, State};
+use crate::utils::validation::data;
 
 pub fn create_user(db_pool: &State<DbPool>, new_user: UserJwt) -> Result<String, ApiError> {
     let mut db_connection = get_connection(db_pool)?;
@@ -16,7 +16,7 @@ pub fn create_user(db_pool: &State<DbPool>, new_user: UserJwt) -> Result<String,
         category: new_user.category,
         university: new_user.university,
     };
-    validation::data::user::field(&mut new_user)?;
+    data::hackathon_2024::user::field(&mut new_user)?;
 
     let user_id = diesel::insert_into(crate::diesel::schema::hackathon_user_2024::table)
         .values(new_user)
