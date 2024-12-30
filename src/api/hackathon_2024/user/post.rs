@@ -5,7 +5,8 @@ use crate::utils::security::encoded_data;
 use crate::utils::validation::data;
 use rocket::serde::json::Json;
 use rocket::{info, post};
-
+use lettre::transport::smtp::authentication::Credentials;
+use lettre::{Message, SmtpTransport, Transport};
 #[post("/hackathon_2024/user/try_registration", data = "<user_data>")]
 pub async fn try_registration(
     user_data: Json<HackathonUser2024Insertable<'_>>,
@@ -30,8 +31,33 @@ pub async fn try_registration(
     };
 
     let token = encoded_data(&jwt_user)?;
+	let creds = Credentials::new(
+		"testfar07@gmail.com".to_owned(),
+		"cmkvjfeqkrpqfyfz".to_owned(),
+	);
+
+	let mailer = SmtpTransport::starttls_relay("smtp.gmail.com")
+		.unwrap()
+		.credentials(creds)
+		.port(587)
+		.build();
+
+        send_email("test".to_string(), mailer);
 
     info!("Email has been send with token - {}", token);
 
     Ok(format!("Email has been send with token - {}", token).to_string())
+}
+fn send_email(html_body: String, smtp: SmtpTransport) {
+	let email = Message::builder()
+		.from("artemk2504@gmail.com".parse().unwrap())
+		.to("artemk2504@gmail.com".parse().unwrap())
+		.subject("Test Email")
+		.body(html_body)
+		.unwrap();
+
+	match smtp.send(&email) {
+		Ok(_) => println!("Email sent successfully!"),
+		Err(e) => panic!("Could not send email: {e:?}"),
+	}
 }
