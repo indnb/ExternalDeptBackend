@@ -3,6 +3,7 @@ use crate::diesel::models::hackathon_2024::hackathon_user_2024::HackathonUser202
 use crate::error::api_error::ApiError;
 use crate::utils::security::encoded_data;
 use crate::utils::validation::data;
+use crate::utils::env_configuration::EnvConfiguration;
 use rocket::serde::json::Json;
 use rocket::{info, post};
 use lettre::transport::smtp::authentication::Credentials;
@@ -32,8 +33,8 @@ pub async fn try_registration(
 
     let token = encoded_data(&jwt_user)?;
 	let creds = Credentials::new(
-		"testfar07@gmail.com".to_owned(),
-		"cmkvjfeqkrpqfyfz".to_owned(),
+		EnvConfiguration::get().smt_email.to_owned(),
+		EnvConfiguration::get().smt_password.to_owned(),
 	);
 
 	let mailer = SmtpTransport::starttls_relay("smtp.gmail.com")
@@ -42,16 +43,16 @@ pub async fn try_registration(
 		.port(587)
 		.build();
 
-        send_email("test".to_string(), mailer);
+        send_email(token.to_string(), mailer,new_user.email.to_string());
 
     info!("Email has been send with token - {}", token);
 
     Ok(format!("Email has been send with token - {}", token).to_string())
 }
-fn send_email(html_body: String, smtp: SmtpTransport) {
+fn send_email(html_body: String, smtp: SmtpTransport,email_user:String) {
 	let email = Message::builder()
-		.from("artemk2504@gmail.com".parse().unwrap())
-		.to("artemk2504@gmail.com".parse().unwrap())
+		.from(EnvConfiguration::get().smt_email.parse().unwrap())
+		.to(email_user.parse().unwrap())    
 		.subject("Test Email")
 		.body(html_body)
 		.unwrap();
