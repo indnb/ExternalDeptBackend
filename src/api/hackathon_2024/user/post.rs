@@ -4,10 +4,11 @@ use crate::error::api_error::ApiError;
 use crate::utils::security::encoded_data;
 use crate::utils::validation::data;
 use crate::utils::env_configuration::EnvConfiguration;
+// use crate::utils::validation::data::hackathon_2024;
 use rocket::serde::json::Json;
 use rocket::{info, post};
 use lettre::transport::smtp::authentication::Credentials;
-use lettre::{Message, SmtpTransport, Transport};
+use lettre::{ SmtpTransport};
 #[post("/hackathon_2024/user/try_registration", data = "<user_data>")]
 pub async fn try_registration(
     user_data: Json<HackathonUser2024Insertable<'_>>,
@@ -43,22 +44,9 @@ pub async fn try_registration(
 		.port(587)
 		.build();
 
-        send_email(token.to_string(), mailer,new_user.email.to_string());
+         data::hackathon_2024::send_email::send_email(token.to_string(), mailer,new_user.email.to_string().to_owned());
 
-    info!("Email has been send with token - {}", token);
+    info!("Email has been send with token");
 
-    Ok(format!("Email has been send with token - {}", token).to_string())
-}
-fn send_email(html_body: String, smtp: SmtpTransport,email_user:String) {
-	let email = Message::builder()
-		.from(EnvConfiguration::get().smt_email.parse().unwrap())
-		.to(email_user.parse().unwrap())    
-		.subject("Test Email")
-		.body(html_body)
-		.unwrap();
-
-	match smtp.send(&email) {
-		Ok(_) => println!("Email sent successfully!"),
-		Err(e) => panic!("Could not send email: {e:?}"),
-	}
+    Ok(format!("Email has been send with token ").to_string())
 }
