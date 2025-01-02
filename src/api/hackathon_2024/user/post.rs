@@ -52,5 +52,5 @@ pub async fn try_registration(
 
     info!("Email has been send with token");
 
-    Ok(format!("Email has been send with token ").to_string())
+    Ok(format!("verify email sent to {}", new_user.email))
 }
