@@ -3,35 +3,74 @@ use crate::utils::constants::database::MIGRATIONS;
 use crate::utils::env_configuration::EnvConfiguration;
 use diesel::pg::PgConnection;
 use diesel::r2d2::{ConnectionManager, Pool, PooledConnection};
+use diesel::sql_types::Text;
+use diesel::RunQueryDsl;
 use diesel_migrations::MigrationHarness;
 use rocket::State;
 
 pub type DbPool = Pool<ConnectionManager<PgConnection>>;
 
-pub fn init_db_pool() -> DbPool {
+pub fn init_database() -> DbPool {
     let database_url = format!(
-        "postgres://{}:{}@{}:{}/{}",
+        "postgres://{}:{}@{}:{}",
         EnvConfiguration::get().database_user,
         EnvConfiguration::get().database_password,
         EnvConfiguration::get().database_host,
         EnvConfiguration::get().database_port,
-        EnvConfiguration::get().database_name,
     );
 
-    let manager = ConnectionManager::<PgConnection>::new(database_url);
-    let pool = Pool::builder()
-        .build(manager)
-        .unwrap_or_else(|err| panic!("Error creating DB pool: {}", err));
+    let database_name = &EnvConfiguration::get().database_name;
 
-    let mut conn = pool
+    let server_manager = ConnectionManager::<PgConnection>::new(format!("{}/postgres", database_url));
+    let server_pool = Pool::builder()
+        .build(server_manager)
+        .unwrap_or_else(|err| panic!("Error creating server connection pool: {}", err));
+
+    let mut connection = server_pool
         .get()
-        .expect("Failed to get a DB connection for migrations");
-    conn.run_pending_migrations(MIGRATIONS)
-        .unwrap_or_else(|err| panic!("Error running migrations: {}", err));
-    println!("Migrations ran successfully.");
+        .expect("Failed to get a connection to the PostgreSQL server");
 
-    pool
+    let exists = diesel::sql_query("SELECT 1 FROM pg_database WHERE datname = $1")
+        .bind::<Text, _>(database_name)
+        .execute(&mut connection)
+        .map(|rows| rows > 0)
+        .unwrap_or(false);
+
+    if !exists {
+        println!(
+            "Database '{}' does not exist. Creating it now...",
+            database_name
+        );
+
+        let create_db_query = format!("CREATE DATABASE \"{}\";", database_name);
+        diesel::sql_query(create_db_query)
+            .execute(&mut connection)
+            .unwrap_or_else(|err| panic!("Error creating database '{}': {}", database_name, err));
+
+        println!("Database '{}' created successfully!", database_name);
+    } else {
+        println!("Database '{}' already exists. Proceeding.", database_name);
+    }
+
+    let target_url = format!("{}/{}", database_url, database_name);
+    let target_manager = ConnectionManager::<PgConnection>::new(target_url);
+    let db_pool = Pool::builder()
+        .build(target_manager)
+        .unwrap_or_else(|err| panic!("Error creating database connection pool: {}", err));
+
+    let mut target_connection = db_pool
+        .get()
+        .expect("Failed to get a connection to the target database");
+
+    target_connection
+        .run_pending_migrations(MIGRATIONS)
+        .unwrap_or_else(|err| panic!("Error running migrations: {}", err));
+
+    println!("Pool created successfully!");
+
+    db_pool
 }
+
 pub fn get_connection(
     db_pool: &State<DbPool>,
 ) -> Result<PooledConnection<ConnectionManager<PgConnection>>, ApiError> {
