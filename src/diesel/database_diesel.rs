@@ -21,7 +21,8 @@ pub fn init_database() -> DbPool {
 
     let database_name = &EnvConfiguration::get().database_name;
 
-    let server_manager = ConnectionManager::<PgConnection>::new(format!("{}/postgres", database_url));
+    let server_manager =
+        ConnectionManager::<PgConnection>::new(format!("{}/postgres", database_url));
     let server_pool = Pool::builder()
         .build(server_manager)
         .unwrap_or_else(|err| panic!("Error creating server connection pool: {}", err));
