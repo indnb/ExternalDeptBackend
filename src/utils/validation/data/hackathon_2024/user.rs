@@ -1,4 +1,4 @@
-use crate::diesel::models::hackathon_2024::hackathon_user_2024::HackathonUser2024Insertable;
+use crate::diesel::models::hackathon_2024::user::HackathonUser2024Insertable;
 use crate::error::api_error::ApiError;
 use crate::utils::validation::validation_string::Validate;
 

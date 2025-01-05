@@ -1,6 +1,6 @@
 use crate::data::admin_match::AdminMatch;
 use crate::diesel::database_diesel::{get_connection, DbPool};
-use crate::diesel::models::hackathon_2024::hackathon_user_2024::HackathonUser2024Insertable;
+use crate::diesel::models::hackathon_2024::user::HackathonUser2024Insertable;
 use crate::diesel::schema::hackathon_user_2024::dsl::*;
 use crate::error::api_error::ApiError;
 use diesel::prelude::*;

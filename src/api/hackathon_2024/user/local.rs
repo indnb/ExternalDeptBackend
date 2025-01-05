@@ -1,6 +1,6 @@
 use crate::data::hackathon_2024::user::UserJwt;
 use crate::diesel::database_diesel::{get_connection, DbPool};
-use crate::diesel::models::hackathon_2024::hackathon_user_2024::HackathonUser2024Insertable;
+use crate::diesel::models::hackathon_2024::user::HackathonUser2024Insertable;
 use crate::error::api_error::ApiError;
 use crate::utils::validation::data;
 use diesel::RunQueryDsl;

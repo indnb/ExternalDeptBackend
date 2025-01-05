@@ -2,7 +2,7 @@ use crate::api::hackathon_2024::user::local::create_user;
 use crate::data::admin_match::AdminMatch;
 use crate::data::claims::Claims;
 use crate::diesel::database_diesel::{get_connection, DbPool};
-use crate::diesel::models::hackathon_2024::hackathon_user_2024::HackathonUser2024Queryable;
+use crate::diesel::models::hackathon_2024::user::HackathonUser2024Queryable;
 use crate::diesel::schema::hackathon_user_2024::dsl::hackathon_user_2024;
 use crate::diesel::schema::hackathon_user_2024::id;
 use crate::error::api_error::ApiError;

@@ -1,5 +1,5 @@
 use crate::diesel::database_diesel::{get_connection, DbPool};
-use crate::diesel::models::hackathon_2024::hackathon_university_2024::HackathonUniversity2024Queryable;
+use crate::diesel::models::hackathon_2024::university::HackathonUniversity2024Queryable;
 use crate::error::api_error::ApiError;
 use diesel::prelude::*;
 use rocket::serde::json::Json;

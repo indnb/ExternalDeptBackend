@@ -40,6 +40,8 @@ diesel::table! {
         count_members -> Int4,
         created_at -> Nullable<Timestamp>,
         updated_at -> Nullable<Timestamp>,
+        #[max_length = 255]
+        email -> Varchar,
     }
 }
 
