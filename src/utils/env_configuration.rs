@@ -12,6 +12,8 @@ pub struct EnvConfiguration {
     #[allow(dead_code)]
     pub main_url: String,
     #[allow(dead_code)]
+    pub smtp_email: String,
+    pub smtp_password: String,
     pub server_port: u16,
     /* WILL UNCOMMENT WHEN IN SCHEMA.RS EXISTS USER_ROLE!!!
     #[allow(dead_code)]
@@ -30,6 +32,8 @@ impl EnvConfiguration {
             database_name: EnvConfiguration::unwrap_env("DATABASE_NAME", None),
             database_user: EnvConfiguration::unwrap_env("DATABASE_USER", None),
             database_password: EnvConfiguration::unwrap_env("DATABASE_PASSWORD", None),
+            smtp_email: EnvConfiguration::unwrap_env("SMTP_EMAIL", None),
+            smtp_password: EnvConfiguration::unwrap_env("SMTP_PASSWORD", None),
             database_host: EnvConfiguration::unwrap_env(
                 "DATABASE_HOST",
                 Some("localhost".to_owned()),

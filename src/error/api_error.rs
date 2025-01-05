@@ -43,6 +43,9 @@ pub enum ApiError {
     #[allow(dead_code)]
     #[error("Invalid claims error")]
     InvalidClaims,
+    #[allow(dead_code)]
+    #[error("Email send error")]
+    SendEmailError(String),
 }
 
 impl<'r> Responder<'r, 'static> for ApiError {
@@ -79,6 +82,9 @@ impl<'r> Responder<'r, 'static> for ApiError {
                 Status::InternalServerError,
                 "Database connection error".to_owned(),
             ),
+            ApiError::SendEmailError(_) => {
+                (Status::InternalServerError, "Email send error".to_owned())
+            }
         };
 
         let body = serde_json::to_string(&ApiErrorBody {
