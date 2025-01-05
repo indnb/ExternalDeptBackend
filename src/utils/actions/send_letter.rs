@@ -1,8 +1,9 @@
 use crate::error::api_error::ApiError;
 use crate::utils::env_configuration::EnvConfiguration;
 use lettre::{Message, SmtpTransport, Transport};
-pub fn send_confirm_email(
-    html_body: String,
+pub fn send_letter(
+    title_letter: String,
+    body_letter: String,
     smtp: SmtpTransport,
     email_user: String,
 ) -> Result<(), ApiError> {
@@ -18,8 +19,8 @@ pub fn send_confirm_email(
     let email = Message::builder()
         .from(from_email)
         .to(to_email)
-        .subject("Test Email")
-        .body(html_body)
+        .subject(title_letter)
+        .body(body_letter)
         .map_err(|_| ApiError::SendEmailError("Failed to build email message".to_string()))?;
 
     match smtp.send(&email) {

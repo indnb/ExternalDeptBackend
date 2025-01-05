@@ -1,6 +1,7 @@
 use crate::data::hackathon_2024::user::UserJwt;
 use crate::diesel::models::hackathon_2024::hackathon_user_2024::HackathonUser2024Insertable;
 use crate::error::api_error::ApiError;
+use crate::utils::actions;
 use crate::utils::env_configuration::EnvConfiguration;
 use crate::utils::security::encoded_data;
 use crate::utils::validation::data;
@@ -43,10 +44,20 @@ pub async fn try_registration(
         .port(587)
         .build();
 
-    match data::hackathon_2024::send_email::send_confirm_email(
-        token.to_string(),
+    match actions::send_letter::send_letter(
+        "letter".to_string(),
+        format!(
+            "<html>
+            <body>
+                <p>Здравствуйте!</p>
+                <p>Чтобы подтвердить участие в хакатоне, пожалуйста, перейдите по ссылке:</p>
+                <a href=\"{token}\">Подтвердить участие</a>
+            </body>
+         </html>"
+        )
+        .to_string(),
         mailer,
-        new_user.email.to_string(),
+        new_user.email.to_owned(),
     ) {
         Ok(_) => Ok(format!("verify email sent to {}", new_user.email)),
         Err(e) => Err(e),
