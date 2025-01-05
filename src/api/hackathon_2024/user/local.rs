@@ -13,7 +13,7 @@ pub fn create_user(db_pool: &State<DbPool>, new_user: UserJwt) -> Result<String,
         last_name: new_user.last_name.as_str(),
         email: new_user.email.as_str(),
         phone: new_user.phone.as_str(),
-        category: new_user.category,
+        team_id: new_user.team_id,
         university: new_user.university,
     };
     data::hackathon_2024::user::field(&mut new_user)?;

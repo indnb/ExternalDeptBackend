@@ -27,7 +27,7 @@ pub async fn try_registration(
         last_name: new_user.last_name.to_string(),
         email: new_user.email.to_string(),
         phone: new_user.phone.to_string(),
-        category: new_user.category,
+        team_id: new_user.team_id,
         university: new_user.university,
         exp,
     };
