@@ -1,5 +1,5 @@
 use crate::api;
-use crate::diesel::database_diesel::{init_db_pool, DbPool};
+use crate::diesel::database_diesel::{init_database, DbPool};
 use crate::utils::env_configuration::EnvConfiguration;
 use log::LevelFilter;
 use rocket::figment::Figment;
@@ -15,7 +15,7 @@ impl Server {
 
         let config = Server::get_server_config().expect("Failed to configure Rocket server");
         let cors = Server::configure_cors();
-        let db_pool = init_db_pool();
+        let db_pool = init_database();
         Server::build_rocket(db_pool, config, cors).await;
     }
 
