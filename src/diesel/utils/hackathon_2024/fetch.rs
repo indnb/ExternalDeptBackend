@@ -9,10 +9,7 @@ use crate::error::api_error::ApiError;
 use diesel::ExpressionMethods;
 use diesel::{QueryDsl, RunQueryDsl};
 use rocket::State;
-pub fn team(
-    db_pool: &State<DbPool>,
-    id: i32,
-) -> Result<HackathonTeam2024Queryable, ApiError> {
+pub fn team(db_pool: &State<DbPool>, id: i32) -> Result<HackathonTeam2024Queryable, ApiError> {
     let mut db_connection = get_connection(db_pool)?;
 
     hackathon_team_2024

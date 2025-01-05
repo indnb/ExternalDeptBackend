@@ -26,8 +26,6 @@ pub fn check_password(password: &str, length: usize, error_message: &str) -> Res
     if password.is_password(length) {
         Ok(())
     } else {
-        Err(ApiError::ValidationError(
-            error_message.to_owned(),
-        ))
+        Err(ApiError::ValidationError(error_message.to_owned()))
     }
 }

@@ -1,7 +1,7 @@
 use crate::error::api_error::ApiError;
 use crate::utils::env_configuration::EnvConfiguration;
-use lettre::{Message, SmtpTransport, Transport};
 use lettre::transport::smtp::authentication::Credentials;
+use lettre::{Message, SmtpTransport, Transport};
 
 pub fn send_letter(
     title_letter: String,

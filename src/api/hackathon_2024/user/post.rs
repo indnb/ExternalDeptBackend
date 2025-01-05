@@ -42,11 +42,15 @@ pub async fn try_registration(
                 <p>Чтобы подтвердить участие в хакатоне, пожалуйста, перейдите по ссылке:</p>
                 <a href=\"{}\">Подтвердить участие</a>
             </body>
-         </html>"
-        , token)
+         </html>",
+            token
+        )
         .to_string(),
         user_data.email.to_owned(),
     )?;
 
-    Ok(format!("verify email sent to {}, jwt token - {}", user_data.email, token))
+    Ok(format!(
+        "verify email sent to {}, jwt token - {}",
+        user_data.email, token
+    ))
 }

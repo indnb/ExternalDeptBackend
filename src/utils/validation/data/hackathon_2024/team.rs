@@ -24,7 +24,8 @@ pub fn check_team_password(password: &str) -> Result<(), ApiError> {
         format!(
             "Team password greater for {} symbol or don't correct regex",
             20
-        ).as_str(),
+        )
+        .as_str(),
     )?;
     Ok(())
 }

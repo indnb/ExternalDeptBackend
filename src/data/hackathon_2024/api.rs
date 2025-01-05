@@ -1,6 +1,6 @@
-use serde::Deserialize;
-use crate::diesel::models::hackathon_2024::user::HackathonUser2024Insertable;
 use crate::data::hackathon_2024::team::TeamRegistrationData;
+use crate::diesel::models::hackathon_2024::user::HackathonUser2024Insertable;
+use serde::Deserialize;
 
 #[derive(Deserialize)]
 pub struct RegistrationData {

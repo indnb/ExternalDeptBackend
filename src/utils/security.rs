@@ -21,7 +21,9 @@ pub fn verify_password(password: impl AsRef<str>, hash: impl AsRef<str>) -> Resu
         ApiError::HashingError(err.to_string())
     })
 }
-pub fn decoded_data<T: DeserializeOwned>(jwt_token: impl AsRef<str>) -> Result<TokenData<T>, ApiError> {
+pub fn decoded_data<T: DeserializeOwned>(
+    jwt_token: impl AsRef<str>,
+) -> Result<TokenData<T>, ApiError> {
     decode::<T>(
         jwt_token.as_ref(),
         &DecodingKey::from_secret(CONFIG.get().unwrap().jwt_secret.as_ref()),

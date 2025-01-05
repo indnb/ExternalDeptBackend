@@ -65,5 +65,4 @@ impl<T: AsRef<str>> Validate for T {
             && has_lowercase.is_match(input)
             && has_uppercase.is_match(input)
     }
-
 }

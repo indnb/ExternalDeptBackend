@@ -1,3 +1,3 @@
-pub mod user;
-pub mod team;
 pub mod api;
+pub mod team;
+pub mod user;
