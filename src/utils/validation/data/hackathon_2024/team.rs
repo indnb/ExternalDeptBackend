@@ -1,45 +1,30 @@
 use crate::diesel::models::hackathon_2024::team::HackathonTeam2024Insertable;
 use crate::error::api_error::ApiError;
-use crate::utils::validation::validation_string::Validate;
+use crate::utils::validation::data::fields::{check_email, check_name, check_password};
 
 #[allow(dead_code)]
 pub fn field(new_team: &HackathonTeam2024Insertable) -> Result<(), ApiError> {
-    check_email(new_team.email)?;
-    check_name(new_team.name)?;
-    check_password(new_team.password_registration)?;
+    check_email(
+        new_team.email,
+        format!("Email don't correct {}", new_team.email).as_str(),
+    )?;
+    check_name(
+        new_team.name,
+        30,
+        format!("Team name greater for {} symbol", 30).as_str(),
+    )?;
+    check_team_password(new_team.password_registration)?;
     Ok(())
 }
-pub fn check_password(password: &str) -> Result<(), ApiError> {
-    let max_lenght = 20;
-    if !password.is_password(max_lenght) {
-        Ok(())
-    } else {
-        Err(ApiError::ValidationError(
-            format!(
-                "Team password greater for {} symbol or don't correct regex",
-                max_lenght
-            )
-            .to_owned(),
-        ))
-    }
-}
 
-fn check_name(name: &str) -> Result<(), ApiError> {
-    let max_lenght = 30;
-    if !name.less_for(max_lenght) {
-        Ok(())
-    } else {
-        Err(ApiError::ValidationError(
-            format!("Team name greater for {} symbol", max_lenght).to_owned(),
-        ))
-    }
-}
-fn check_email(email: &str) -> Result<(), ApiError> {
-    if !email.is_email() {
-        Ok(())
-    } else {
-        Err(ApiError::ValidationError(
-            format!("Email don't correct {}", email).to_owned(),
-        ))
-    }
+pub fn check_team_password(password: &str) -> Result<(), ApiError> {
+    check_password(
+        password,
+        20,
+        format!(
+            "Team password greater for {} symbol or don't correct regex",
+            20
+        ).as_str(),
+    )?;
+    Ok(())
 }

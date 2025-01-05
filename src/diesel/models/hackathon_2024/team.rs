@@ -28,15 +28,11 @@ pub struct HackathonTeam2024Queryable {
 #[diesel(table_name = crate::diesel::schema::hackathon_team_2024)]
 pub struct HackathonTeam2024Insertable<'a> {
     #[allow(dead_code)]
-    pub id: i32,
-    #[allow(dead_code)]
     pub name: &'a str,
     #[allow(dead_code)]
     pub category: HackathonCategory2024Enum,
     #[allow(dead_code)]
     pub password_registration: &'a str,
-    #[allow(dead_code)]
-    pub count_members: i32,
     #[allow(dead_code)]
     pub email: &'a str,
 }

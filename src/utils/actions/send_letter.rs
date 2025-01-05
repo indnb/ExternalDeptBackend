@@ -1,12 +1,24 @@
 use crate::error::api_error::ApiError;
 use crate::utils::env_configuration::EnvConfiguration;
 use lettre::{Message, SmtpTransport, Transport};
+use lettre::transport::smtp::authentication::Credentials;
+
 pub fn send_letter(
     title_letter: String,
     body_letter: String,
-    smtp: SmtpTransport,
     email_user: String,
 ) -> Result<(), ApiError> {
+    let creds = Credentials::new(
+        EnvConfiguration::get().smtp_email.to_owned(),
+        EnvConfiguration::get().smtp_password.to_owned(),
+    );
+
+    let smtp = SmtpTransport::starttls_relay("smtp.gmail.com")
+        .unwrap()
+        .credentials(creds)
+        .port(587)
+        .build();
+
     let from_email = EnvConfiguration::get()
         .smtp_email
         .parse()
