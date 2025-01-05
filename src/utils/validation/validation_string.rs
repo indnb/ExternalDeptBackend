@@ -23,7 +23,7 @@ impl<T: AsRef<str>> Validate for T {
     }
 
     fn is_email(&self) -> bool {
-        match Regex::new(r"(?i)^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,}$") {
+        match Regex::new(r"(?i)^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$") {
             Ok(email_regex) => email_regex.is_match(self.as_ref()),
             Err(_) => false,
         }
@@ -38,22 +38,32 @@ impl<T: AsRef<str>> Validate for T {
 
     fn is_password(&self, max_len: usize) -> bool {
         let input = self.as_ref();
-        if input.len() > max_len || input.len() <= 10 {
+
+        if input.len() > max_len || input.len() < 10 {
             return false;
         }
 
-        let digits = match Regex::new(r"\\d") {
-            Ok(digits) => digits,
+        let has_digit = match Regex::new(r"\d") {
+            Ok(regex) => regex,
             Err(_) => return false,
         };
-        let symbols = match Regex::new(r"[!@#$%^&*()_+=\\\-{}\[\]|\\:;'<>,.?/~`]") {
-            Ok(symbols) => symbols,
+        let has_symbol = match Regex::new(r"[!@#$%^&*()_+=\-{}\[\]|\\:;'<>,.?/~`]") {
+            Ok(regex) => regex,
             Err(_) => return false,
         };
-        let letters = match Regex::new(r"[a-zA-Z]") {
-            Ok(lettres) => lettres,
+        let has_lowercase = match Regex::new(r"[a-z]") {
+            Ok(regex) => regex,
             Err(_) => return false,
         };
-        digits.is_match(input) && symbols.is_match(input) && letters.is_match(input)
+        let has_uppercase = match Regex::new(r"[A-Z]") {
+            Ok(regex) => regex,
+            Err(_) => return false,
+        };
+
+        has_digit.is_match(input)
+            && has_symbol.is_match(input)
+            && has_lowercase.is_match(input)
+            && has_uppercase.is_match(input)
     }
+
 }
