@@ -10,7 +10,7 @@ use rocket::{put, State};
 #[put("/hackathon_2024/user/update/<user_id>", data = "<user_data>")]
 pub async fn update(
     db_pool: &State<DbPool>,
-    user_data: Json<HackathonUser2024Insertable<'_>>,
+    user_data: Json<HackathonUser2024Insertable>,
     user_id: i32,
     admin_match: AdminMatch,
 ) -> Result<String, ApiError> {
@@ -24,7 +24,7 @@ pub async fn update(
         .set((
             first_name.eq(new_user.first_name),
             last_name.eq(new_user.last_name),
-            email.eq(new_user.email),
+            email.eq(&new_user.email),
             phone.eq(new_user.phone),
             updated_at.eq(chrono::Utc::now().naive_utc()),
         ))
