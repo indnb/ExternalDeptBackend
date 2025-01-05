@@ -1,4 +1,3 @@
-use crate::diesel::models::hackathon_2024::hackathon_category_2024::HackathonCategory2024Enum;
 use chrono::NaiveDateTime;
 use diesel::{Insertable, Queryable};
 use serde::{Deserialize, Serialize};
@@ -21,18 +20,18 @@ pub struct HackathonUser2024Queryable {
     #[allow(dead_code)]
     pub updated_at: Option<NaiveDateTime>,
     #[allow(dead_code)]
-    pub category: HackathonCategory2024Enum,
-    #[allow(dead_code)]
     pub university: Option<i32>,
+    #[allow(dead_code)]
+    pub team_id: i32,
 }
 
 #[derive(Insertable, Debug, Deserialize, Serialize)]
 #[diesel(table_name = crate::diesel::schema::hackathon_user_2024)]
-pub struct HackathonUser2024Insertable<'a> {
-    pub first_name: &'a str,
-    pub last_name: &'a str,
-    pub email: &'a str,
-    pub phone: &'a str,
-    pub category: HackathonCategory2024Enum,
+pub struct HackathonUser2024Insertable {
+    pub first_name: String,
+    pub last_name: String,
+    pub email: String,
+    pub phone: String,
     pub university: i32,
+    pub team_id: i32,
 }

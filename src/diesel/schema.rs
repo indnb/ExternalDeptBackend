@@ -27,6 +27,25 @@ diesel::table! {
 }
 
 diesel::table! {
+    use diesel::sql_types::*;
+    use super::sql_types::HackathonCategory2024;
+
+    hackathon_team_2024 (id) {
+        id -> Int4,
+        #[max_length = 255]
+        name -> Varchar,
+        category -> HackathonCategory2024,
+        #[max_length = 255]
+        password_registration -> Varchar,
+        count_members -> Int4,
+        created_at -> Nullable<Timestamp>,
+        updated_at -> Nullable<Timestamp>,
+        #[max_length = 255]
+        email -> Varchar,
+    }
+}
+
+diesel::table! {
     hackathon_university_2024 (id) {
         id -> Int4,
         #[max_length = 255]
@@ -37,9 +56,6 @@ diesel::table! {
 }
 
 diesel::table! {
-    use diesel::sql_types::*;
-    use super::sql_types::HackathonCategory2024;
-
     hackathon_user_2024 (id) {
         id -> Int4,
         #[max_length = 50]
@@ -52,8 +68,8 @@ diesel::table! {
         email -> Varchar,
         created_at -> Nullable<Timestamp>,
         updated_at -> Nullable<Timestamp>,
-        category -> HackathonCategory2024,
         university -> Nullable<Int4>,
+        team_id -> Int4,
     }
 }
 
@@ -84,11 +100,13 @@ diesel::table! {
     }
 }
 
+diesel::joinable!(hackathon_user_2024 -> hackathon_team_2024 (team_id));
 diesel::joinable!(hackathon_user_2024 -> hackathon_university_2024 (university));
 diesel::joinable!(news_media -> news (news_id));
 
 diesel::allow_tables_to_appear_in_same_query!(
     announcement_banner,
+    hackathon_team_2024,
     hackathon_university_2024,
     hackathon_user_2024,
     news,

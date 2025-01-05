@@ -1,6 +1,6 @@
 use crate::data::admin_match::AdminMatch;
 use crate::diesel::database_diesel::{get_connection, DbPool};
-use crate::diesel::models::hackathon_2024::hackathon_user_2024::HackathonUser2024Insertable;
+use crate::diesel::models::hackathon_2024::user::HackathonUser2024Insertable;
 use crate::diesel::schema::hackathon_user_2024::dsl::*;
 use crate::error::api_error::ApiError;
 use diesel::prelude::*;
@@ -10,7 +10,7 @@ use rocket::{put, State};
 #[put("/hackathon_2024/user/update/<user_id>", data = "<user_data>")]
 pub async fn update(
     db_pool: &State<DbPool>,
-    user_data: Json<HackathonUser2024Insertable<'_>>,
+    user_data: Json<HackathonUser2024Insertable>,
     user_id: i32,
     admin_match: AdminMatch,
 ) -> Result<String, ApiError> {
@@ -24,7 +24,7 @@ pub async fn update(
         .set((
             first_name.eq(new_user.first_name),
             last_name.eq(new_user.last_name),
-            email.eq(new_user.email),
+            email.eq(&new_user.email),
             phone.eq(new_user.phone),
             updated_at.eq(chrono::Utc::now().naive_utc()),
         ))
