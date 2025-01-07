@@ -7,8 +7,8 @@ use rocket::{get, State};
 
 use crate::diesel::schema::hackathon_university_2024::dsl::*;
 
-#[get("/hackathon_2024/university/get_all")]
-pub async fn get_all(
+#[get("/hackathon_2024/university/all")]
+pub async fn all(
     db_pool: &State<DbPool>,
 ) -> Result<Json<Vec<HackathonUniversity2024Queryable>>, ApiError> {
     let mut db_connection = get_connection(db_pool).map_err(|_| ApiError::InternalServerError)?;
@@ -20,8 +20,8 @@ pub async fn get_all(
     Ok(Json(result))
 }
 
-#[get("/hackathon_2024/university/get_by_id/<university_id>")]
-pub async fn get_by_id(
+#[get("/hackathon_2024/university/by_id/<university_id>")]
+pub async fn by_id(
     db_pool: &State<DbPool>,
     university_id: i32,
 ) -> Result<Json<HackathonUniversity2024Queryable>, ApiError> {

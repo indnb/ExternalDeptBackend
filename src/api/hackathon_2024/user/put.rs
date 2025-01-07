@@ -7,8 +7,8 @@ use diesel::prelude::*;
 use rocket::serde::json::Json;
 use rocket::{put, State};
 
-#[put("/hackathon_2024/user/update/<user_id>", data = "<user_data>")]
-pub async fn update(
+#[put("/hackathon_2024/user/by_id/<user_id>", data = "<user_data>")]
+pub async fn by_id(
     db_pool: &State<DbPool>,
     user_data: Json<HackathonUser2024Insertable>,
     user_id: i32,
@@ -26,11 +26,13 @@ pub async fn update(
             last_name.eq(new_user.last_name),
             email.eq(&new_user.email),
             phone.eq(new_user.phone),
+            university.eq(new_user.university),
+            team_id.eq(new_user.team_id),
             updated_at.eq(chrono::Utc::now().naive_utc()),
         ))
         .execute(&mut db_connection)
         .map_err(|err| {
-            log::error!("Error updating hackathon_user_2024: {:?}", err);
+            log::error!("Error updating hackathon_user_2024, bellow error");
             ApiError::DatabaseErrorResult(err)
         })?;
 
