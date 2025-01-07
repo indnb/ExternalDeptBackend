@@ -69,17 +69,21 @@ impl Server {
                     // /hackathon_2024/user/*
                     api::hackathon_2024::user::post::try_registration,
                     api::hackathon_2024::user::get::confirm_new_user,
-                    api::hackathon_2024::user::get::get_all,
-                    api::hackathon_2024::user::put::update,
-                    api::hackathon_2024::user::delete::delete_by_id,
+                    api::hackathon_2024::user::get::all,
+                    api::hackathon_2024::user::put::by_id,
+                    api::hackathon_2024::user::delete::by_id,
                     // /hackathon_2024/university/*
                     api::hackathon_2024::university::post::create,
-                    api::hackathon_2024::university::get::get_all,
-                    api::hackathon_2024::university::get::get_by_id,
-                    api::hackathon_2024::university::put::update,
-                    api::hackathon_2024::university::delete::delete_by_id,
+                    api::hackathon_2024::university::get::all,
+                    api::hackathon_2024::university::get::by_id,
+                    api::hackathon_2024::university::put::by_id,
+                    api::hackathon_2024::university::delete::by_id,
                     // /hackathon_2024/team/*
                     api::hackathon_2024::team::post::create,
+                    api::hackathon_2024::team::get::all,
+                    api::hackathon_2024::team::get::by_id,
+                    api::hackathon_2024::team::put::by_id,
+                    api::hackathon_2024::team::delete::by_id,
                     // /other/*
                 ],
             )

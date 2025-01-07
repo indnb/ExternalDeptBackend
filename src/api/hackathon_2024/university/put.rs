@@ -8,10 +8,10 @@ use rocket::serde::json::Json;
 use rocket::{put, State};
 
 #[put(
-    "/hackathon_2024/university/update/<university_id>",
+    "/hackathon_2024/university/by_id/<university_id>",
     data = "<university_data>"
 )]
-pub async fn update(
+pub async fn by_id(
     db_pool: &State<DbPool>,
     university_id: i32,
     admin_match: AdminMatch,

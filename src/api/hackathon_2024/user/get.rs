@@ -21,8 +21,8 @@ pub async fn confirm_new_user(
 }
 
 #[allow(dead_code)]
-#[get("/hackathon_2024/user/get_authorization_user")]
-pub async fn get_authorization_user(
+#[get("/hackathon_2024/user/authorization_user")]
+pub async fn authorization_user(
     db_pool: &State<DbPool>,
     claims: Claims,
 ) -> Result<Json<HackathonUser2024Queryable>, ApiError> {
@@ -39,8 +39,8 @@ pub async fn get_authorization_user(
     }
 }
 
-#[get("/hackathon_2024/user/get_all")]
-pub async fn get_all(
+#[get("/hackathon_2024/user/all")]
+pub async fn all(
     db_pool: &State<DbPool>,
     admin_match: AdminMatch,
 ) -> Result<Json<Vec<HackathonUser2024Queryable>>, ApiError> {

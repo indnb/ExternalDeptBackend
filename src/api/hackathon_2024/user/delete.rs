@@ -8,8 +8,8 @@ use diesel::QueryDsl;
 use diesel::RunQueryDsl;
 use rocket::{delete, State};
 
-#[delete("/hackathon_2024/user/delete_by_id/<user_id>")]
-pub async fn delete_by_id(
+#[delete("/hackathon_2024/user/by_id/<user_id>")]
+pub async fn by_id(
     db_pool: &State<DbPool>,
     user_id: i32,
     admin_match: AdminMatch,
