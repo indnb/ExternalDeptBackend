@@ -14,6 +14,7 @@ pub fn hashing_data(value: impl AsRef<str>) -> Result<String, ApiError> {
         ApiError::HashingError(err.to_string())
     })
 }
+
 #[allow(dead_code)]
 pub fn verify_password(password: impl AsRef<str>, hash: impl AsRef<str>) -> Result<bool, ApiError> {
     verify(password.as_ref(), hash.as_ref()).map_err(|err| {
@@ -21,6 +22,7 @@ pub fn verify_password(password: impl AsRef<str>, hash: impl AsRef<str>) -> Resu
         ApiError::HashingError(err.to_string())
     })
 }
+
 pub fn decoded_data<T: DeserializeOwned>(
     jwt_token: impl AsRef<str>,
 ) -> Result<TokenData<T>, ApiError> {
@@ -31,6 +33,7 @@ pub fn decoded_data<T: DeserializeOwned>(
     )
     .map_err(|err| ApiError::TokenDecodeError(err.to_string()))
 }
+
 pub fn encoded_data<T: Serialize>(value: &T) -> Result<String, ApiError> {
     encode(
         &Header::new(Algorithm::HS512),

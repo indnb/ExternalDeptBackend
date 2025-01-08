@@ -3,12 +3,16 @@ use regex::Regex;
 pub trait Validate {
     #[allow(dead_code)]
     fn less_for(&self, len: usize) -> bool;
+
     #[allow(dead_code)]
     fn greater_for(&self, len: usize) -> bool;
+
     #[allow(dead_code)]
     fn is_email(&self) -> bool;
+
     #[allow(dead_code)]
     fn is_phone(&self) -> bool;
+
     #[allow(dead_code)]
     fn is_password(&self, max_len: usize) -> bool;
 }
@@ -47,14 +51,17 @@ impl<T: AsRef<str>> Validate for T {
             Ok(regex) => regex,
             Err(_) => return false,
         };
+
         let has_symbol = match Regex::new(r"[!@#$%^&*()_+=\-{}\[\]|\\:;'<>,.?/~`]") {
             Ok(regex) => regex,
             Err(_) => return false,
         };
+
         let has_lowercase = match Regex::new(r"[a-z]") {
             Ok(regex) => regex,
             Err(_) => return false,
         };
+
         let has_uppercase = match Regex::new(r"[A-Z]") {
             Ok(regex) => regex,
             Err(_) => return false,

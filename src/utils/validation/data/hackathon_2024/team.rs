@@ -5,21 +5,24 @@ use crate::utils::validation::data::fields::{check_email, check_name, check_pass
 #[allow(dead_code)]
 pub fn field(new_team: &HackathonTeam2024Insertable) -> Result<(), ApiError> {
     check_email(
-        new_team.email,
-        format!("Email don't correct {}", new_team.email).as_str(),
+        &new_team.nickname_tg,
+        format!("Email don't correct {}", new_team.nickname_tg).as_str(),
     )?;
+
     check_name(
-        new_team.name,
+        &new_team.name,
         30,
         format!("Team name greater for {} symbol", 30).as_str(),
     )?;
-    check_team_password(new_team.password_registration)?;
+
+    check_team_password(&new_team.password_registration)?;
+
     Ok(())
 }
 
-pub fn check_team_password(password: &str) -> Result<(), ApiError> {
+pub fn check_team_password(password: impl AsRef<str>) -> Result<(), ApiError> {
     check_password(
-        password,
+        password.as_ref(),
         20,
         format!(
             "Team password greater for {} symbol or don't correct regex",

@@ -17,22 +17,22 @@ pub struct HackathonTeam2024Queryable {
     #[allow(dead_code)]
     pub count_members: i32,
     #[allow(dead_code)]
+    pub email: String,
+    #[allow(dead_code)]
     pub created_at: Option<NaiveDateTime>,
     #[allow(dead_code)]
     pub updated_at: Option<NaiveDateTime>,
-    #[allow(dead_code)]
-    pub email: String,
 }
 
 #[derive(Insertable, Debug, Deserialize, Serialize)]
 #[diesel(table_name = crate::diesel::schema::hackathon_team_2024)]
-pub struct HackathonTeam2024Insertable<'a> {
+pub struct HackathonTeam2024Insertable {
     #[allow(dead_code)]
-    pub name: &'a str,
+    pub name: String,
     #[allow(dead_code)]
     pub category: HackathonCategory2024Enum,
     #[allow(dead_code)]
-    pub password_registration: &'a str,
+    pub password_registration: String,
     #[allow(dead_code)]
-    pub email: &'a str,
+    pub nickname_tg: String,
 }

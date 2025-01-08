@@ -10,42 +10,58 @@ pub enum ApiError {
     #[allow(dead_code)]
     #[error("Error not found")]
     NotFound,
+
     #[allow(dead_code)]
     #[error("Database result error occurred")]
     DatabaseErrorResult(#[from] diesel::result::Error),
+
     #[allow(dead_code)]
     #[error("Database connection error occurred")]
     DatabaseErrorConnection(String),
+
     #[allow(dead_code)]
     #[error("Internal server error")]
     InternalServerError,
+
     #[allow(dead_code)]
     #[error("Bad request error")]
     BadRequest,
+
     #[allow(dead_code)]
     #[error("HTTP error")]
     HttpError,
+
     #[allow(dead_code)]
     #[error("Hashing error")]
     HashingError(String),
+
     #[allow(dead_code)]
     #[error("Validation error")]
     ValidationError(String),
+
     #[allow(dead_code)]
     #[error("Token generation error")]
     TokenGenerationError(String),
+
     #[allow(dead_code)]
     #[error("Token decoded error")]
     TokenDecodeError(String),
+
     #[allow(dead_code)]
     #[error("Unauthorized error")]
     Unauthorized(String),
+
     #[allow(dead_code)]
     #[error("Invalid claims error")]
     InvalidClaims,
+
     #[allow(dead_code)]
     #[error("Email send error")]
     SendEmailError(String),
+
+    #[allow(dead_code)]
+    #[error("Header mismatched error")]
+    HeaderMismatched(String),
 }
 
 impl<'r> Responder<'r, 'static> for ApiError {
@@ -53,45 +69,46 @@ impl<'r> Responder<'r, 'static> for ApiError {
         log::error!("API error occurred: {:?}", self);
 
         let (status, message) = match self {
-            ApiError::NotFound => (Status::NotFound, "Error not found".to_owned()),
-            ApiError::DatabaseErrorResult(_) => (
+            ApiError::NotFound => (Status::NotFound, "Resource not found".to_owned()),
+
+            ApiError::DatabaseErrorResult(err) => (
                 Status::InternalServerError,
-                "Database error occurred".to_owned(),
+                format!("Database error result: {}", err),
             ),
+
             ApiError::InternalServerError => (
                 Status::InternalServerError,
                 "Internal server error".to_owned(),
             ),
-            ApiError::BadRequest => (Status::BadRequest, "Bad request error".to_owned()),
-            ApiError::HttpError => (
-                Status::InternalServerError,
-                "HTTP error occurred".to_owned(),
-            ),
-            ApiError::HashingError(_) => (Status::NotFound, "Hashing error".to_owned()),
-            ApiError::ValidationError(_) => (Status::NotFound, "Validation error".to_owned()),
-            ApiError::TokenGenerationError(_) => {
-                (Status::NotFound, "Token generation error".to_owned())
-            }
-            ApiError::TokenDecodeError(_) => (Status::NotFound, "Token decoded error".to_owned()),
-            ApiError::Unauthorized(err) => (
-                Status::Unauthorized,
-                format!("Unauthorized error - {}", err).to_owned(),
-            ),
-            ApiError::InvalidClaims => (Status::Unauthorized, "Invalid claims error".to_owned()),
-            ApiError::DatabaseErrorConnection(_) => (
-                Status::InternalServerError,
-                "Database connection error".to_owned(),
-            ),
-            ApiError::SendEmailError(_) => {
-                (Status::InternalServerError, "Email send error".to_owned())
-            }
+
+            ApiError::BadRequest => (Status::BadRequest, "Bad request".to_owned()),
+
+            ApiError::HttpError => (Status::BadGateway, "HTTP error".to_owned()),
+
+            ApiError::HashingError(err) => (Status::InternalServerError, err),
+
+            ApiError::ValidationError(err) => (Status::UnprocessableEntity, err),
+
+            ApiError::TokenGenerationError(err) => (Status::InternalServerError, err),
+
+            ApiError::TokenDecodeError(err) => (Status::Unauthorized, err),
+
+            ApiError::Unauthorized(err) => (Status::Unauthorized, err),
+
+            ApiError::InvalidClaims => (Status::Unauthorized, "Invalid claims".to_owned()),
+
+            ApiError::DatabaseErrorConnection(err) => (Status::ServiceUnavailable, err),
+
+            ApiError::SendEmailError(err) => (Status::InternalServerError, err),
+
+            ApiError::HeaderMismatched(err) => (Status::BadRequest, err),
         };
 
         let body = serde_json::to_string(&ApiErrorBody {
             error: status.to_string(),
             message,
         })
-        .expect("Failed to serialize error body");
+        .unwrap_or("Can't deserialize api error body".to_owned());
 
         Response::build()
             .status(status)
