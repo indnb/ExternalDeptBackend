@@ -67,7 +67,7 @@ impl Server {
                     // /test/*
                     api::test::get::ping,
                     // /hackathon_2024/user/*
-                    api::hackathon_2024::user::post::try_registration,
+                    api::hackathon_2024::user::post::registration_by_tg,
                     api::hackathon_2024::user::get::confirm_new_user,
                     api::hackathon_2024::user::get::all,
                     api::hackathon_2024::user::put::by_id,

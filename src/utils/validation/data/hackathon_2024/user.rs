@@ -1,9 +1,9 @@
 use crate::diesel::models::hackathon_2024::user::HackathonUser2024Insertable;
 use crate::error::api_error::ApiError;
-use crate::utils::validation::data::fields::{check_email, check_name, check_phone};
+use crate::utils::validation::data::fields::{check_name, check_nickname_tg, check_phone};
 
 pub fn field(new_user: &HackathonUser2024Insertable) -> Result<(), ApiError> {
-    check_email(
+    check_nickname_tg(
         new_user.nickname_tg.as_str(),
         format!("Email don't correct {}", new_user.nickname_tg),
     )?;

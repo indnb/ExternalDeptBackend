@@ -1,10 +1,10 @@
 use crate::diesel::models::hackathon_2024::team::HackathonTeam2024Insertable;
 use crate::error::api_error::ApiError;
-use crate::utils::validation::data::fields::{check_email, check_name, check_password};
+use crate::utils::validation::data::fields::{check_name, check_nickname_tg, check_password};
 
 #[allow(dead_code)]
 pub fn field(new_team: &HackathonTeam2024Insertable) -> Result<(), ApiError> {
-    check_email(
+    check_nickname_tg(
         &new_team.nickname_tg,
         format!("Email don't correct {}", new_team.nickname_tg).as_str(),
     )?;
@@ -30,5 +30,6 @@ pub fn check_team_password(password: impl AsRef<str>) -> Result<(), ApiError> {
         )
         .as_str(),
     )?;
+
     Ok(())
 }

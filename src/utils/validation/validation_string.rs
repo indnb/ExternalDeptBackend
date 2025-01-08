@@ -11,6 +11,9 @@ pub trait Validate {
     fn is_email(&self) -> bool;
 
     #[allow(dead_code)]
+    fn is_nickname_tg(&self) -> bool;
+
+    #[allow(dead_code)]
     fn is_phone(&self) -> bool;
 
     #[allow(dead_code)]
@@ -29,6 +32,13 @@ impl<T: AsRef<str>> Validate for T {
     fn is_email(&self) -> bool {
         match Regex::new(r"(?i)^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$") {
             Ok(email_regex) => email_regex.is_match(self.as_ref()),
+            Err(_) => false,
+        }
+    }
+
+    fn is_nickname_tg(&self) -> bool {
+        match Regex::new(r"(?i)^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$") {
+            Ok(nickname_regex) => nickname_regex.is_match(self.as_ref()),
             Err(_) => false,
         }
     }

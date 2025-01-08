@@ -13,6 +13,7 @@ pub struct EnvConfiguration {
     pub main_url: String,
     #[allow(dead_code)]
     pub smtp_email: String,
+    #[allow(dead_code)]
     pub smtp_password: String,
     pub server_port: u16,
     /* WILL UNCOMMENT WHEN IN SCHEMA.RS EXISTS USER_ROLE!!!

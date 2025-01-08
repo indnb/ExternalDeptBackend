@@ -1,6 +1,7 @@
 use crate::diesel::models::hackathon_2024::user::HackathonUser2024Insertable;
 use serde::{Deserialize, Serialize};
 
+#[allow(dead_code)]
 #[derive(Debug, Serialize, Deserialize)]
 pub struct UserJwt {
     pub first_name: String,
@@ -13,6 +14,7 @@ pub struct UserJwt {
 }
 
 impl UserJwt {
+    #[allow(dead_code)]
     pub fn from(data: &HackathonUser2024Insertable, exp: i64) -> Self {
         let exp = chrono::Utc::now()
             .checked_add_signed(chrono::Duration::minutes(exp))
@@ -28,6 +30,7 @@ impl UserJwt {
             exp,
         }
     }
+    #[allow(dead_code)]
     pub fn into(self) -> HackathonUser2024Insertable {
         HackathonUser2024Insertable {
             first_name: self.first_name,

@@ -34,6 +34,7 @@ pub fn decoded_data<T: DeserializeOwned>(
     .map_err(|err| ApiError::TokenDecodeError(err.to_string()))
 }
 
+#[allow(dead_code)]
 pub fn encoded_data<T: Serialize>(value: &T) -> Result<String, ApiError> {
     encode(
         &Header::new(Algorithm::HS512),
