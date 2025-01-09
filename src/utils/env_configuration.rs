@@ -43,7 +43,7 @@ impl EnvConfiguration {
                 .parse()
                 .expect("Invalid DATABASE_PORT"),
             main_url: EnvConfiguration::unwrap_env(
-                "DATABASE_PASSWORD",
+                "MAIN_URL",
                 Some("http://localhost:3000".to_owned()),
             ),
             server_port: EnvConfiguration::unwrap_env("SERVER_PORT", Some(8080.to_string()))

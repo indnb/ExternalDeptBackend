@@ -7,6 +7,7 @@ use crate::utils::prelude_api::*;
 use crate::utils::security::decoded_data;
 use rocket::get;
 
+#[allow(dead_code)]
 #[get("/hackathon_2024/user/confirm_new_user?<jwt_token>")]
 pub async fn confirm_new_user(db_pool: &DbState, jwt_token: String) -> Result<(), ApiError> {
     create_user_by_jwt(db_pool, decoded_data(&jwt_token)?.claims)

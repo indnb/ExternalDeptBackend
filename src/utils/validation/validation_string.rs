@@ -37,7 +37,7 @@ impl<T: AsRef<str>> Validate for T {
     }
 
     fn is_nickname_tg(&self) -> bool {
-        match Regex::new(r"(?i)^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$") {
+        match Regex::new(r"^[a-zA-Z0-9](?:[a-zA-Z0-9_]{3,30}[a-zA-Z0-9])?$") {
             Ok(nickname_regex) => nickname_regex.is_match(self.as_ref()),
             Err(_) => false,
         }

@@ -1,14 +1,11 @@
-use crate::diesel::models::hackathon_2024::team::HackathonTeam2024Insertable;
+use crate::dto::request::hackathon_2024::team::TeamCreateData;
 use crate::utils::prelude_api::*;
 use crate::utils::security::hashing_data;
 use rocket::post;
 
 #[post("/hackathon_2024/team/create", data = "<data>")]
-pub async fn create(
-    db_pool: &DbState,
-    data: Json<HackathonTeam2024Insertable>,
-) -> Result<(), ApiError> {
-    let mut team = data.into_inner();
+pub async fn create(db_pool: &DbState, data: Json<TeamCreateData>) -> Result<(), ApiError> {
+    let mut team = data.into_inner().0;
 
     crate::utils::validation::data::hackathon_2024::team::field(&team)?;
     team.password_registration = hashing_data(team.password_registration)?;

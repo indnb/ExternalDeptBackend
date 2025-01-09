@@ -42,7 +42,7 @@ impl Server {
     }
 
     fn configure_cors() -> Cors {
-        let exact = &[&format!("https://{}", "your_main_url.com")];
+        let exact = &[&format!("https://{}", EnvConfiguration::get().main_url)];
         CorsOptions {
             allowed_origins: AllowedOrigins::some_exact(exact),
             allowed_methods: vec!["GET", "POST", "PUT", "DELETE"]
@@ -68,7 +68,6 @@ impl Server {
                     api::test::get::ping,
                     // /hackathon_2024/user/*
                     api::hackathon_2024::user::post::registration_by_tg,
-                    api::hackathon_2024::user::get::confirm_new_user,
                     api::hackathon_2024::user::get::all,
                     api::hackathon_2024::user::put::by_id,
                     api::hackathon_2024::user::delete::by_id,
