@@ -17,6 +17,6 @@ pub struct HackathonUniversity2024Queryable {
 
 #[derive(Insertable, Debug, Deserialize, Serialize)]
 #[diesel(table_name = crate::diesel::schema::hackathon_university_2024)]
-pub struct HackathonUniversity2024Insertable<'a> {
-    pub name: &'a str,
+pub struct HackathonUniversity2024Insertable {
+    pub name: String,
 }

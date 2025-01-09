@@ -1,5 +1,5 @@
 use crate::api;
-use crate::diesel::database_diesel::{init_database, DbPool};
+use crate::diesel::configurator::{configuration_database, DbPool};
 use crate::utils::env_configuration::EnvConfiguration;
 use log::LevelFilter;
 use rocket::figment::Figment;
@@ -15,7 +15,7 @@ impl Server {
 
         let config = Server::get_server_config().expect("Failed to configure Rocket server");
         let cors = Server::configure_cors();
-        let db_pool = init_database();
+        let db_pool = configuration_database();
         Server::build_rocket(db_pool, config, cors).await;
     }
 
@@ -42,7 +42,7 @@ impl Server {
     }
 
     fn configure_cors() -> Cors {
-        let exact = &[&format!("https://{}", "your_main_url.com")];
+        let exact = &[&format!("https://{}", EnvConfiguration::get().main_url)];
         CorsOptions {
             allowed_origins: AllowedOrigins::some_exact(exact),
             allowed_methods: vec!["GET", "POST", "PUT", "DELETE"]
@@ -67,8 +67,7 @@ impl Server {
                     // /test/*
                     api::test::get::ping,
                     // /hackathon_2024/user/*
-                    api::hackathon_2024::user::post::try_registration,
-                    api::hackathon_2024::user::get::confirm_new_user,
+                    api::hackathon_2024::user::post::registration_by_tg,
                     api::hackathon_2024::user::get::all,
                     api::hackathon_2024::user::put::by_id,
                     api::hackathon_2024::user::delete::by_id,

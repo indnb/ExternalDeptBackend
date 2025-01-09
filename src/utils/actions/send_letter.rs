@@ -3,6 +3,7 @@ use crate::utils::env_configuration::EnvConfiguration;
 use lettre::transport::smtp::authentication::Credentials;
 use lettre::{Message, SmtpTransport, Transport};
 
+#[allow(dead_code)]
 pub fn send_letter(
     title_letter: String,
     body_letter: String,

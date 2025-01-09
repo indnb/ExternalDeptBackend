@@ -1,9 +1,12 @@
 use crate::server::Server;
 mod api;
-mod data;
 mod diesel;
+mod dto;
 mod error;
+mod middleware;
+mod models;
 mod server;
+#[cfg(test)]
 mod tests;
 mod utils;
 

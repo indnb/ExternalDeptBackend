@@ -1,1 +1,2 @@
-pub mod test;
+#[cfg(test)]
+pub mod main;

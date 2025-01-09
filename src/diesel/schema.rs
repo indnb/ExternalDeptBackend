@@ -38,10 +38,10 @@ diesel::table! {
         #[max_length = 255]
         password_registration -> Varchar,
         count_members -> Int4,
+        #[max_length = 255]
+        nickname_tg -> Varchar,
         created_at -> Nullable<Timestamp>,
         updated_at -> Nullable<Timestamp>,
-        #[max_length = 255]
-        email -> Varchar,
     }
 }
 
@@ -65,11 +65,11 @@ diesel::table! {
         #[max_length = 20]
         phone -> Varchar,
         #[max_length = 255]
-        email -> Varchar,
+        nickname_tg -> Varchar,
+        university_id -> Nullable<Int4>,
+        team_id -> Nullable<Int4>,
         created_at -> Nullable<Timestamp>,
         updated_at -> Nullable<Timestamp>,
-        university -> Nullable<Int4>,
-        team_id -> Int4,
     }
 }
 
@@ -101,7 +101,7 @@ diesel::table! {
 }
 
 diesel::joinable!(hackathon_user_2024 -> hackathon_team_2024 (team_id));
-diesel::joinable!(hackathon_user_2024 -> hackathon_university_2024 (university));
+diesel::joinable!(hackathon_user_2024 -> hackathon_university_2024 (university_id));
 diesel::joinable!(news_media -> news (news_id));
 
 diesel::allow_tables_to_appear_in_same_query!(

@@ -1,56 +1,33 @@
-use crate::data::hackathon_2024::api::RegistrationData;
-use crate::data::hackathon_2024::user::UserJwt;
-use crate::diesel::database_diesel::DbPool;
-use crate::error::api_error::ApiError;
-use crate::utils::actions;
-use crate::utils::security::{encoded_data, verify_password};
+use crate::dto::request::hackathon_2024::user::RegistrationData;
+use crate::utils::prelude_api::*;
+use crate::utils::security::verify_password;
 use crate::utils::validation;
-use rocket::serde::json::Json;
-use rocket::{post, State};
+use rocket::post;
 
-#[post("/hackathon_2024/user/try_registration", data = "<registration_data>")]
-pub async fn try_registration(
-    db_pool: &State<DbPool>,
-    registration_data: Json<RegistrationData>,
-) -> Result<String, ApiError> {
-    let registration_data = registration_data.into_inner();
+#[post("/hackathon_2024/user/registration_by_tg", data = "<data>")]
+pub async fn registration_by_tg(
+    db_pool: &DbState,
+    data: Json<RegistrationData>,
+) -> Result<(), ApiError> {
+    let data = data.into_inner();
 
     let RegistrationData {
         user_data,
         team_data,
-        ..
-    } = registration_data;
+    } = data;
 
     validation::data::hackathon_2024::team::check_team_password(team_data.password.as_str())?;
     validation::data::hackathon_2024::user::field(&user_data)?;
 
-    let team = crate::diesel::utils::hackathon_2024::fetch::team(db_pool, team_data.id)?;
-    verify_password(team_data.password, team.password_registration.as_str())?;
-
-    let _ = crate::diesel::utils::hackathon_2024::fetch::university(db_pool, user_data.university)?;
-
-    let jwt_user = UserJwt::from(&user_data, 5);
-
-    let token = encoded_data(&jwt_user)?;
-
-    actions::send_letter::send_letter(
-        "letter".to_owned(),
-        format!(
-            "<html>
-            <body>
-                <p>Здравствуйте!</p>
-                <p>Чтобы подтвердить участие в хакатоне, пожалуйста, перейдите по ссылке:</p>
-                <a href=\"{}\">Подтвердить участие</a>
-            </body>
-         </html>",
-            token
-        )
-        .to_string(),
-        user_data.email.to_owned(),
+    let team = crate::diesel::utils::hackathon_2024::team::fetch::by_id(db_pool, team_data.id)?;
+    verify_password(
+        team_data.password.as_str(),
+        team.password_registration.as_str(),
     )?;
 
-    Ok(format!(
-        "verify email sent to {}, jwt token - {}",
-        user_data.email, token
-    ))
+    let id = crate::diesel::utils::hackathon_2024::user::insert::new(db_pool, user_data)?;
+
+    info!("Succeed create user with id {id}");
+
+    Ok(())
 }

@@ -13,6 +13,7 @@ pub struct EnvConfiguration {
     pub main_url: String,
     #[allow(dead_code)]
     pub smtp_email: String,
+    #[allow(dead_code)]
     pub smtp_password: String,
     pub server_port: u16,
     /* WILL UNCOMMENT WHEN IN SCHEMA.RS EXISTS USER_ROLE!!!
@@ -42,7 +43,7 @@ impl EnvConfiguration {
                 .parse()
                 .expect("Invalid DATABASE_PORT"),
             main_url: EnvConfiguration::unwrap_env(
-                "DATABASE_PASSWORD",
+                "MAIN_URL",
                 Some("http://localhost:3000".to_owned()),
             ),
             server_port: EnvConfiguration::unwrap_env("SERVER_PORT", Some(8080.to_string()))

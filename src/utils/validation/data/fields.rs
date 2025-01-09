@@ -1,31 +1,54 @@
 use crate::error::api_error::ApiError;
 use crate::utils::validation::validation_string::Validate;
 
-pub fn check_email(email: &str, error_message: &str) -> Result<(), ApiError> {
-    if email.is_email() {
+#[allow(dead_code)]
+pub fn check_email(email: impl AsRef<str>, error_message: impl AsRef<str>) -> Result<(), ApiError> {
+    if email.as_ref().is_email() {
         Ok(())
     } else {
-        Err(ApiError::ValidationError(error_message.to_owned()))
+        Err(ApiError::ValidationError(error_message.as_ref().to_owned()))
     }
 }
-pub fn check_name(name: &str, lenght: usize, error_message: &str) -> Result<(), ApiError> {
-    if name.less_for(lenght) {
+
+pub fn check_nickname_tg(
+    nickname_tg: impl AsRef<str>,
+    error_message: impl AsRef<str>,
+) -> Result<(), ApiError> {
+    if nickname_tg.as_ref().is_nickname_tg() {
         Ok(())
     } else {
-        Err(ApiError::ValidationError(error_message.to_owned()))
+        Err(ApiError::ValidationError(error_message.as_ref().to_owned()))
     }
 }
-pub fn check_phone(phone: &str, error_message: &str) -> Result<(), ApiError> {
-    if phone.is_phone() {
+
+pub fn check_name(
+    name: impl AsRef<str>,
+    length: usize,
+    error_message: impl AsRef<str>,
+) -> Result<(), ApiError> {
+    if name.as_ref().less_for(length) {
         Ok(())
     } else {
-        Err(ApiError::ValidationError(error_message.to_owned()))
+        Err(ApiError::ValidationError(error_message.as_ref().to_owned()))
     }
 }
-pub fn check_password(password: &str, length: usize, error_message: &str) -> Result<(), ApiError> {
-    if password.is_password(length) {
+
+pub fn check_phone(phone: impl AsRef<str>, error_message: impl AsRef<str>) -> Result<(), ApiError> {
+    if phone.as_ref().is_phone() {
         Ok(())
     } else {
-        Err(ApiError::ValidationError(error_message.to_owned()))
+        Err(ApiError::ValidationError(error_message.as_ref().to_owned()))
+    }
+}
+
+pub fn check_password(
+    password: impl AsRef<str>,
+    length: usize,
+    error_message: impl AsRef<str>,
+) -> Result<(), ApiError> {
+    if password.as_ref().is_password(length) {
+        Ok(())
+    } else {
+        Err(ApiError::ValidationError(error_message.as_ref().to_owned()))
     }
 }
