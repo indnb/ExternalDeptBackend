@@ -9,7 +9,7 @@ struct Claims {
     sub: String,
     exp: u64,
 }
-
+#[allow(dead_code)]
 pub fn create_jwt(data_for_jwt: String) -> Result<String, ApiError> {
     let my_claims = Claims {
         sub: data_for_jwt,

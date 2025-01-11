@@ -1,6 +1,6 @@
-use crate::dto::request::admin::admin::LoginAdminData;
+use crate::dto::request::admin::login_admin::LoginAdminData;
 use crate::error::api_error::ApiError;
-use crate::utils::admin::create_jwt;
+use crate::utils::actions;
 use crate::utils::env_configuration::EnvConfiguration;
 use crate::utils::prelude_api::*;
 use rocket::post;
@@ -13,11 +13,11 @@ pub async fn admin_login(data: Json<LoginAdminData>) -> Result<String, ApiError>
     if password_env != admin_password {
         return Err(ApiError::ValidationError("passow".to_string()));
     }
-    match create_jwt::create_jwt(admin_password) {
-        Ok(token) => Ok(format!("{}", token)),
+    match actions::create_jwt::create_jwt(admin_password) {
+        Ok(token) => Ok(token),
         Err(err) => {
-            println!("Ошибка при создании токена: {:?}", err); // Печатаем ошибку
-            Err(ApiError::TokenGenerationError(err.to_string())) // Возвращаем ошибку с нужным типом
+            println!("Ошибка при создании токена: {:?}", err); 
+            Err(ApiError::TokenGenerationError(err.to_string())) 
         }
     }
 }
