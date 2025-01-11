@@ -16,8 +16,8 @@ pub async fn admin_login(data: Json<LoginAdminData>) -> Result<String, ApiError>
     match actions::create_jwt::create_jwt(admin_password) {
         Ok(token) => Ok(token),
         Err(err) => {
-            println!("Ошибка при создании токена: {:?}", err); 
-            Err(ApiError::TokenGenerationError(err.to_string())) 
+            println!("Ошибка при создании токена: {:?}", err);
+            Err(ApiError::TokenGenerationError(err.to_string()))
         }
     }
 }
