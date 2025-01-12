@@ -83,6 +83,9 @@ impl Server {
                     api::hackathon_2024::team::get::by_id,
                     api::hackathon_2024::team::put::by_id,
                     api::hackathon_2024::team::delete::by_id,
+                    // /adnmin/
+                    api::admin::post::login,
+                    api::admin::get::get,
                     // /other/*
                 ],
             )
