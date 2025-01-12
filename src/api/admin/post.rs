@@ -17,11 +17,15 @@ pub async fn login(data: Json<LoginAdminData>) -> Result<String, ApiError> {
     let password_env = EnvConfiguration::get().admin_password.to_owned();
     let name_env = EnvConfiguration::get().admin_name.to_owned();
     if name_env != admin_name {
-        return Err(ApiError::ValidationError("name".to_string()));
+        return Err(ApiError::ValidationError(
+            "Error validation admin name".to_string(),
+        ));
     }
 
     if password_env != admin_password {
-        return Err(ApiError::ValidationError("passow".to_string()));
+        return Err(ApiError::ValidationError(
+            "Error validation admin password".to_string(),
+        ));
     }
     let my_claims = admin_jwt::AdminJwt {
         admin_password,
