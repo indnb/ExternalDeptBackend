@@ -1,12 +1,14 @@
 use crate::dto::request::admin::login_admin::LoginAdminData;
 use crate::error::api_error::ApiError;
-use crate::utils::actions;
+use crate::models::admin::admin_jwt;
 use crate::utils::env_configuration::EnvConfiguration;
 use crate::utils::prelude_api::*;
+use crate::utils::security;
+use chrono::{Duration, Utc};
 use rocket::post;
 
-#[post("/admin/admin_login", data = "<data>")]
-pub async fn admin_login(data: Json<LoginAdminData>) -> Result<String, ApiError> {
+#[post("/admin/login", data = "<data>")]
+pub async fn login(data: Json<LoginAdminData>) -> Result<String, ApiError> {
     let data = data.into_inner();
     let LoginAdminData {
         admin_name,
@@ -21,11 +23,14 @@ pub async fn admin_login(data: Json<LoginAdminData>) -> Result<String, ApiError>
     if password_env != admin_password {
         return Err(ApiError::ValidationError("passow".to_string()));
     }
-    match actions::create_jwt::create_jwt(admin_password, admin_name) {
+    let my_claims = admin_jwt::AdminJwt {
+        admin_password,
+        admin_name,
+        exp: (Utc::now() + Duration::hours(24)).timestamp() as u64,
+    };
+
+    match security::encoded_data(&my_claims) {
         Ok(token) => Ok(token),
-        Err(err) => {
-            println!("Ошибка при создании токена: {:?}", err);
-            Err(ApiError::TokenGenerationError(err.to_string()))
-        }
+        Err(err) => Err(ApiError::TokenGenerationError(err.to_string())),
     }
 }

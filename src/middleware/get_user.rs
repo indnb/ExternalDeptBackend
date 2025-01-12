@@ -1,8 +1,8 @@
 use crate::models::admin::admin_jwt;
-use crate::utils::actions::decode_jwt;
+use crate::utils::security;
 use rocket::http::Status;
 use rocket::request::FromRequest;
-use rocket::{request, warn, Request};
+use rocket::{request, Request};
 
 #[rocket::async_trait]
 impl<'r> FromRequest<'r> for admin_jwt::AdminJwt {
@@ -16,17 +16,11 @@ impl<'r> FromRequest<'r> for admin_jwt::AdminJwt {
             .and_then(|header| header.strip_prefix("Bearer "));
 
         match token {
-            Some(token) => match decode_jwt::decode_jwt(token.to_string()) {
-                Ok(token_data) => request::Outcome::Success(token_data),
-                Err(e) => {
-                    warn!("Error decoding token: {:?}", e);
-                    request::Outcome::Error((Status::Unauthorized, ()))
-                }
+            Some(token) => match security::decoded_data::<admin_jwt::AdminJwt>(token) {
+                Ok(token_data) => request::Outcome::Success(token_data.claims),
+                Err(_) => request::Outcome::Error((Status::Unauthorized, ())),
             },
-            None => {
-                warn!("Token not found in header \"Authorization\"");
-                request::Outcome::Error((Status::Unauthorized, ()))
-            }
+            None => request::Outcome::Error((Status::Unauthorized, ())),
         }
     }
 }
