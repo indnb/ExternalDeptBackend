@@ -85,6 +85,7 @@ impl Server {
                     api::hackathon_2024::team::delete::by_id,
                     // /adnmin/
                     api::admin::post::admin_login,
+                    api::admin::get::admin_get,
                     // /other/*
                 ],
             )

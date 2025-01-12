@@ -1,23 +1,17 @@
 use crate::error::api_error::ApiError;
+use crate::models::admin::admin_jwt;
 use crate::utils::env_configuration::EnvConfiguration;
 use chrono::{Duration, Utc};
 use jsonwebtoken::{encode, EncodingKey, Header};
-use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Serialize, Deserialize)]
-struct Claims {
-    sub: String,
-    exp: u64,
-}
 #[allow(dead_code)]
-pub fn create_jwt(data_for_jwt: String) -> Result<String, ApiError> {
-    let my_claims = Claims {
-        sub: data_for_jwt,
+pub fn create_jwt(admin_password: String, admin_name: String) -> Result<String, ApiError> {
+    let my_claims = admin_jwt::AdminJwt {
+        admin_password,
+        admin_name,
         exp: (Utc::now() + Duration::hours(24)).timestamp() as u64,
     };
-
     let secret_key = EnvConfiguration::get().jwt_secret.to_owned();
-
     let token = encode(
         &Header::default(),
         &my_claims,

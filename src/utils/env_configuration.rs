@@ -21,6 +21,8 @@ pub struct EnvConfiguration {
     pub admin_role: UserRoleEnum,
     */
     #[allow(dead_code)]
+    pub admin_name: String,
+    #[allow(dead_code)]
     pub admin_password: String,
     #[allow(dead_code)]
     pub jwt_secret: String,
@@ -58,6 +60,9 @@ impl EnvConfiguration {
             )
             .parse()
             .expect("Invalid ADMIN_PASSWORD"),
+            admin_name: EnvConfiguration::unwrap_env("ADMIN_NAME", Some("ADMIN_NAME".to_owned()))
+                .parse()
+                .expect("Invalid ADMIN_NAME"),
             jwt_secret: EnvConfiguration::unwrap_env("JWT_SECRET", Some("jwt_secret".to_owned()))
                 .parse()
                 .expect("Invalid JWT_SECRET"),
