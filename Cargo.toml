@@ -21,5 +21,7 @@ rocket_cors = "0.6.0"
 chrono = { version = "0.4", features = ["serde"] }
 regex = "1.11.1"
 diesel_migrations = "2.0"
+utoipa = "3.3.0"
+utoipa-swagger-ui = { version = "3.0.0", features = ["rocket"] }
 [default.databases]
 postgres = { url = "{env:DATABASE_URL}" }

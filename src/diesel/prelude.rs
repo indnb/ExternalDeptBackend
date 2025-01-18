@@ -5,6 +5,5 @@ pub use diesel::ExpressionMethods;
 pub use diesel::QueryDsl;
 pub use diesel::RunQueryDsl;
 pub use log::error;
-pub use log::info;
 pub use rocket::State;
 pub type DbState = State<DbPool>;

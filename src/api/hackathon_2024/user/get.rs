@@ -1,7 +1,6 @@
 use crate::api::hackathon_2024::user::local::create_user_by_jwt;
 use crate::dto::response::hackathon_2024::user::User;
 use crate::dto::response::hackathon_2024::user::VecUser;
-use crate::middleware::admin_match::AdminMatch;
 use crate::middleware::claims::Claims;
 use crate::utils::prelude_api::*;
 use crate::utils::security::decoded_data;
@@ -22,7 +21,7 @@ pub async fn authorization_user(db_pool: &DbState, claims: Claims) -> Result<Jso
 }
 
 #[get("/hackathon_2024/user/all")]
-pub async fn all(db_pool: &DbState, admin_match: AdminMatch) -> Result<Json<VecUser>, ApiError> {
+pub async fn all(db_pool: &DbState, admin_match: AdminAuthData) -> Result<Json<VecUser>, ApiError> {
     admin_match.check_admin()?;
     Ok(Json(VecUser(
         crate::diesel::utils::hackathon_2024::user::fetch::all(db_pool)?,

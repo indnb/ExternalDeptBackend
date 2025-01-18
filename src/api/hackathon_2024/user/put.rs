@@ -1,5 +1,4 @@
 use crate::dto::request::hackathon_2024::user::User;
-use crate::middleware::admin_match::AdminMatch;
 use crate::utils::prelude_api::*;
 use rocket::put;
 #[put("/hackathon_2024/user/by_id/<user_id>", data = "<data>")]
@@ -7,7 +6,7 @@ pub async fn by_id(
     db_pool: &DbState,
     data: Json<User>,
     user_id: i32,
-    admin_match: AdminMatch,
+    admin_match: AdminAuthData,
 ) -> Result<String, ApiError> {
     admin_match.check_admin()?;
     let data = data.into_inner();

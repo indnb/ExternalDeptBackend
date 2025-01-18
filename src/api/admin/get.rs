@@ -1,9 +1,7 @@
-use crate::models::admin::admin_jwt;
-use log::info;
+use crate::{middleware::admin_token_match::AdminAuthData, utils::prelude_api::*};
 use rocket::get;
 
-#[allow(dead_code)]
 #[get("/admin/get")]
-pub async fn get(claims: admin_jwt::AdminJwt) {
-    info!("Welcome, user with ID: {}", claims.admin_name);
+pub async fn get(admin: AdminAuthData) {
+    info!("Auth data admin: {:?}", admin);
 }

@@ -1,5 +1,4 @@
 use crate::dto::request::hackathon_2024::team::TeamUpdateData;
-use crate::middleware::admin_match::AdminMatch;
 use crate::utils::prelude_api::*;
 use rocket::put;
 
@@ -7,7 +6,7 @@ use rocket::put;
 pub async fn by_id(
     db_pool: &DbState,
     data: Json<TeamUpdateData>,
-    admin_match: AdminMatch,
+    admin_match: AdminAuthData,
 ) -> Result<(), ApiError> {
     admin_match.check_admin()?;
     let data = data.into_inner();

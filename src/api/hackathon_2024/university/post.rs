@@ -1,5 +1,4 @@
 use crate::dto::request::hackathon_2024::university::University;
-use crate::middleware::admin_match::AdminMatch;
 use crate::utils::prelude_api::*;
 use rocket::post;
 
@@ -7,7 +6,7 @@ use rocket::post;
 pub async fn create(
     db_pool: &DbState,
     data: Json<University>,
-    admin_match: AdminMatch,
+    admin_match: AdminAuthData,
 ) -> Result<(), ApiError> {
     admin_match.check_admin()?;
     let id = crate::diesel::utils::hackathon_2024::university::insert::new(
