@@ -8,7 +8,7 @@ use rocket::get;
     tag = "Hackathon University 2024",
     operation_id = "get_all_university",
     responses(
-        (status = 200, description = "All university fetched successfully", body = VecUniversity),
+        (status = 200, description = "All university fetched successfully", body = Vec<University>),
         (status = 500, description = "Database error", body = ApiErrorBody),
     ),
 )]

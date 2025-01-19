@@ -39,7 +39,7 @@ pub async fn authorization_user(db_pool: &DbState, claims: Claims) -> Result<Jso
     tag = "Hackathon User 2024",
     operation_id = "get_all_user",
     responses(
-        (status = 200, description = "All user fetched successfully", body = VecUser),
+        (status = 200, description = "All user fetched successfully", body = Vec<User>),
         (status = 500, description = "Database error", body = ApiErrorBody),
     ),
     security(
@@ -92,7 +92,7 @@ pub async fn by_id(
         ("id" = i32, Path, description = "ID of the user`s university to fetch")
     ),
     responses(
-        (status = 200, description = "User fetched successfully", body = VecUser),
+        (status = 200, description = "User fetched successfully", body = Vec<User>),
         (status = 401, description = "Unauthorized error"),
         (status = 500, description = "Database error", body = ApiErrorBody),
     ),
@@ -112,7 +112,6 @@ pub async fn by_university(
     )))
 }
 
-// do swagger doc get user by team
 #[utoipa::path(
     get,
     path = "/api/hackathon_2024/user/by_team/{id}",
@@ -122,7 +121,7 @@ pub async fn by_university(
         ("id" = i32, Path, description = "ID of the user`s team to fetch")
     ),
     responses(
-        (status = 200, description = "User fetched successfully", body = VecUser),
+        (status = 200, description = "User fetched successfully", body = Vec<User>),
         (status = 401, description = "Unauthorized error"),
         (status = 500, description = "Database error", body = ApiErrorBody),
     ),

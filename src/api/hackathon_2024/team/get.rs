@@ -8,7 +8,7 @@ use rocket::get;
     tag = "Hackathon Team 2024",
     operation_id = "get_all_team",
     responses(
-        (status = 200, description = "All team get successfully", body = VecTeam),
+        (status = 200, description = "All team get successfully", body = Vec<Team>),
         (status = 500, description = "Database error", body = ApiErrorBody),
     ),
 )]

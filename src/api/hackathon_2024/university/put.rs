@@ -5,8 +5,7 @@ use rocket::put;
 #[utoipa::path(
     put,
     path = "/api/hackathon_2024/university/by_id/{id}",
-    request_body = crate::diesel::models::hackathon_2024::university::HackathonUniversity2024Insertable,
-    tag = "Hackathon University 2024",
+    request_body = University, tag = "Hackathon University 2024",
     operation_id = "put_university_by_id",
     params(
         ("id" = i32, Path, description = "ID of the university to update")

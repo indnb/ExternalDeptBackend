@@ -1,8 +1,9 @@
 use crate::diesel::models::hackathon_2024::category::HackathonCategory2024Enum;
 use crate::diesel::models::hackathon_2024::team::HackathonTeam2024Insertable;
 use serde::Deserialize;
+use utoipa::ToSchema;
 
-#[derive(Deserialize, utoipa::ToSchema)]
+#[derive(Deserialize, ToSchema)]
 pub struct TeamRegistrationData {
     #[schema(example = "1")]
     pub id: i32,
@@ -10,17 +11,18 @@ pub struct TeamRegistrationData {
     pub password: String,
 }
 
-#[derive(Debug, Deserialize, utoipa::ToSchema)]
+#[derive(Debug, Deserialize, ToSchema)]
 pub struct TeamUpdateData {
     #[schema(example = "1")]
     pub id: i32,
-    #[schema(example = "Innovation University")]
+    #[schema(example = "Team 2")]
     pub name: String,
-    #[schema(example = "Education")]
+    #[schema(example = "Military")]
     pub category: HackathonCategory2024Enum,
-    #[schema(example = "skalse_456")]
+    #[schema(example = "bredovschik")]
     pub nickname_tg: String,
 }
 
-#[derive(Debug, Deserialize, utoipa::ToSchema)]
+#[derive(Debug, Deserialize, ToSchema)]
+#[schema(title = "HackathonTeam2024Insertable", value_type = HackathonTeam2024Insertable, as = HackathonTeam2024Insertable)]
 pub struct TeamCreateData(pub HackathonTeam2024Insertable);
