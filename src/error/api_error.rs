@@ -118,8 +118,8 @@ impl<'r> Responder<'r, 'static> for ApiError {
     }
 }
 
-#[derive(Serialize)]
-struct ApiErrorBody {
+#[derive(Serialize, utoipa::ToSchema)]
+pub struct ApiErrorBody {
     error: String,
     message: String,
 }

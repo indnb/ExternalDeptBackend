@@ -1,4 +1,4 @@
-use crate::{api, diesel::prelude::ApiError};
+use crate::api;
 use utoipa::openapi::security::{HttpAuthScheme, HttpBuilder, SecurityScheme};
 use utoipa::{Modify, OpenApi};
 
@@ -9,14 +9,16 @@ use utoipa::{Modify, OpenApi};
         api::hackathon_2024::university::put::by_id,
         api::hackathon_2024::university::delete::by_id,
         api::hackathon_2024::university::get::by_id,
+        api::hackathon_2024::team::post::create,
+        api::hackathon_2024::team::get::all,
+        api::hackathon_2024::team::get::by_id,
+        api::hackathon_2024::team::put::by_id,
+        api::hackathon_2024::team::delete::by_id,
+        api::admin::post::login,
+        api::admin::get::get
     ),
-    components(schemas(
-        crate::diesel::models::hackathon_2024::university::HackathonUniversity2024Insertable,
-        crate::middleware::admin_token_match::AdminAuthData,
-        ApiError,
-    )),
     info(
-        title = "ExternalDept Hackathon 2024 API",
+        title = "ExternalDept API",
         version = "1.0.0"
     ),
     modifiers(&SecurityAddon)

@@ -3,16 +3,16 @@ use diesel::{Insertable, Queryable};
 use serde::{Deserialize, Serialize};
 use utoipa::ToSchema;
 
-#[derive(Debug, Queryable, Serialize)]
+#[derive(Debug, Queryable, Serialize, ToSchema)]
 #[diesel(table_name = crate::diesel::schema::hackathon_university_2024)]
 pub struct HackathonUniversity2024Queryable {
-    #[allow(dead_code)]
+    #[schema(example = "1")]
     pub id: i32,
-    #[allow(dead_code)]
+    #[schema(example = "Innovation University")]
     pub name: String,
-    #[allow(dead_code)]
+    #[schema(example = "2025-01-19T15:06:19.027744")]
     pub created_at: Option<NaiveDateTime>,
-    #[allow(dead_code)]
+    #[schema(example = "2025-01-19T15:06:19.027744")]
     pub updated_at: Option<NaiveDateTime>,
 }
 

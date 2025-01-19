@@ -5,9 +5,11 @@ use rocket::delete;
     delete,
     path = "/api/hackathon_2024/university/by_id/{id}",
     tag = "Hackathon University 2024",
+    operation_id = "delete_university_by_id", 
     responses(
         (status = 200, description = "University deleted successfully"),
         (status = 401, description = "Unauthorized error"),
+        (status = 500, description = "Database error", body = ApiErrorBody),
     ),
     operation_id = "delete_university_by_id",
     params(

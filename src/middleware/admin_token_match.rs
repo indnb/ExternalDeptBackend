@@ -15,14 +15,21 @@ pub struct AdminAuthData {
 
 impl AdminAuthData {
     pub fn check_admin(&self) -> Result<(), ApiError> {
+        log::info!(
+            "Admin name: {}, Admin password: {}",
+            EnvConfiguration::get().admin_name,
+            EnvConfiguration::get().admin_password
+        );
         if self.admin_name != EnvConfiguration::get().admin_name {
-            Err(ApiError::ValidationError(
-                "Error validation admin name".to_string(),
-            ))
+            Err(ApiError::ValidationError(format!(
+                "Error validation admin name: {}",
+                self.admin_name
+            )))
         } else if self.admin_password != EnvConfiguration::get().admin_password {
-            Err(ApiError::ValidationError(
-                "Error validation admin password".to_string(),
-            ))
+            Err(ApiError::ValidationError(format!(
+                "Error validation admin password: {}",
+                self.admin_password
+            )))
         } else {
             Ok(())
         }

@@ -11,7 +11,18 @@ use serialize::IsNull;
 use std::fmt::Debug;
 use std::io::Write;
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, FromSqlRow, AsExpression, Deserialize, Serialize)]
+#[derive(
+    Debug,
+    Clone,
+    Copy,
+    PartialEq,
+    Eq,
+    FromSqlRow,
+    AsExpression,
+    Deserialize,
+    Serialize,
+    utoipa::ToSchema,
+)]
 #[diesel(sql_type = crate::diesel::schema::sql_types::HackathonCategory2024)]
 pub enum HackathonCategory2024Enum {
     Education,

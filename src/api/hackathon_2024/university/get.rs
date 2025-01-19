@@ -6,10 +6,10 @@ use rocket::get;
     get,
     path = "/api/hackathon_2024/university/all",
     tag = "Hackathon University 2024",
+    operation_id = "get_all_university",
     responses(
-        (status = 200, description = "All university fetched successfully"),
-        (status = 401, description = "Unauthorized error"),
-        (status = 500, description = "Database error"),
+        (status = 200, description = "All university fetched successfully", body = VecUniversity),
+        (status = 500, description = "Database error", body = ApiErrorBody),
     ),
 )]
 #[get("/hackathon_2024/university/all")]
@@ -28,7 +28,7 @@ pub async fn all(db_pool: &DbState) -> Result<Json<VecUniversity>, ApiError> {
         ("id" = i32, Path, description = "ID of the university to fetch")
     ),
     responses(
-        (status = 200, description = "Single university fetched by id successfully"),
+        (status = 200, description = "Single university fetched by id successfully", body = University),
         (status = 401, description = "Unauthorized error"),
         (status = 500, description = "Database error"),
     ),

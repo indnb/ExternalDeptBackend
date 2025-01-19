@@ -5,12 +5,12 @@ use rocket::post;
 #[utoipa::path(
     post,
     path = "/api/hackathon_2024/university/create",
-    request_body = crate::diesel::models::hackathon_2024::university::HackathonUniversity2024Insertable,
-    tag = "Hackathon University 2024",
+    request_body = University, tag = "Hackathon University 2024",
+    operation_id = "create_university",
     responses(
         (status = 200, description = "University created successfully"),
-        (status = 500, description = "Unauthorized error"),
-        (status = 500, description = "Database error"),
+        (status = 401, description = "Unauthorized error", body = ApiErrorBody),
+        (status = 500, description = "Database error", body = ApiErrorBody),
     ),
     security(
         ("bearer_auth" = [])

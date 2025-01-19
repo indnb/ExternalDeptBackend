@@ -14,7 +14,7 @@ use rocket::put;
     responses(
         (status = 200, description = "University updated successfully"),
         (status = 401, description = "Unauthorized error"),
-        (status = 500, description = "Database error"),
+        (status = 500, description = "Database error", body = ApiErrorBody),
     ),
     security(
         ("bearer_auth" = [])
