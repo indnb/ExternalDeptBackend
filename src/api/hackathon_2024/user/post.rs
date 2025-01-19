@@ -4,6 +4,18 @@ use crate::utils::security::verify_password;
 use crate::utils::validation;
 use rocket::post;
 
+#[utoipa::path(
+    post,
+    path = "/api/hackathon_2024/user/registration_by_tg",
+    request_body = RegistrationData,
+    tag = "Hackathon User 2024",
+    operation_id = "user_registration_by_tg",
+    responses(
+        (status = 200, description = "User registration successfully"),
+        (status = 422, description = "Validation error", body = ApiErrorBody),
+        (status = 500, description = "Database error", body = ApiErrorBody),
+    ),
+)]
 #[post("/hackathon_2024/user/registration_by_tg", data = "<data>")]
 pub async fn registration_by_tg(
     db_pool: &DbState,

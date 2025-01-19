@@ -23,6 +23,6 @@ pub fn by_id(
         .execute(&mut get_connection(dp_pool)?)
         .map_err(|err| {
             error!("Error updating hackathon_user_2024, bellow error");
-            ApiError::DatabaseErrorResult(err)
+            err.into()
         })
 }

@@ -4,16 +4,13 @@ CREATE TYPE hackathon_category_2024 AS ENUM ('education', 'military', 'web3_0', 
 CREATE TYPE type_media AS ENUM ('video', 'photo');
 
 -- Function for Updated Timestamp
-CREATE
-OR REPLACE FUNCTION update_timestamp()
+CREATE OR REPLACE FUNCTION update_timestamp()
 RETURNS TRIGGER AS $$
 BEGIN
-    NEW.updated_at
-= CURRENT_TIMESTAMP;
-RETURN NEW;
+    NEW.updated_at = CURRENT_TIMESTAMP;
+    RETURN NEW;
 END;
-$$
-LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql;
 
 -- University Table
 CREATE TABLE hackathon_university_2024
@@ -72,17 +69,15 @@ CREATE TRIGGER update_hackathon_user_updated_at
     EXECUTE FUNCTION update_timestamp();
 
 -- Trigger to Increment Team Member Count
-CREATE
-OR REPLACE FUNCTION increment_team_member_count()
+CREATE OR REPLACE FUNCTION increment_team_member_count()
 RETURNS TRIGGER AS $$
 BEGIN
-UPDATE hackathon_team_2024
-SET count_members = count_members + 1
-WHERE id = NEW.team_id;
-RETURN NEW;
+    UPDATE hackathon_team_2024
+    SET count_members = count_members + 1
+    WHERE id = NEW.team_id;
+    RETURN NEW;
 END;
-$$
-LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql;
 
 CREATE TRIGGER increment_team_member_trigger
     AFTER INSERT
@@ -90,13 +85,31 @@ CREATE TRIGGER increment_team_member_trigger
     FOR EACH ROW
     EXECUTE FUNCTION increment_team_member_count();
 
+-- Trigger to Decrement Team Member Count
+CREATE OR REPLACE FUNCTION decrement_team_member_count()
+RETURNS TRIGGER AS $$
+BEGIN
+    UPDATE hackathon_team_2024
+    SET count_members = count_members - 1
+    WHERE id = OLD.team_id;
+    RETURN OLD;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER decrement_team_member_trigger
+    AFTER DELETE OR UPDATE OF team_id
+    ON hackathon_user_2024
+    FOR EACH ROW
+    WHEN (OLD.team_id IS NOT NULL)
+    EXECUTE FUNCTION decrement_team_member_count();
+
 -- News Table
 CREATE TABLE news
 (
     id          SERIAL PRIMARY KEY,
     description TEXT         NOT NULL,
     preview_id  INT,
-    header      VARCHAR(255) NOT NULL,
+    header      VARCHAR(255) NOT NULL UNIQUE,
     created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -116,7 +129,8 @@ CREATE TABLE news_media
     type_media type_media NOT NULL,
     position   INT        NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT unique_position_per_news UNIQUE (news_id, position)
 );
 
 CREATE TRIGGER update_news_media_updated_at
@@ -130,7 +144,7 @@ CREATE TABLE announcement_banner
 (
     id          SERIAL PRIMARY KEY,
     src_url     TEXT         NOT NULL,
-    type_media  type_media   NOT NULL,
+    type_media  type_media   NOT NULL DEFAULT 'photo',
     description VARCHAR(255) NOT NULL,
     showing     BOOLEAN      NOT NULL DEFAULT FALSE,
     created_at  TIMESTAMP             DEFAULT CURRENT_TIMESTAMP,
@@ -142,3 +156,4 @@ CREATE TRIGGER update_announcement_banner_updated_at
     ON announcement_banner
     FOR EACH ROW
     EXECUTE FUNCTION update_timestamp();
+

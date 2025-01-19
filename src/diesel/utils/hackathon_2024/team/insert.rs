@@ -9,6 +9,6 @@ pub fn new(db_pool: &DbState, data: HackathonTeam2024Insertable) -> Result<i32, 
         .get_result::<i32>(&mut db_connection)
         .map_err(|err| {
             error!("Error inserting hackathon 2024 team with id - {:?}", err);
-            ApiError::DatabaseErrorResult(err)
+            err.into()
         })
 }

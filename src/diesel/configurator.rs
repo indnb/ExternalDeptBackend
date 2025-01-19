@@ -1,3 +1,4 @@
+use super::prelude::DbState;
 use crate::error::api_error::ApiError;
 use crate::utils::constants::diesel::MIGRATIONS;
 use crate::utils::env_configuration::EnvConfiguration;
@@ -6,7 +7,6 @@ use diesel::r2d2::{ConnectionManager, Pool, PooledConnection};
 use diesel::sql_types::Text;
 use diesel::RunQueryDsl;
 use diesel_migrations::MigrationHarness;
-use rocket::State;
 
 pub type DbPool = Pool<ConnectionManager<PgConnection>>;
 
@@ -73,7 +73,7 @@ pub fn configuration_database() -> DbPool {
 }
 
 pub fn get_connection(
-    db_pool: &State<DbPool>,
+    db_pool: &DbState,
 ) -> Result<PooledConnection<ConnectionManager<PgConnection>>, ApiError> {
     db_pool
         .get()

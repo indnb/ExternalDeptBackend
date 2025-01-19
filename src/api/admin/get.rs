@@ -1,9 +1,20 @@
-use crate::models::admin::admin_jwt;
-use log::info;
+use crate::{middleware::admin_token_match::AdminAuthData, utils::prelude_api::*};
 use rocket::get;
 
-#[allow(dead_code)]
+#[utoipa::path(
+    get,
+    path = "/api/admin/get",
+    operation_id = "get_admin",
+    tag = "Admin",
+    responses(
+        (status = 200, description = "Successfully authenticated admin"),
+        (status = 401, description = "Unauthorized error"),
+    ),
+    security(
+        ("bearer_auth" = [])
+    )
+)]
 #[get("/admin/get")]
-pub async fn get(claims: admin_jwt::AdminJwt) {
-    info!("Welcome, user with ID: {}", claims.admin_name);
+pub async fn get(admin: AdminAuthData) {
+    info!("Auth data admin: {:?}", admin);
 }
