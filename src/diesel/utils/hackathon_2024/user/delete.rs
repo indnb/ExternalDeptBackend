@@ -7,6 +7,6 @@ pub fn by_id(db_pool: &DbState, user_id: i32) -> Result<usize, ApiError> {
         .execute(&mut get_connection(db_pool)?)
         .map_err(|err| {
             error!("Error deleting hackathon_user_2024");
-            ApiError::DatabaseErrorResult(err)
+            err.into()
         })
 }

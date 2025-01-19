@@ -1,11 +1,14 @@
 use crate::api;
 use crate::diesel::configurator::{configuration_database, DbPool};
+use crate::swagger::ApiDoc;
 use crate::utils::env_configuration::EnvConfiguration;
 use log::LevelFilter;
 use rocket::figment::Figment;
 use rocket::{routes, Config};
 use rocket_cors::{AllowedHeaders, AllowedOrigins, Cors, CorsOptions};
 use std::net::IpAddr;
+use utoipa::OpenApi;
+use utoipa_swagger_ui::SwaggerUi;
 
 pub struct Server;
 
@@ -42,7 +45,10 @@ impl Server {
     }
 
     fn configure_cors() -> Cors {
-        let exact = &[&format!("https://{}", EnvConfiguration::get().main_url)];
+        let exact = &[
+            &format!("https://{}", EnvConfiguration::get().main_url,),
+            &format!("http://0.0.0.0:{}", EnvConfiguration::get().server_port),
+        ];
         CorsOptions {
             allowed_origins: AllowedOrigins::some_exact(exact),
             allowed_methods: vec!["GET", "POST", "PUT", "DELETE"]
@@ -61,6 +67,10 @@ impl Server {
         rocket::custom(config)
             .attach(cors)
             .manage(db_pool)
+            .mount(
+                "/",
+                SwaggerUi::new("/swagger-ui/<_..>").url("/api-doc/openapi.json", ApiDoc::openapi()),
+            )
             .mount(
                 "/api",
                 routes![

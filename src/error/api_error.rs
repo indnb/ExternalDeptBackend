@@ -5,7 +5,7 @@ use serde::Serialize;
 use std::io::Cursor;
 use thiserror::Error;
 
-#[derive(Error, Debug)]
+#[derive(Error, Debug, utoipa::ToSchema)]
 pub enum ApiError {
     #[allow(dead_code)]
     #[error("Error not found")]
@@ -13,7 +13,7 @@ pub enum ApiError {
 
     #[allow(dead_code)]
     #[error("Database result error occurred")]
-    DatabaseErrorResult(#[from] diesel::result::Error),
+    DatabaseErrorResult(String),
 
     #[allow(dead_code)]
     #[error("Database connection error occurred")]
@@ -122,4 +122,10 @@ impl<'r> Responder<'r, 'static> for ApiError {
 struct ApiErrorBody {
     error: String,
     message: String,
+}
+
+impl From<diesel::result::Error> for ApiError {
+    fn from(err: diesel::result::Error) -> Self {
+        ApiError::DatabaseErrorResult(err.to_string())
+    }
 }

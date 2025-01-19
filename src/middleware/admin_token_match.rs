@@ -6,7 +6,7 @@ use rocket::request::FromRequest;
 use rocket::{request, Request};
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, utoipa::ToSchema, utoipa::IntoParams)]
 pub struct AdminAuthData {
     pub admin_password: String,
     pub admin_name: String,

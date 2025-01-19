@@ -6,6 +6,7 @@ mod error;
 mod middleware;
 mod models;
 mod server;
+mod swagger;
 #[cfg(test)]
 mod tests;
 mod utils;

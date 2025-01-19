@@ -15,6 +15,6 @@ pub fn new(
                 "Error inserting hackathon 2024 university with id - {:?}",
                 err
             );
-            ApiError::DatabaseErrorResult(err)
+            err.into()
         })
 }

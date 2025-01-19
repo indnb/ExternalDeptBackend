@@ -18,6 +18,6 @@ pub fn by_data(db_pool: &DbState, data: &TeamUpdateData) -> Result<usize, ApiErr
                 "Error updating hackathon_university_2024 with data {:?}",
                 data
             );
-            ApiError::DatabaseErrorResult(err)
+            err.into()
         })
 }
