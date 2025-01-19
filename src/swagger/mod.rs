@@ -14,6 +14,13 @@ use utoipa::{Modify, OpenApi};
         api::hackathon_2024::team::get::by_id,
         api::hackathon_2024::team::put::by_id,
         api::hackathon_2024::team::delete::by_id,
+        api::hackathon_2024::user::post::registration_by_tg,
+        api::hackathon_2024::user::get::all,
+        api::hackathon_2024::user::put::by_id,
+        api::hackathon_2024::user::delete::by_id,
+        api::hackathon_2024::user::get::by_id,
+        api::hackathon_2024::user::get::by_university,
+        api::hackathon_2024::user::get::by_team,
         api::admin::post::login,
         api::admin::get::get
     ),

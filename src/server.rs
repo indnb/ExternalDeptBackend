@@ -81,6 +81,9 @@ impl Server {
                     api::hackathon_2024::user::get::all,
                     api::hackathon_2024::user::put::by_id,
                     api::hackathon_2024::user::delete::by_id,
+                    api::hackathon_2024::user::get::by_id,
+                    api::hackathon_2024::user::get::by_university,
+                    api::hackathon_2024::user::get::by_team,
                     // /hackathon_2024/university/*
                     api::hackathon_2024::university::post::create,
                     api::hackathon_2024::university::get::all,

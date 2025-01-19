@@ -6,7 +6,7 @@ use serde::Deserialize;
 pub struct TeamRegistrationData {
     #[schema(example = "1")]
     pub id: i32,
-    #[schema(example = "password")]
+    #[schema(example = "real_password123!AAA")]
     pub password: String,
 }
 
