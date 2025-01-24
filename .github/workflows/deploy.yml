@@ -1,0 +1,41 @@
+name: Deploy to Backend
+
+on:
+  push:
+    tags:
+      - 'v*'  
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Deploy via SSH
+      uses: appleboy/ssh-action@v0.1.7
+      with:
+        host: ${{ secrets.SERVER_HOST }}
+        port: ${{ secrets.SERVER_PORT }}
+        username: ${{ secrets.SERVER_USER }}
+        key: ${{ secrets.SERVER_SSH_KEY }}
+        script: |
+          CONTAINER_NAME=${{ secrets.CONTAINER_NAME }}
+          NETWORK_NAME=${{ secrets.NETWORK_NAME }}
+          IMAGE_TAG=${GITHUB_REF_NAME} # Use the tag name (v*) as the Docker image tag
+
+          echo "Deploying with Container Name: $CONTAINER_NAME, Network Name: $NETWORK_NAME, and Tag: $IMAGE_TAG"
+
+          cd /home/dnb/ExternalDeptBackend
+
+          git pull
+
+          docker build -t external-dept-backend:$IMAGE_TAG .
+
+          docker rm -f $CONTAINER_NAME || true
+
+          docker run --name $CONTAINER_NAME --network $NETWORK_NAME -p 8181:8181 -d external-dept-backend:$IMAGE_TAG
+
+          echo "Deployment completed successfully with tag $IMAGE_TAG."
+
