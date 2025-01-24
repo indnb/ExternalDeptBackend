@@ -21,6 +21,7 @@ jobs:
         username: ${{ secrets.SERVER_USER }}
         key: ${{ secrets.SERVER_SSH_KEY }}
         timeout: 30m
+        command_timeout: 30m
         script: |
           CONTAINER_NAME=${{ secrets.CONTAINER_NAME }}
           NETWORK_NAME=${{ secrets.NETWORK_NAME }}
