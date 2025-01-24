@@ -23,7 +23,7 @@ jobs:
         script: |
           CONTAINER_NAME=${{ secrets.CONTAINER_NAME }}
           NETWORK_NAME=${{ secrets.NETWORK_NAME }}
-          IMAGE_TAG=${GITHUB_REF_NAME} # Use the tag name (v*) as the Docker image tag
+          IMAGE_TAG=${GITHUB_REF_NAME:-latest}
 
           echo "Deploying with Container Name: $CONTAINER_NAME, Network Name: $NETWORK_NAME, and Tag: $IMAGE_TAG"
 
