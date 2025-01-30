@@ -2,29 +2,23 @@ use once_cell::sync::OnceCell;
 use std::env;
 
 pub static CONFIG: OnceCell<EnvConfiguration> = OnceCell::new();
+
 pub struct EnvConfiguration {
-    #[allow(dead_code)]
     pub database_name: String,
     pub database_user: String,
     pub database_password: String,
     pub database_host: String,
     pub database_port: u16,
-    #[allow(dead_code)]
     pub main_url: String,
-    #[allow(dead_code)]
     pub smtp_email: String,
-    #[allow(dead_code)]
     pub smtp_password: String,
     pub server_port: u16,
     /* WILL UNCOMMENT WHEN IN SCHEMA.RS EXISTS USER_ROLE!!!
     #[allow(dead_code)]
     pub admin_role: UserRoleEnum,
     */
-    #[allow(dead_code)]
     pub admin_name: String,
-    #[allow(dead_code)]
     pub admin_password: String,
-    #[allow(dead_code)]
     pub jwt_secret: String,
 }
 
@@ -68,6 +62,7 @@ impl EnvConfiguration {
                 .expect("Invalid JWT_SECRET"),
         })
     }
+
     fn unwrap_env(name: &str, default: Option<String>) -> String {
         env::var(name).unwrap_or_else(|_| match default {
             None => panic!("Error loading environment variable: {}", name),

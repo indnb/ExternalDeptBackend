@@ -46,7 +46,8 @@ impl Server {
 
     fn configure_cors() -> Cors {
         let exact = &[
-            &format!("https://{}", EnvConfiguration::get().main_url,),
+            &format!("http://{}", EnvConfiguration::get().main_url),
+            &format!("https://{}", EnvConfiguration::get().main_url),
             &format!("http://0.0.0.0:{}", EnvConfiguration::get().server_port),
         ];
         CorsOptions {
