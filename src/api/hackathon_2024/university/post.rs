@@ -1,4 +1,5 @@
 use crate::dto::request::hackathon_2024::university::{University, VecUniversity};
+use crate::dto::response::hackathon_2024::university::update_university_cached;
 use crate::utils::prelude_api::*;
 use rocket::post;
 
@@ -27,7 +28,11 @@ pub async fn create(
         db_pool,
         data.into_inner().0,
     )?;
+
+    update_university_cached(db_pool).await?;
+
     info!("Succeed insert new university with id - {id}");
+
     Ok(())
 }
 
@@ -52,10 +57,15 @@ pub async fn create_by_vec(
     admin_match: AdminAuthData,
 ) -> Result<(), ApiError> {
     admin_match.check_admin()?;
+
     let id = crate::diesel::utils::hackathon_2024::university::insert::new_by_vec(
         db_pool,
         data.into_inner().0,
     )?;
+
+    update_university_cached(db_pool).await?;
+
     info!("Succeed insert new university with id - {id}");
+
     Ok(())
 }

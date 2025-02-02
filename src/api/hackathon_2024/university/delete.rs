@@ -1,4 +1,6 @@
-use crate::utils::prelude_api::*;
+use crate::{
+    dto::response::hackathon_2024::university::update_university_cached, utils::prelude_api::*,
+};
 use rocket::delete;
 
 #[utoipa::path(
@@ -23,6 +25,10 @@ use rocket::delete;
 pub async fn by_id(db_pool: &DbState, id: i32, admin_match: AdminAuthData) -> Result<(), ApiError> {
     admin_match.check_admin()?;
     let id = crate::diesel::utils::hackathon_2024::university::delete::by_id(db_pool, id)?;
+
+    update_university_cached(db_pool).await?;
+
     info!("Successfully deleted university from hackathon_university_2024 with id {id}");
+
     Ok(())
 }

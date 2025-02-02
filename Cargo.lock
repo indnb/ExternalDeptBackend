@@ -13,6 +13,7 @@ dependencies = [
  "dotenvy",
  "env_logger",
  "jsonwebtoken",
+ "lazy_static",
  "lettre",
  "log",
  "once_cell",

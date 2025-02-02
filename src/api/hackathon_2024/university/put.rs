@@ -1,4 +1,5 @@
 use crate::dto::request::hackathon_2024::university::University;
+use crate::dto::response::hackathon_2024::university::update_university_cached;
 use crate::utils::prelude_api::*;
 use rocket::put;
 
@@ -32,6 +33,10 @@ pub async fn by_id(
         id,
         data.into_inner().0,
     )?;
+
+    update_university_cached(db_pool).await?;
+
     info!("Successfully updated hackathon_university_2024 with id: {id}");
+
     Ok(())
 }

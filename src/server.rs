@@ -1,10 +1,11 @@
 use crate::api;
 use crate::diesel::configurator::{configuration_database, DbPool};
+use crate::dto::response::hackathon_2024::university::update_university_cached;
 use crate::swagger::ApiDoc;
 use crate::utils::env_configuration::EnvConfiguration;
 use log::LevelFilter;
 use rocket::figment::Figment;
-use rocket::{routes, Config};
+use rocket::{routes, Config, State};
 use rocket_cors::{AllowedHeaders, AllowedOrigins, Cors, CorsOptions};
 use std::net::IpAddr;
 use utoipa::OpenApi;
@@ -19,6 +20,13 @@ impl Server {
         let config = Server::get_server_config().expect("Failed to configure Rocket server");
         let cors = Server::configure_cors();
         let db_pool = configuration_database();
+
+        let db_state = rocket::build().manage(db_pool.clone());
+        let db_state: Option<&State<DbPool>> = State::get(&db_state);
+        update_university_cached(db_state.expect("Failed to configure Rocket server"))
+            .await
+            .expect("Failed to configure Rocket server");
+
         Server::build_rocket(db_pool, config, cors).await;
     }
 
