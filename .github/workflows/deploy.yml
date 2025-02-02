@@ -37,7 +37,7 @@ jobs:
 
           docker rm -f $CONTAINER_NAME || true
 
-          docker run --name $CONTAINER_NAME --network $NETWORK_NAME -p 8181:8181 -d external-dept-backend:$IMAGE_TAG
+          docker run --name $CONTAINER_NAME --network $NETWORK_NAME --restart always -p 8181:8181 -d external-dept-backend:$IMAGE_TAG
 
           echo "Deployment completed successfully with tag $IMAGE_TAG."
 
