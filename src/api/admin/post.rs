@@ -35,6 +35,6 @@ pub async fn login(data: Json<LoginAdminData>) -> Result<String, ApiError> {
 
     match security::encoded_data(&auth) {
         Ok(token) => Ok(token),
-        Err(err) => Err(ApiError::TokenGenerationError(err.to_string())),
+        Err(err) => Err(ApiError::FailedToGenerateAdminToken(err.to_string())),
     }
 }

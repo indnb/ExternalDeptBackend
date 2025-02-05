@@ -6,7 +6,7 @@ pub fn check_email(email: impl AsRef<str>, error_message: impl AsRef<str>) -> Re
     if email.as_ref().is_email() {
         Ok(())
     } else {
-        Err(ApiError::ValidationError(error_message.as_ref().to_owned()))
+        Err(ApiError::InvalidEmail(error_message.as_ref().to_owned()))
     }
 }
 
@@ -17,7 +17,9 @@ pub fn check_nickname_tg(
     if nickname_tg.as_ref().is_nickname_tg() {
         Ok(())
     } else {
-        Err(ApiError::ValidationError(error_message.as_ref().to_owned()))
+        Err(ApiError::InvalidTelegramNickname(
+            error_message.as_ref().to_owned(),
+        ))
     }
 }
 
@@ -29,7 +31,7 @@ pub fn check_name(
     if name.as_ref().less_for(length) {
         Ok(())
     } else {
-        Err(ApiError::ValidationError(error_message.as_ref().to_owned()))
+        Err(ApiError::InvalidName(error_message.as_ref().to_owned()))
     }
 }
 
@@ -37,7 +39,9 @@ pub fn check_phone(phone: impl AsRef<str>, error_message: impl AsRef<str>) -> Re
     if phone.as_ref().is_phone() {
         Ok(())
     } else {
-        Err(ApiError::ValidationError(error_message.as_ref().to_owned()))
+        Err(ApiError::InvalidPhoneNumber(
+            error_message.as_ref().to_owned(),
+        ))
     }
 }
 
@@ -49,6 +53,6 @@ pub fn check_password(
     if password.as_ref().is_password(length) {
         Ok(())
     } else {
-        Err(ApiError::ValidationError(error_message.as_ref().to_owned()))
+        Err(ApiError::InvalidPassword(error_message.as_ref().to_owned()))
     }
 }

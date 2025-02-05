@@ -22,12 +22,12 @@ impl AdminAuthData {
             EnvConfiguration::get().admin_password
         );
         if self.admin_name != EnvConfiguration::get().admin_name {
-            Err(ApiError::ValidationError(format!(
+            Err(ApiError::InvalidAdminName(format!(
                 "Error validation admin name: {}",
                 self.admin_name
             )))
         } else if self.admin_password != EnvConfiguration::get().admin_password {
-            Err(ApiError::ValidationError(format!(
+            Err(ApiError::InvalidAdminPassword(format!(
                 "Error validation admin password: {}",
                 self.admin_password
             )))
@@ -52,12 +52,12 @@ impl<'r> FromRequest<'r> for AdminAuthData {
                 Ok(token_data) => request::Outcome::Success(token_data.claims),
                 Err(_) => request::Outcome::Error((
                     Status::Unauthorized,
-                    ApiError::Unauthorized("Admin not authorized".to_string()),
+                    ApiError::AdminUnauthorized("Admin not authorized from token".to_string()),
                 )),
             },
             None => request::Outcome::Error((
                 Status::Unauthorized,
-                ApiError::HeaderMismatched("Admin header mismatched".to_owned()),
+                ApiError::AdminHeaderMismatch("Admin header mismatched".to_owned()),
             )),
         }
     }

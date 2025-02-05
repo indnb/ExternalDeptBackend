@@ -15,8 +15,15 @@ pub fn by_id(
         ))
         .returning(id)
         .get_result(&mut get_connection(db_pool)?)
-        .map_err(|err| {
-            error!("Error updating hackathon_university_2024");
-            err.into()
+        .map(|data| {
+            if data == 0 {
+                Err(ApiError::FailedToUpdateUniversityById(
+                    "University not found".to_string(),
+                ))
+            } else {
+                Ok(data)
+            }
         })
+        .map_err(|err| ApiError::FailedToUpdateUniversityById(err.to_string()))
+        .and_then(|data| data)
 }

@@ -32,6 +32,8 @@ pub async fn registration_by_tg(
     validation::data::hackathon_2024::user::field(&user_data)?;
 
     let team = crate::diesel::utils::hackathon_2024::team::fetch::by_id(db_pool, team_data.id)?;
+    validation::data::hackathon_2024::team::check_team_members_count(team.count_members)?;
+
     verify_password(
         team_data.password.as_str(),
         team.password_registration.as_str(),

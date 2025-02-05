@@ -77,5 +77,5 @@ pub fn get_connection(
 ) -> Result<PooledConnection<ConnectionManager<PgConnection>>, ApiError> {
     db_pool
         .get()
-        .map_err(|err| ApiError::DatabaseErrorConnection(err.to_string()))
+        .map_err(|err| ApiError::FailedDatabaseConnection(err.to_string()))
 }

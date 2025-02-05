@@ -26,13 +26,14 @@ use utoipa::{Modify, OpenApi};
                 api::hackathon_2024::team::post::create,
                 api::hackathon_2024::team::get::all,
                 api::hackathon_2024::team::get::by_id,
-                api::hackathon_2024::team::put::by_id,
+                api::hackathon_2024::team::put::by_data,
                 api::hackathon_2024::team::delete::by_id,
                 // /adnmin/
                 api::admin::post::login,
                 api::admin::get::get,
                 // /other/*
     ),
+    components(schemas(crate::error::api_error::ApiError)),
     info(
         title = "ExternalDept API",
         version = "1.0.0"

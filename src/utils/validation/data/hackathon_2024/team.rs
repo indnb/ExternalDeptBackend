@@ -32,3 +32,13 @@ pub fn check_team_password(password: impl AsRef<str>) -> Result<(), ApiError> {
 
     Ok(())
 }
+
+pub fn check_team_members_count(count: i32) -> Result<(), ApiError> {
+    if count >= 6 {
+        Err(ApiError::InvalidTeamMembersCount(
+            "Team members count greater for 6".to_string(),
+        ))
+    } else {
+        Ok(())
+    }
+}

@@ -10,13 +10,7 @@ pub fn new(
         .values(data)
         .returning(crate::diesel::schema::hackathon_university_2024::id)
         .get_result::<i32>(&mut db_connection)
-        .map_err(|err| {
-            error!(
-                "Error inserting hackathon 2024 university with id - {:?}",
-                err
-            );
-            err.into()
-        })
+        .map_err(|err| ApiError::FailedToInsertUniversity(err.to_string()))
 }
 
 pub fn new_by_vec(
@@ -28,11 +22,5 @@ pub fn new_by_vec(
         .values(data)
         .returning(crate::diesel::schema::hackathon_university_2024::id)
         .get_result::<i32>(&mut db_connection)
-        .map_err(|err| {
-            error!(
-                "Error inserting hackathon 2024 university with id - {:?}",
-                err
-            );
-            err.into()
-        })
+        .map_err(|err| ApiError::FailedToInsertUniversityFromVec(err.to_string()))
 }

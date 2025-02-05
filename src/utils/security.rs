@@ -8,17 +8,17 @@ use log::error;
 use serde::de::DeserializeOwned;
 use serde::Serialize;
 
-pub fn hashing_data(value: impl AsRef<str>) -> Result<String, ApiError> {
+pub fn hashing_password(value: impl AsRef<str>) -> Result<String, ApiError> {
     hash(value.as_ref(), DEFAULT_COST).map_err(|err| {
         error!("Error hashing password: {err:?}");
-        ApiError::HashingError(err.to_string())
+        ApiError::FailedToHashPassword(err.to_string())
     })
 }
 
 pub fn verify_password(password: impl AsRef<str>, hash: impl AsRef<str>) -> Result<bool, ApiError> {
     verify(password.as_ref(), hash.as_ref()).map_err(|err| {
         error!("Error verifying password: {err:?}");
-        ApiError::HashingError(err.to_string())
+        ApiError::FailedToVerifyPassword(err.to_string())
     })
 }
 
@@ -30,7 +30,7 @@ pub fn decoded_data<T: DeserializeOwned>(
         &DecodingKey::from_secret(CONFIG.get().unwrap().jwt_secret.as_ref()),
         &Validation::new(Algorithm::HS512),
     )
-    .map_err(|err| ApiError::TokenDecodeError(err.to_string()))
+    .map_err(|err| ApiError::FailedToDecodeData(err.to_string()))
 }
 
 pub fn encoded_data<T: Serialize>(value: &T) -> Result<String, ApiError> {
@@ -39,5 +39,5 @@ pub fn encoded_data<T: Serialize>(value: &T) -> Result<String, ApiError> {
         &value,
         &EncodingKey::from_secret(CONFIG.get().unwrap().jwt_secret.as_ref()),
     )
-    .map_err(|_| ApiError::InternalServerError)
+    .map_err(|err| ApiError::FailedToEncodeData(err.to_string()))
 }

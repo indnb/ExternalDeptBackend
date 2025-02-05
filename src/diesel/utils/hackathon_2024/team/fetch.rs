@@ -6,11 +6,11 @@ pub fn by_id(db_pool: &DbState, team_id: i32) -> Result<HackathonTeam2024Queryab
     hackathon_team_2024
         .filter(crate::diesel::schema::hackathon_team_2024::columns::id.eq(team_id))
         .first::<HackathonTeam2024Queryable>(&mut get_connection(db_pool)?)
-        .map_err(|err| err.into())
+        .map_err(|err| ApiError::FailedToGetTeamById(err.to_string()))
 }
 
 pub fn all(db_pool: &State<DbPool>) -> Result<Vec<HackathonTeam2024Queryable>, ApiError> {
     hackathon_team_2024
         .load::<HackathonTeam2024Queryable>(&mut get_connection(db_pool)?)
-        .map_err(|err| err.into())
+        .map_err(|err| ApiError::FailedToGetAllTeams(err.to_string()))
 }

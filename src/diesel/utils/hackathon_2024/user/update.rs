@@ -21,8 +21,15 @@ pub fn by_id(
             updated_at.eq(chrono::Utc::now().naive_utc()),
         ))
         .execute(&mut get_connection(dp_pool)?)
-        .map_err(|err| {
-            error!("Error updating hackathon_user_2024, bellow error");
-            err.into()
+        .map(|data| {
+            if data == 0 {
+                Err(ApiError::FailedToUpdateUserById(
+                    "User not found".to_string(),
+                ))
+            } else {
+                Ok(data)
+            }
         })
+        .map_err(|err| ApiError::FailedToUpdateUserById(err.to_string()))
+        .and_then(|data| data)
 }

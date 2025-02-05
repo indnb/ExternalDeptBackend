@@ -4,13 +4,10 @@ use rocket::put;
 
 #[utoipa::path(
     put,
-    path = "/api/hackathon_2024/team/by_id",
+    path = "/api/hackathon_2024/team/by_data",
     tag = "Hackathon Team 2024",
     request_body = TeamUpdateData,
-    operation_id = "put_team_by_id",
-    params(
-        ("id" = i32, Path, description = "ID of the team to update")
-    ),
+    operation_id = "put_team_by_data",
     responses(
         (status = 200, description = "Team updated successfully"),
         (status = 401, description = "Unauthorized error"),
@@ -20,8 +17,8 @@ use rocket::put;
         ("bearer_auth" = [])
     )
 )]
-#[put("/hackathon_2024/team/by_id", data = "<data>")]
-pub async fn by_id(
+#[put("/hackathon_2024/team/by_data", data = "<data>")]
+pub async fn by_data(
     db_pool: &DbState,
     data: Json<TeamUpdateData>,
     admin_match: AdminAuthData,

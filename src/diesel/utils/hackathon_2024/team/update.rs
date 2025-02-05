@@ -13,11 +13,15 @@ pub fn by_data(db_pool: &DbState, data: &TeamUpdateData) -> Result<usize, ApiErr
             updated_at.eq(chrono::Utc::now().naive_utc()),
         ))
         .execute(&mut get_connection(db_pool)?)
-        .map_err(|err| {
-            error!(
-                "Error updating hackathon_university_2024 with data {:?}",
-                data
-            );
-            err.into()
+        .map(|data| {
+            if data == 0 {
+                Err(ApiError::FailedToUpdateTeamByData(
+                    "Team not found".to_string(),
+                ))
+            } else {
+                Ok(data)
+            }
         })
+        .map_err(|err| ApiError::FailedToUpdateTeamByData(err.to_string()))
+        .and_then(|data| data)
 }
