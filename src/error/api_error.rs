@@ -1,3 +1,4 @@
+use log::error;
 use rocket::http::Status;
 use rocket::response::{Responder, Response};
 use rocket::Request;
@@ -66,7 +67,7 @@ pub enum ApiError {
 
 impl<'r> Responder<'r, 'static> for ApiError {
     fn respond_to(self, _: &'r Request<'_>) -> rocket::response::Result<'static> {
-        log::error!("API error occurred: {:?}", self);
+        error!("API error occurred: {:?}", self);
 
         let (status, message) = match self {
             ApiError::NotFound => (Status::NotFound, "Resource not found".to_owned()),

@@ -16,5 +16,5 @@ use rocket::get;
 )]
 #[get("/admin/get")]
 pub async fn get(admin: AdminAuthData) {
-    info!("Auth data admin: {:?}", admin);
+    info!("Auth data admin: {admin:?}");
 }

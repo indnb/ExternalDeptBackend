@@ -5,8 +5,9 @@ use rocket::http::Status;
 use rocket::request::FromRequest;
 use rocket::{request, Request};
 use serde::{Deserialize, Serialize};
+use utoipa::{IntoParams, ToSchema};
 
-#[derive(Debug, Serialize, Deserialize, utoipa::ToSchema, utoipa::IntoParams)]
+#[derive(Debug, Serialize, Deserialize, ToSchema, IntoParams)]
 pub struct AdminAuthData {
     pub admin_password: String,
     pub admin_name: String,
@@ -40,7 +41,6 @@ impl AdminAuthData {
 impl<'r> FromRequest<'r> for AdminAuthData {
     type Error = ApiError;
 
-    #[allow(dead_code)]
     async fn from_request(req: &'r Request<'_>) -> request::Outcome<Self, Self::Error> {
         let token = req
             .headers()

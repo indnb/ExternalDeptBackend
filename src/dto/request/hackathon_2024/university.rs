@@ -1,7 +1,6 @@
+use crate::diesel::models::hackathon_2024::university::HackathonUniversity2024Insertable;
 use serde::Deserialize;
 use utoipa::ToSchema;
-
-use crate::diesel::models::hackathon_2024::university::HackathonUniversity2024Insertable;
 
 #[derive(Deserialize, ToSchema)]
 #[schema(title = "HackathonUniversity2024Insertable", value_type = HackathonUniversity2024Insertable, as = HackathonUniversity2024Insertable)]

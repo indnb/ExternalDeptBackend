@@ -4,21 +4,20 @@ use bcrypt::{hash, verify, DEFAULT_COST};
 use jsonwebtoken::{
     decode, encode, Algorithm, DecodingKey, EncodingKey, Header, TokenData, Validation,
 };
+use log::error;
 use serde::de::DeserializeOwned;
 use serde::Serialize;
 
-#[allow(dead_code)]
 pub fn hashing_data(value: impl AsRef<str>) -> Result<String, ApiError> {
     hash(value.as_ref(), DEFAULT_COST).map_err(|err| {
-        log::error!("Error hashing password: {:?}", err);
+        error!("Error hashing password: {err:?}");
         ApiError::HashingError(err.to_string())
     })
 }
 
-#[allow(dead_code)]
 pub fn verify_password(password: impl AsRef<str>, hash: impl AsRef<str>) -> Result<bool, ApiError> {
     verify(password.as_ref(), hash.as_ref()).map_err(|err| {
-        log::error!("Error verifying password: {:?}", err);
+        error!("Error verifying password: {err:?}");
         ApiError::HashingError(err.to_string())
     })
 }
@@ -34,7 +33,6 @@ pub fn decoded_data<T: DeserializeOwned>(
     .map_err(|err| ApiError::TokenDecodeError(err.to_string()))
 }
 
-#[allow(dead_code)]
 pub fn encoded_data<T: Serialize>(value: &T) -> Result<String, ApiError> {
     encode(
         &Header::new(Algorithm::HS512),

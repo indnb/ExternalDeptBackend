@@ -1,8 +1,7 @@
-use std::collections::HashMap;
-
 use crate::diesel::models::hackathon_2024::university::HackathonUniversity2024Queryable;
 use crate::diesel::prelude::*;
 use crate::diesel::schema::hackathon_university_2024::dsl::hackathon_university_2024;
+use std::collections::HashMap;
 
 #[allow(dead_code)]
 pub fn by_id(db_pool: &DbState, id: i32) -> Result<HackathonUniversity2024Queryable, ApiError> {

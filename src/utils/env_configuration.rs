@@ -10,13 +10,7 @@ pub struct EnvConfiguration {
     pub database_host: String,
     pub database_port: u16,
     pub main_url: String,
-    pub smtp_email: String,
-    pub smtp_password: String,
     pub server_port: u16,
-    /* WILL UNCOMMENT WHEN IN SCHEMA.RS EXISTS USER_ROLE!!!
-    #[allow(dead_code)]
-    pub admin_role: UserRoleEnum,
-    */
     pub admin_name: String,
     pub admin_password: String,
     pub jwt_secret: String,
@@ -29,8 +23,6 @@ impl EnvConfiguration {
             database_name: EnvConfiguration::unwrap_env("DATABASE_NAME", None),
             database_user: EnvConfiguration::unwrap_env("DATABASE_USER", None),
             database_password: EnvConfiguration::unwrap_env("DATABASE_PASSWORD", None),
-            smtp_email: EnvConfiguration::unwrap_env("SMTP_EMAIL", None),
-            smtp_password: EnvConfiguration::unwrap_env("SMTP_PASSWORD", None),
             database_host: EnvConfiguration::unwrap_env(
                 "DATABASE_HOST",
                 Some("localhost".to_owned()),
@@ -38,16 +30,10 @@ impl EnvConfiguration {
             database_port: EnvConfiguration::unwrap_env("DATABASE_PORT", Some(5432.to_string()))
                 .parse()
                 .expect("Invalid DATABASE_PORT"),
-            main_url: EnvConfiguration::unwrap_env(
-                "MAIN_URL",
-                Some("http://localhost:3000".to_owned()),
-            ),
+            main_url: EnvConfiguration::unwrap_env("MAIN_URL", Some("localhost:3000".to_owned())),
             server_port: EnvConfiguration::unwrap_env("SERVER_PORT", Some(8080.to_string()))
                 .parse()
                 .expect("Invalid SERVER_PORT"),
-            /* WILL UNCOMMENT WHEN IN SCHEMA.RS EXISTS USER_ROLE!!!
-            admin_role: UserRoleEnum::Admin,
-            */
             admin_password: EnvConfiguration::unwrap_env(
                 "ADMIN_PASSWORD",
                 Some("ADMIN_PASSWORD".to_owned()),

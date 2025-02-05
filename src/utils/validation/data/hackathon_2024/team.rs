@@ -2,7 +2,6 @@ use crate::diesel::models::hackathon_2024::team::HackathonTeam2024Insertable;
 use crate::error::api_error::ApiError;
 use crate::utils::validation::data::fields::{check_name, check_nickname_tg, check_password};
 
-#[allow(dead_code)]
 pub fn field(new_team: &HackathonTeam2024Insertable) -> Result<(), ApiError> {
     check_nickname_tg(
         &new_team.nickname_tg,

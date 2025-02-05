@@ -50,10 +50,7 @@ impl FromSql<HackathonCategory2024, Pg> for HackathonCategory2024Enum {
             "web3_0" => Ok(HackathonCategory2024Enum::Web3),
             "cybersecurity" => Ok(HackathonCategory2024Enum::Cybersecurity),
             _ => {
-                info!(
-                    "Not a valid hackathon category: {}, default set 'education'",
-                    value
-                );
+                info!("Not a valid hackathon category: {value}, default set 'education'");
                 Ok(HackathonCategory2024Enum::Education)
             }
         }

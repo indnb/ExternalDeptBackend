@@ -1,37 +1,7 @@
-use crate::api::hackathon_2024::user::local::create_user_by_jwt;
 use crate::dto::response::hackathon_2024::user::User;
 use crate::dto::response::hackathon_2024::user::VecUser;
-use crate::middleware::claims::Claims;
 use crate::utils::prelude_api::*;
-use crate::utils::security::decoded_data;
 use rocket::get;
-
-#[allow(dead_code)]
-#[get("/hackathon_2024/user/confirm_new_user?<jwt_token>")]
-pub async fn confirm_new_user(db_pool: &DbState, jwt_token: String) -> Result<(), ApiError> {
-    create_user_by_jwt(db_pool, decoded_data(&jwt_token)?.claims)
-}
-
-#[allow(dead_code)]
-#[utoipa::path(
-    get,
-    path = "/api/hackathon_2024/user/authorization_user",
-    tag = "Hackathon User 2024",
-    operation_id = "get_authorization_user",
-    responses(
-        (status = 200, description = "User fetched successfully", body = User),
-        (status = 500, description = "Database error", body = ApiErrorBody),
-    ),
-    security(
-        ("bearer_auth" = [])
-    )
-)]
-#[get("/hackathon_2024/user/authorization_user")]
-pub async fn authorization_user(db_pool: &DbState, claims: Claims) -> Result<Json<User>, ApiError> {
-    Ok(Json(User(
-        crate::diesel::utils::hackathon_2024::user::fetch::by_id(db_pool, claims.sub)?,
-    )))
-}
 
 #[utoipa::path(
     get,

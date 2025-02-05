@@ -1,5 +1,17 @@
 use regex::Regex;
 
+lazy_static::lazy_static! {
+    pub static ref EMAIL_REGEX: Regex =
+        Regex::new(r"(?i)^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$").unwrap();
+    pub static ref NICKNAME_REGEX: Regex =
+        Regex::new(r"^[a-zA-Z0-9](?:[a-zA-Z0-9_]{3,30}[a-zA-Z0-9])?$").unwrap();
+    pub static ref PHONE_REGEX: Regex = Regex::new(r"^(\+380|0)\d{9}$").unwrap();
+    pub static ref HAS_DIGIT: Regex = Regex::new(r"\d").unwrap();
+    pub static ref HAS_SYMBOL: Regex = Regex::new(r"[!@#$%^&*()_+=\-{}\[\]|\\:;'<>,.?/~`]").unwrap();
+    pub static ref HAS_LOWERCASE: Regex = Regex::new(r"[a-z]").unwrap();
+    pub static ref HAS_UPPERCASE: Regex = Regex::new(r"[A-Z]").unwrap();
+}
+
 pub trait Validate {
     #[allow(dead_code)]
     fn less_for(&self, len: usize) -> bool;
@@ -30,24 +42,15 @@ impl<T: AsRef<str>> Validate for T {
     }
 
     fn is_email(&self) -> bool {
-        match Regex::new(r"(?i)^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$") {
-            Ok(email_regex) => email_regex.is_match(self.as_ref()),
-            Err(_) => false,
-        }
+        EMAIL_REGEX.is_match(self.as_ref())
     }
 
     fn is_nickname_tg(&self) -> bool {
-        match Regex::new(r"^[a-zA-Z0-9](?:[a-zA-Z0-9_]{3,30}[a-zA-Z0-9])?$") {
-            Ok(nickname_regex) => nickname_regex.is_match(self.as_ref()),
-            Err(_) => false,
-        }
+        NICKNAME_REGEX.is_match(self.as_ref())
     }
 
     fn is_phone(&self) -> bool {
-        match Regex::new(r"^(\+380|0)\d{9}$") {
-            Ok(phone_regex) => phone_regex.is_match(self.as_ref()),
-            Err(_) => false,
-        }
+        PHONE_REGEX.is_match(self.as_ref())
     }
 
     fn is_password(&self, max_len: usize) -> bool {
@@ -57,29 +60,9 @@ impl<T: AsRef<str>> Validate for T {
             return false;
         }
 
-        let has_digit = match Regex::new(r"\d") {
-            Ok(regex) => regex,
-            Err(_) => return false,
-        };
-
-        let has_symbol = match Regex::new(r"[!@#$%^&*()_+=\-{}\[\]|\\:;'<>,.?/~`]") {
-            Ok(regex) => regex,
-            Err(_) => return false,
-        };
-
-        let has_lowercase = match Regex::new(r"[a-z]") {
-            Ok(regex) => regex,
-            Err(_) => return false,
-        };
-
-        let has_uppercase = match Regex::new(r"[A-Z]") {
-            Ok(regex) => regex,
-            Err(_) => return false,
-        };
-
-        has_digit.is_match(input)
-            && has_symbol.is_match(input)
-            && has_lowercase.is_match(input)
-            && has_uppercase.is_match(input)
+        HAS_DIGIT.is_match(input)
+            && HAS_SYMBOL.is_match(input)
+            && HAS_LOWERCASE.is_match(input)
+            && HAS_UPPERCASE.is_match(input)
     }
 }
