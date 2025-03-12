@@ -2,7 +2,7 @@ use crate::diesel::models::hackathon_2024::user::HackathonUser2024Insertable;
 use crate::diesel::prelude::*;
 use crate::diesel::schema::hackathon_user_2024::dsl::hackathon_user_2024;
 use crate::diesel::schema::hackathon_user_2024::{
-    first_name, last_name, nickname_tg, phone, team_id, university_id, updated_at,
+    first_name, id, last_name, nickname_tg, phone, team_id, university_id, updated_at,
 };
 
 pub fn by_id(
