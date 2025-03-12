@@ -2,7 +2,7 @@ use crate::diesel::models::hackathon_2024::user::HackathonUser2024Insertable;
 use crate::diesel::prelude::*;
 use crate::diesel::schema::hackathon_user_2024::dsl::hackathon_user_2024;
 use crate::diesel::schema::hackathon_user_2024::{
-    first_name, id, last_name, nickname_tg, phone, university_id, updated_at,
+    first_name, last_name, nickname_tg, phone, team_id, university_id, updated_at,
 };
 
 pub fn by_id(
@@ -17,7 +17,7 @@ pub fn by_id(
             nickname_tg.eq(&data.nickname_tg),
             phone.eq(&data.phone),
             university_id.eq(data.university_id),
-            id.eq(data.team_id),
+            team_id.eq(data.team_id),
             updated_at.eq(chrono::Utc::now().naive_utc()),
         ))
         .execute(&mut get_connection(dp_pool)?)
