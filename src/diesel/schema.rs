@@ -1,11 +1,11 @@
 // @generated automatically by Diesel CLI.
 
 pub mod sql_types {
-    #[derive(diesel::query_builder::QueryId, Clone, diesel::sql_types::SqlType)]
+    #[derive(diesel::sql_types::SqlType)]
     #[diesel(postgres_type(name = "hackathon_category_2024"))]
     pub struct HackathonCategory2024;
 
-    #[derive(diesel::query_builder::QueryId, Clone, diesel::sql_types::SqlType)]
+    #[derive(diesel::sql_types::SqlType)]
     #[diesel(postgres_type(name = "type_media"))]
     pub struct TypeMedia;
 }
@@ -48,8 +48,8 @@ diesel::table! {
 diesel::table! {
     hackathon_university_2024 (id) {
         id -> Int4,
-        #[max_length = 255]
-        name -> Varchar,
+        name -> Text,
+        name_eng -> Text,
         created_at -> Nullable<Timestamp>,
         updated_at -> Nullable<Timestamp>,
     }

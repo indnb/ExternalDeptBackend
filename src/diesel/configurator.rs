@@ -1,14 +1,22 @@
-use super::prelude::DbState;
+use super::prelude::*;
+use crate::diesel::models::hackathon_2024::university::HackathonUniversity2024Insertable;
+use crate::diesel::schema::hackathon_university_2024;
 use crate::error::api_error::ApiError;
 use crate::utils::constants::diesel::MIGRATIONS;
 use crate::utils::env_configuration::EnvConfiguration;
+use csv::ReaderBuilder;
+use diesel::associations::HasTable;
 use diesel::pg::PgConnection;
 use diesel::r2d2::{ConnectionManager, Pool, PooledConnection};
 use diesel::sql_types::Text;
 use diesel::RunQueryDsl;
 use diesel_migrations::MigrationHarness;
+use std::fs::File;
+use std::io::BufReader;
 
 pub type DbPool = Pool<ConnectionManager<PgConnection>>;
+
+const CSV_UNIVERSITY: &str = "mock_db/university.csv";
 
 pub fn configuration_database() -> DbPool {
     let database_url = format!(
@@ -67,13 +75,46 @@ pub fn configuration_database() -> DbPool {
         .run_pending_migrations(MIGRATIONS)
         .unwrap_or_else(|err| panic!("Error running migrations: {}", err));
 
+    load_csv(&db_pool);
+
     println!("Pool created successfully!");
 
     db_pool
 }
 
+fn load_csv(pool: &DbPool) {
+    let count_current_university = hackathon_university_2024::table
+        .count()
+        .get_result::<i64>(&mut get_connection(pool).unwrap())
+        .unwrap();
+
+    if count_current_university > 0 {
+        return;
+    }
+
+    let file = File::open(CSV_UNIVERSITY).expect("Cannot open file");
+    let mut rdr = ReaderBuilder::new().from_reader(BufReader::new(file));
+
+    let mut rows = Vec::new();
+
+    for result in rdr.records() {
+        let record = result.unwrap();
+        let new_row = HackathonUniversity2024Insertable {
+            name: record.get(0).unwrap().to_string(),
+            name_eng: record.get(1).unwrap().to_string(),
+        };
+
+        rows.push(new_row);
+    }
+
+    diesel::insert_into(hackathon_university_2024::table)
+        .values(&rows)
+        .execute(&mut get_connection(pool).unwrap())
+        .unwrap();
+}
+
 pub fn get_connection(
-    db_pool: &DbState,
+    db_pool: &DbPool,
 ) -> Result<PooledConnection<ConnectionManager<PgConnection>>, ApiError> {
     db_pool
         .get()

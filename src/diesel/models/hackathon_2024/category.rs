@@ -25,18 +25,18 @@ use std::io::Write;
 )]
 #[diesel(sql_type = crate::diesel::schema::sql_types::HackathonCategory2024)]
 pub enum HackathonCategory2024Enum {
-    Education,
-    Military,
-    Web3,
-    Cybersecurity,
+    Software,
+    IoT,
+    Gamedev,
+    Blockchain,
 }
 impl ToSql<HackathonCategory2024, Pg> for HackathonCategory2024Enum {
     fn to_sql(&self, out: &mut Output<Pg>) -> serialize::Result {
         match *self {
-            HackathonCategory2024Enum::Education => out.write_all(b"education")?,
-            HackathonCategory2024Enum::Military => out.write_all(b"military")?,
-            HackathonCategory2024Enum::Web3 => out.write_all(b"web3_0")?,
-            HackathonCategory2024Enum::Cybersecurity => out.write_all(b"cybersecurity")?,
+            HackathonCategory2024Enum::Software => out.write_all(b"software")?,
+            HackathonCategory2024Enum::IoT => out.write_all(b"iot")?,
+            HackathonCategory2024Enum::Gamedev => out.write_all(b"gamedev")?,
+            HackathonCategory2024Enum::Blockchain => out.write_all(b"blockchain")?,
         };
         Ok(IsNull::No)
     }
@@ -45,13 +45,13 @@ impl FromSql<HackathonCategory2024, Pg> for HackathonCategory2024Enum {
     fn from_sql(bytes: <Pg as Backend>::RawValue<'_>) -> diesel::deserialize::Result<Self> {
         let value = std::str::from_utf8(bytes.as_bytes())?;
         match value {
-            "education" => Ok(HackathonCategory2024Enum::Education),
-            "military" => Ok(HackathonCategory2024Enum::Military),
-            "web3_0" => Ok(HackathonCategory2024Enum::Web3),
-            "cybersecurity" => Ok(HackathonCategory2024Enum::Cybersecurity),
+            "software" => Ok(HackathonCategory2024Enum::Software),
+            "iot" => Ok(HackathonCategory2024Enum::IoT),
+            "gamedev" => Ok(HackathonCategory2024Enum::Gamedev),
+            "blockchain" => Ok(HackathonCategory2024Enum::Blockchain),
             _ => {
                 info!("Not a valid hackathon category: {value}, default set 'education'");
-                Ok(HackathonCategory2024Enum::Education)
+                Ok(HackathonCategory2024Enum::Software)
             }
         }
     }

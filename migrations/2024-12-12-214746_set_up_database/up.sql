@@ -1,6 +1,6 @@
 -- Enum Definitions
 CREATE TYPE user_role AS ENUM ('Admin', 'User');
-CREATE TYPE hackathon_category_2024 AS ENUM ('education', 'military', 'web3_0', 'cybersecurity');
+CREATE TYPE hackathon_category_2024 AS ENUM ('software', 'iot', 'gamedev', 'blockchain');
 CREATE TYPE type_media AS ENUM ('video', 'photo');
 
 -- Function for Updated Timestamp
@@ -16,7 +16,8 @@ $$ LANGUAGE plpgsql;
 CREATE TABLE hackathon_university_2024
 (
     id         SERIAL PRIMARY KEY,
-    name       VARCHAR(255) NOT NULL UNIQUE,
+    name       TEXT NOT NULL UNIQUE,
+    name_eng   TEXT NOT NULL UNIQUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
