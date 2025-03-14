@@ -5,7 +5,6 @@ use crate::error::api_error::ApiError;
 use crate::utils::constants::diesel::MIGRATIONS;
 use crate::utils::env_configuration::EnvConfiguration;
 use csv::ReaderBuilder;
-use diesel::associations::HasTable;
 use diesel::pg::PgConnection;
 use diesel::r2d2::{ConnectionManager, Pool, PooledConnection};
 use diesel::sql_types::Text;

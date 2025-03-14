@@ -11,7 +11,7 @@ pub struct HackathonUniversity2024Queryable {
     #[schema(example = "Інноваційний університет")]
     pub name: String,
     #[schema(example = "Innovation University")]
-    pub name_end: String,
+    pub name_eng: String,
     #[schema(example = "2025-01-19T15:06:19.027744")]
     pub created_at: Option<NaiveDateTime>,
     #[schema(example = "2025-01-19T15:06:19.027744")]

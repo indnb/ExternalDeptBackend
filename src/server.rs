@@ -36,13 +36,14 @@ impl Server {
             .init();
     }
 
-    fn get_server_config() -> Result<Config, rocket::figment::Error> {
+    fn get_server_config() -> Result<Config, Box<rocket::figment::Error>> {
         let (address, port) = Server::parse_address_port();
 
         Figment::from(Config::default())
             .merge(("address", address.to_string()))
             .merge(("port", port))
             .extract()
+            .map_err(Box::new)
     }
 
     fn parse_address_port() -> (IpAddr, u16) {
@@ -57,6 +58,7 @@ impl Server {
             &format!("http://{}", EnvConfiguration::get().main_url),
             &format!("https://{}", EnvConfiguration::get().main_url),
             &format!("http://0.0.0.0:{}", EnvConfiguration::get().server_port),
+            &format!("http://127.0.0.1:{}", EnvConfiguration::get().server_port),
         ];
         CorsOptions {
             allowed_origins: AllowedOrigins::some_exact(exact),
