@@ -1,7 +1,7 @@
 use crate::diesel::models::hackathon_2024::university::HackathonUniversity2024Insertable;
 use crate::diesel::prelude::*;
 use crate::diesel::schema::hackathon_university_2024::dsl::hackathon_university_2024;
-use crate::diesel::schema::hackathon_university_2024::{id, name, updated_at};
+use crate::diesel::schema::hackathon_university_2024::{id, name, name_eng, updated_at};
 
 pub fn by_id(
     db_pool: &State<DbPool>,
@@ -11,6 +11,7 @@ pub fn by_id(
     diesel::update(hackathon_university_2024.filter(id.eq(university_id)))
         .set((
             name.eq(data.name),
+            name_eng.eq(data.name_eng),
             updated_at.eq(chrono::Utc::now().naive_utc()),
         ))
         .returning(id)
