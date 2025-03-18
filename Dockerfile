@@ -1,46 +1,41 @@
-# Stage 1: Build the application
-FROM rust:latest as builder
+FROM lukemathwalker/cargo-chef:latest-rust-1.85.0 as chef
 
-# Set the working directory inside the container
 WORKDIR /app
 
-# Copy only the dependency files to leverage Docker caching
-COPY Cargo.toml Cargo.lock ./
+RUN apt update && apt install lld clang -y
 
-# Create a dummy main file to fetch dependencies
-RUN mkdir src && echo "fn main() {}" > src/main.rs
-RUN cargo fetch
+FROM chef as planner
 
-# Copy the rest of the application source code
 COPY . .
 
-# Build the application in release mode
-RUN cargo build --release
+RUN cargo chef prepare --recipe-path recipe.json
 
-# Stage 2: Create a lightweight runtime image
-FROM debian:bookworm-slim
+FROM chef as builder
 
-# Install only the required libraries for the Rust application
-RUN apt-get update && apt-get install -y \
-    libssl-dev libsqlite3-dev libpq-dev ca-certificates \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+COPY --from=planner /app/recipe.json recipe.json
 
-# Set the working directory inside the container
+RUN cargo chef cook --release --recipe-path recipe.json
+
+COPY . .
+
+ENV SQLX_OFFLINE true
+
+RUN cargo build --release --bin ExternalDeptBackend
+
+FROM debian:bookworm-slim AS runtime
+
 WORKDIR /app
 
-# Copy the compiled binary from the builder stage
-COPY --from=builder /app/target/release/ExternalDeptBackend .
+RUN apt-get update -y \
+  && apt-get install -y --no-install-recommends openssl ca-certificates \
+  && apt-get autoremove -y \
+  && apt-get clean -y \
+  && rm -rf /var/lib/apt/lists/*
 
-# Optionally copy the .env file if needed
-COPY .env /app/.env
+COPY --from=builder /app/target/release/ExternalDeptBackend ExternalDeptBackend
 
-# Expose the application's port
-EXPOSE 8181
+COPY .env .env
 
-# Set the environment variable for Rust backtraces
-ENV RUST_BACKTRACE=1
+COPY mock_db/ ./mock_db/
 
-# Define the default command to run the application
-CMD ["./ExternalDeptBackend"]
-
+ENTRYPOINT ["./ExternalDeptBackend"]
