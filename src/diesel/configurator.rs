@@ -19,7 +19,7 @@ const CSV_UNIVERSITY: &str = "mock_db/university.csv";
 
 pub fn configuration_database() -> DbPool {
     let database_url = format!(
-        "postgres://{}:{}@{}:{}",
+        "postgresql://{}:{}@{}:{}",
         EnvConfiguration::get().database_user,
         EnvConfiguration::get().database_password,
         EnvConfiguration::get().database_host,
@@ -28,7 +28,8 @@ pub fn configuration_database() -> DbPool {
 
     let database_name = &EnvConfiguration::get().database_name;
 
-    let server_manager = ConnectionManager::<PgConnection>::new(database_url.clone());
+    let server_manager =
+        ConnectionManager::<PgConnection>::new(format!("{}/{}", database_url, database_name));
     let server_pool = Pool::builder()
         .build(server_manager)
         .unwrap_or_else(|err| panic!("Error creating server connection pool: {}", err));
