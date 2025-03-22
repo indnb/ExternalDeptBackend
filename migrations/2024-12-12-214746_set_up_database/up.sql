@@ -32,7 +32,7 @@ CREATE TRIGGER update_hackathon_university_updated_at
 CREATE TABLE hackathon_team_2024
 (
     id                    SERIAL PRIMARY KEY,
-    name                  VARCHAR(255)            NOT NULL,
+    name                  VARCHAR(255)            NOT NULL UNIQUE,
     category              hackathon_category_2024 NOT NULL,
     password_registration VARCHAR(255)            NOT NULL,
     count_members         INT                     NOT NULL DEFAULT 0,
@@ -103,58 +103,3 @@ CREATE TRIGGER decrement_team_member_trigger
     FOR EACH ROW
     WHEN (OLD.team_id IS NOT NULL)
     EXECUTE FUNCTION decrement_team_member_count();
-
--- News Table
-CREATE TABLE news
-(
-    id          SERIAL PRIMARY KEY,
-    description TEXT         NOT NULL,
-    preview_id  INT,
-    header      VARCHAR(255) NOT NULL UNIQUE,
-    created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TRIGGER update_news_updated_at
-    BEFORE UPDATE
-    ON news
-    FOR EACH ROW
-    EXECUTE FUNCTION update_timestamp();
-
--- News Media Table
-CREATE TABLE news_media
-(
-    id         SERIAL PRIMARY KEY,
-    src_url    TEXT       NOT NULL,
-    news_id    INT REFERENCES news (id) ON DELETE CASCADE,
-    type_media type_media NOT NULL,
-    position   INT        NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT unique_position_per_news UNIQUE (news_id, position)
-);
-
-CREATE TRIGGER update_news_media_updated_at
-    BEFORE UPDATE
-    ON news_media
-    FOR EACH ROW
-    EXECUTE FUNCTION update_timestamp();
-
--- Announcement Banner Table
-CREATE TABLE announcement_banner
-(
-    id          SERIAL PRIMARY KEY,
-    src_url     TEXT         NOT NULL,
-    type_media  type_media   NOT NULL DEFAULT 'photo',
-    description VARCHAR(255) NOT NULL,
-    showing     BOOLEAN      NOT NULL DEFAULT FALSE,
-    created_at  TIMESTAMP             DEFAULT CURRENT_TIMESTAMP,
-    updated_at  TIMESTAMP             DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TRIGGER update_announcement_banner_updated_at
-    BEFORE UPDATE
-    ON announcement_banner
-    FOR EACH ROW
-    EXECUTE FUNCTION update_timestamp();
-
