@@ -2,6 +2,7 @@ use crate::dto::request::hackathon_2024::user::RegistrationData;
 use crate::utils::prelude_api::*;
 use crate::utils::security::verify_password;
 use crate::utils::validation;
+use log::error;
 use rocket::post;
 
 #[utoipa::path(
@@ -34,10 +35,14 @@ pub async fn registration_by_tg(
     let team = crate::diesel::utils::hackathon_2024::team::fetch::by_id(db_pool, team_data.id)?;
     validation::data::hackathon_2024::team::check_team_members_count(team.count_members)?;
 
-    verify_password(
+    if !verify_password(
         team_data.password.as_str(),
         team.password_registration.as_str(),
-    )?;
+    )? {
+        let err = "Password is incorrect";
+        error!("Error verifying password: {err}");
+        return Err(ApiError::FailedToVerifyPassword(err.to_string()));
+    }
 
     let id = crate::diesel::utils::hackathon_2024::user::insert::new(db_pool, user_data)?;
 
