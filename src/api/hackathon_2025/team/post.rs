@@ -13,7 +13,7 @@ use std::error::Error;
 #[utoipa::path(
     post,
     path = "/api/hackathon_2025/team/registration",
-    request_body = NewTeam,
+    request_body = NewTeamWithPersons,
     tag = "Hackathon Team 2025",
     operation_id = "registration_team",
     responses(
@@ -70,13 +70,20 @@ pub async fn registration(
 
             crate::diesel::utils::hackathon_2025::user::insert::new_tx(tx, captain)?;
 
-            for member in new_team.members.into_iter().map(|m| m.into()) {
+            for member in new_team.members.into_iter().map(|m| {
+                let mut m: HackathonUser2025Insertable = m.into();
+                m.team_id = id;
+                m
+            }) {
                 crate::diesel::utils::hackathon_2025::user::insert::new_tx(tx, member)?;
             }
 
             Ok(id)
         })
-        .map_err(|_| ApiError::FailedTransaction("Failed to create team".to_string()))?;
+        .map_err(|err| {
+            log::error!("Failed to create team: {}", err);
+            ApiError::FailedTransaction("Failed to create team".to_string())
+        })?;
 
     info!("Succeed insert new hackathon 2025 team with id, {}", id);
 

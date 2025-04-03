@@ -300,6 +300,22 @@ pub enum ApiError {
         "message": "Failed to execute transaction: Database error"
     }))]
     FailedTransaction(String),
+
+    #[error("Failed to delete team captain by team ID: {0}")]
+    #[schema(example = json!({
+        "status": 500,
+        "code": "E7008",
+        "message": "Failed to delete team captain by team ID: Not found"
+    }))]
+    FailedToDeleteTeamCaptainByTeamId(String),
+
+    #[error("Failed to delete team captain by data: {0}")]
+    #[schema(example = json!({
+        "status": 500,
+        "code": "E7009",
+        "message": "Failed to delete team captain by data: Not found"
+    }))]
+    FailedToUpdateTeamCaptainByData(String),
 }
 
 impl ApiError {
@@ -346,6 +362,8 @@ impl ApiError {
             ApiError::InvalidTeamMembersCount(_) => "E7005",
             ApiError::FailedToDeleteTeamById(_) => "E7006",
             ApiError::FailedTransaction(_) => "E7007",
+            ApiError::FailedToDeleteTeamCaptainByTeamId(_) => "E7008",
+            ApiError::FailedToUpdateTeamCaptainByData(_) => "E7009",
         }
     }
 
@@ -392,7 +410,9 @@ impl ApiError {
             | ApiError::FailedToGetTeamById(_)
             | ApiError::InvalidTeamMembersCount(_)
             | ApiError::FailedToDeleteTeamById(_)
-            | ApiError::FailedTransaction(_) => Status::InternalServerError,
+            | ApiError::FailedTransaction(_)
+            | ApiError::FailedToDeleteTeamCaptainByTeamId(_)
+            | ApiError::FailedToUpdateTeamCaptainByData(_) => Status::InternalServerError,
         }
     }
 }
