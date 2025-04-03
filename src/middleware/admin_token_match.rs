@@ -22,9 +22,9 @@ impl AdminAuthData {
             EnvConfiguration::get().admin_password
         );
 
-        if self.admin_name != EnvConfiguration::get().admin_name {
-            Err(ApiError::InvalidAdmin("Error validation admin".to_string()))
-        } else if self.admin_password != EnvConfiguration::get().admin_password {
+        if self.admin_name != EnvConfiguration::get().admin_name
+            || self.admin_password != EnvConfiguration::get().admin_password
+        {
             Err(ApiError::InvalidAdmin("Error validation admin".to_string()))
         } else {
             Ok(())

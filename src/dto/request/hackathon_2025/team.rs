@@ -30,11 +30,11 @@ pub struct NewTeam {
     pub category: HackathonCategory2025Enum,
 }
 
-impl Into<HackathonTeam2025Insertable> for NewTeam {
-    fn into(self) -> HackathonTeam2025Insertable {
-        HackathonTeam2025Insertable {
-            name: self.name,
-            category: self.category,
+impl From<NewTeam> for HackathonTeam2025Insertable {
+    fn from(team: NewTeam) -> Self {
+        Self {
+            name: team.name,
+            category: team.category,
         }
     }
 }
@@ -53,14 +53,14 @@ pub struct Captain {
     pub university_id: i32,
 }
 
-impl Into<HackathonUser2025Insertable> for Captain {
-    fn into(self) -> HackathonUser2025Insertable {
-        HackathonUser2025Insertable {
-            first_name: self.first_name,
-            last_name: self.last_name,
-            nickname_tg: Some(self.nickname_tg),
-            phone: Some(self.phone),
-            university_id: self.university_id,
+impl From<Captain> for HackathonUser2025Insertable {
+    fn from(captain: Captain) -> Self {
+        Self {
+            first_name: captain.first_name,
+            last_name: captain.last_name,
+            nickname_tg: Some(captain.nickname_tg),
+            phone: Some(captain.phone),
+            university_id: captain.university_id,
             team_id: 0,
         }
     }
@@ -80,14 +80,14 @@ pub struct Member {
     pub university_id: i32,
 }
 
-impl Into<HackathonUser2025Insertable> for Member {
-    fn into(self) -> HackathonUser2025Insertable {
-        HackathonUser2025Insertable {
-            first_name: self.first_name,
-            last_name: self.last_name,
-            nickname_tg: self.nickname_tg,
-            phone: self.phone,
-            university_id: self.university_id,
+impl From<Member> for HackathonUser2025Insertable {
+    fn from(member: Member) -> Self {
+        Self {
+            first_name: member.first_name,
+            last_name: member.last_name,
+            nickname_tg: member.nickname_tg,
+            phone: member.phone,
+            university_id: member.university_id,
             team_id: 0,
         }
     }

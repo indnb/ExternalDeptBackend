@@ -1,4 +1,3 @@
-use std::error::Error;
 use crate::diesel::models::hackathon_2025::team::HackathonTeam2025Insertable;
 use crate::diesel::models::hackathon_2025::user::HackathonUser2025Insertable;
 use crate::diesel::prelude::get_connection;
@@ -9,6 +8,7 @@ use crate::utils::validation::data::fields::check_name;
 use crate::utils::validation::data::hackathon_2025::team::check_team_members_count;
 use diesel::Connection;
 use rocket::post;
+use std::error::Error;
 
 #[utoipa::path(
     post,
@@ -60,7 +60,7 @@ pub async fn registration(
 
     user_validate(&captain).await?;
 
- let   insert_team = new_team.team.into();
+    let insert_team = new_team.team.into();
 
     let id = connection
         .transaction::<_, Box<dyn Error>, _>(|tx| {
