@@ -1,10 +1,10 @@
-use crate::{dto::request::hackathon_2025::user::User, utils::prelude_api::*};
+use crate::{dto::request::hackathon_2025::user::NewUser, utils::prelude_api::*};
 use rocket::put;
 
 #[utoipa::path(
     put,
     path = "/api/hackathon_2025/user/by_id/{id}",
-    request_body = User,
+    request_body = NewUser,
     tag = "Hackathon User 2025",
     operation_id = "update_user_by_id",
     params(
@@ -22,7 +22,7 @@ use rocket::put;
 #[put("/hackathon_2025/user/by_id/<id>", data = "<data>")]
 pub async fn by_id(
     db_pool: &DbState,
-    data: Json<User>,
+    data: Json<NewUser>,
     id: i32,
     admin_match: AdminAuthData,
 ) -> Result<(), ApiError> {

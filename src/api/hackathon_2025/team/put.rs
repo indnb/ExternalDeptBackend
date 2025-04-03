@@ -1,4 +1,4 @@
-use crate::dto::request::hackathon_2025::team::TeamUpdateData;
+use crate::dto::request::hackathon_2025::team::UpdateTeam;
 use crate::utils::prelude_api::*;
 use rocket::put;
 
@@ -6,7 +6,7 @@ use rocket::put;
     put,
     path = "/api/hackathon_2025/team/by_data",
     tag = "Hackathon Team 2025",
-    request_body = TeamUpdateData,
+    request_body = UpdateTeam,
     operation_id = "put_team_by_data",
     responses(
         (status = 200, description = "Team updated successfully"),
@@ -20,7 +20,7 @@ use rocket::put;
 #[put("/hackathon_2025/team/by_data", data = "<data>")]
 pub async fn by_data(
     db_pool: &DbState,
-    data: Json<TeamUpdateData>,
+    data: Json<UpdateTeam>,
     admin_match: AdminAuthData,
 ) -> Result<(), ApiError> {
     admin_match.check_admin()?;

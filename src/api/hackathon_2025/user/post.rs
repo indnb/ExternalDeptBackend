@@ -1,4 +1,4 @@
-use crate::dto::request::hackathon_2025::user::User;
+use crate::dto::request::hackathon_2025::user::NewUser;
 use crate::utils::prelude_api::*;
 use crate::utils::validation;
 use rocket::post;
@@ -6,7 +6,7 @@ use rocket::post;
 #[utoipa::path(
     post,
     path = "/api/hackathon_2025/user/create",
-    request_body = User,
+    request_body = NewUser,
     tag = "Hackathon User 2025",
     operation_id = "user_create",
     responses(
@@ -21,7 +21,7 @@ use rocket::post;
 #[post("/hackathon_2025/user/create", data = "<data>")]
 pub async fn create(
     db_pool: &DbState,
-    data: Json<User>,
+    data: Json<NewUser>,
     admin_match: AdminAuthData,
 ) -> Result<(), ApiError> {
     admin_match.check_admin()?;

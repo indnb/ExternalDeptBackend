@@ -1,9 +1,9 @@
 use crate::diesel::prelude::*;
 use crate::diesel::schema::hackathon_team_2025::dsl::hackathon_team_2025;
 use crate::diesel::schema::hackathon_team_2025::{category, name, updated_at};
-use crate::dto::request::hackathon_2025::team::TeamUpdateData;
+use crate::dto::request::hackathon_2025::team::UpdateTeam;
 
-pub fn by_data(db_pool: &DbState, data: &TeamUpdateData) -> Result<usize, ApiError> {
+pub fn by_data(db_pool: &DbState, data: &UpdateTeam) -> Result<usize, ApiError> {
     diesel::update(hackathon_team_2025)
         .filter(crate::diesel::schema::hackathon_team_2025::id.eq(data.id))
         .set((
