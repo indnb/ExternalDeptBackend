@@ -6,3 +6,4 @@ pub use diesel::QueryDsl;
 pub use diesel::RunQueryDsl;
 pub use rocket::State;
 pub type DbState = State<DbPool>;
+pub use crate::diesel::configurator::DbPooled;

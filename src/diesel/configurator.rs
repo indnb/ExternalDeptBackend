@@ -14,6 +14,7 @@ use std::fs::File;
 use std::io::BufReader;
 
 pub type DbPool = Pool<ConnectionManager<PgConnection>>;
+pub type DbPooled = PooledConnection<ConnectionManager<PgConnection>>;
 
 const CSV_UNIVERSITY: &str = "mock_db/university.csv";
 

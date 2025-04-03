@@ -1,5 +1,8 @@
 use crate::{
-    diesel::models::hackathon_2025::team_captain::HackathonTeamCaptain2025Queryable,
+    diesel::{
+        models::hackathon_2025::team_captain::HackathonTeamCaptain2025Queryable,
+        prelude::get_connection,
+    },
     dto::response::hackathon_2025::team_captain::{TeamCaptainResponse, VecTeamCaptainResponse},
     utils::prelude_api::*,
 };
@@ -31,7 +34,10 @@ pub async fn by_team_id(
     admin_match.check_admin()?;
 
     Ok(Json(TeamCaptainResponse(
-        crate::diesel::utils::hackathon_2025::team_captain::fetch::by_team_id(pool, team_id)?,
+        crate::diesel::utils::hackathon_2025::team_captain::fetch::by_team_id(
+            &mut get_connection(pool)?,
+            team_id,
+        )?,
     )))
 }
 
@@ -87,6 +93,6 @@ pub async fn all(
     admin_match.check_admin()?;
 
     Ok(Json(VecTeamCaptainResponse(
-        crate::diesel::utils::hackathon_2025::team_captain::fetch::all(pool)?,
+        crate::diesel::utils::hackathon_2025::team_captain::fetch::all(&mut get_connection(pool)?)?,
     )))
 }

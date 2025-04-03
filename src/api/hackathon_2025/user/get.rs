@@ -1,3 +1,4 @@
+use crate::diesel::prelude::get_connection;
 use crate::dto::response::hackathon_2025::user::User;
 use crate::dto::response::hackathon_2025::user::VecUser;
 use crate::utils::prelude_api::*;
@@ -18,10 +19,10 @@ use rocket::get;
     )
 )]
 #[get("/hackathon_2025/user/all")]
-pub async fn all(db_pool: &DbState, admin_match: AdminAuthData) -> Result<Json<VecUser>, ApiError> {
+pub async fn all(pool: &DbState, admin_match: AdminAuthData) -> Result<Json<VecUser>, ApiError> {
     admin_match.check_admin()?;
     Ok(Json(VecUser(
-        crate::diesel::utils::hackathon_2025::user::fetch::all(db_pool)?,
+        crate::diesel::utils::hackathon_2025::user::fetch::all(&mut get_connection(pool)?)?,
     )))
 }
 
@@ -44,13 +45,13 @@ pub async fn all(db_pool: &DbState, admin_match: AdminAuthData) -> Result<Json<V
 )]
 #[get("/hackathon_2025/user/by_id/<id>")]
 pub async fn by_id(
-    db_pool: &DbState,
+    pool: &DbState,
     id: i32,
     admin_match: AdminAuthData,
 ) -> Result<Json<User>, ApiError> {
     admin_match.check_admin()?;
     Ok(Json(User(
-        crate::diesel::utils::hackathon_2025::user::fetch::by_id(db_pool, id)?,
+        crate::diesel::utils::hackathon_2025::user::fetch::by_id(&mut get_connection(pool)?, id)?,
     )))
 }
 

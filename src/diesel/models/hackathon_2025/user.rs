@@ -3,7 +3,7 @@ use diesel::{Insertable, Queryable};
 use serde::{Deserialize, Serialize};
 use utoipa::ToSchema;
 
-#[derive(Debug, Queryable, Serialize, ToSchema)]
+#[derive(Debug, Queryable, Clone, Serialize, ToSchema)]
 #[diesel(table_name = crate::diesel::schema::hackathon_user_2025)]
 pub struct HackathonUser2025Queryable {
     #[schema(example = "1")]

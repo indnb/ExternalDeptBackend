@@ -107,6 +107,8 @@ impl Server {
                     api::hackathon_2025::team::post::create,
                     api::hackathon_2025::team::get::all,
                     api::hackathon_2025::team::get::by_id,
+                    api::hackathon_2025::team::get::by_id_full,
+                    api::hackathon_2025::team::get::all_full,
                     api::hackathon_2025::team::put::by_data,
                     api::hackathon_2025::team::delete::by_id,
                     // /hackathon_2025/team_captain/*
