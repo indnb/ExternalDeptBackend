@@ -10,6 +10,7 @@ use rocket::get;
     operation_id = "get_all_user",
     responses(
         (status = 200, description = "All user fetched successfully", body = Vec<User>),
+        (status = 401, description = "Unauthorized error"),
         (status = 500, description = "Database error", body = ApiErrorBody),
     ),
     security(

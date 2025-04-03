@@ -10,9 +10,12 @@ use rocket::post;
     operation_id = "create_team_captain",
     responses(
         (status = 200, description = "Team captain created successfully"),
-        (status = 422, description = "Validation error", body = ApiErrorBody),
+        (status = 401, description = "Unauthorized error"),
         (status = 500, description = "Database error", body = ApiErrorBody),
     ),
+    security(
+        ("bearer_auth" = [])
+    )
 )]
 #[post("/hackathon_2025/team_captain/by_data", data = "<data>")]
 pub async fn by_data(

@@ -11,6 +11,7 @@ use rocket::post;
     operation_id = "user_create",
     responses(
         (status = 200, description = "User created successfully"),
+        (status = 401, description = "Unauthorized error"),
         (status = 422, description = "Validation error", body = ApiErrorBody),
         (status = 500, description = "Database error", body = ApiErrorBody),
     ),

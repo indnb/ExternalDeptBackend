@@ -1,4 +1,5 @@
 use crate::diesel::models::hackathon_2025::team::HackathonTeam2025Insertable;
+use crate::diesel::models::hackathon_2025::team_captain::HackathonTeamCaptain2025Insertable;
 use crate::diesel::models::hackathon_2025::user::HackathonUser2025Insertable;
 use crate::diesel::prelude::get_connection;
 use crate::dto::request::hackathon_2025::team::{NewTeam, NewTeamWithPersons};
@@ -31,7 +32,7 @@ pub async fn registration(
 
     let mut connection = get_connection(db_pool)?;
 
-    check_team_members_count(new_team.members.len())?;
+    check_team_members_count(new_team.members.as_ref().map(|vev| vev.len()).unwrap_or(0))?;
     check_name(
         &new_team.team.name,
         30,
@@ -51,9 +52,8 @@ pub async fn registration(
         Ok(())
     }
 
-    for member in new_team.members.iter() {
-        let a = member.clone().into();
-        user_validate(&a).await?;
+    for member in new_team.members.as_ref().unwrap_or(&vec![]).iter() {
+        user_validate(&member.clone().into()).await?;
     }
 
     let mut captain = new_team.captain.into();
@@ -64,21 +64,37 @@ pub async fn registration(
 
     let id = connection
         .transaction::<_, Box<dyn Error>, _>(|tx| {
-            let id = crate::diesel::utils::hackathon_2025::team::insert::new_tx(tx, insert_team)?;
+            let team_id =
+                crate::diesel::utils::hackathon_2025::team::insert::new_tx(tx, insert_team)?;
 
-            captain.team_id = id;
+            captain.team_id = team_id;
 
-            crate::diesel::utils::hackathon_2025::user::insert::new_tx(tx, captain)?;
+            let captain_id =
+                crate::diesel::utils::hackathon_2025::user::insert::new_tx(tx, captain)?;
 
-            for member in new_team.members.into_iter().map(|m| {
-                let mut m: HackathonUser2025Insertable = m.into();
-                m.team_id = id;
-                m
-            }) {
-                crate::diesel::utils::hackathon_2025::user::insert::new_tx(tx, member)?;
-            }
+            crate::diesel::utils::hackathon_2025::team_captain::insert::new_tx(
+                tx,
+                HackathonTeamCaptain2025Insertable {
+                    team_id,
+                    captain_id,
+                },
+            )?;
 
-            Ok(id)
+            new_team
+                .members
+                .unwrap_or_default()
+                .into_iter()
+                .map(|m| {
+                    let mut member: HackathonUser2025Insertable = m.into();
+                    member.team_id = team_id;
+                    member
+                })
+                .try_for_each(|member| -> Result<(), ApiError> {
+                    crate::diesel::utils::hackathon_2025::user::insert::new_tx(tx, member)?;
+                    Ok(())
+                })?;
+
+            Ok(team_id)
         })
         .map_err(|err| {
             log::error!("Failed to create team: {}", err);

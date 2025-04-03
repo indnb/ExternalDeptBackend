@@ -13,6 +13,7 @@ use rocket::put;
     responses(
         (status = 200, description = "User updated successfully", body = String),
         (status = 401, description = "Unauthorized error"),
+        (status = 422, description = "Validation error", body = ApiErrorBody),
         (status = 500, description = "Database error", body = ApiErrorBody),
     ),
     security(

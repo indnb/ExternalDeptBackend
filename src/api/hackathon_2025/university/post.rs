@@ -40,7 +40,7 @@ pub async fn create(
 #[utoipa::path(
     post,
     path = "/api/hackathon_2025/university/create_by_vec",
-    request_body = Vec<University>, tag = "Hackathon University 2024",
+    request_body = Vec<University>, tag = "Hackathon University 2025",
     operation_id = "create_university_by_vec",
     responses(
         (status = 200, description = "Vec university created successfully"),

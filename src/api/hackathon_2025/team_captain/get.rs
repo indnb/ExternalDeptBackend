@@ -3,7 +3,7 @@ use crate::{
     dto::response::hackathon_2025::team_captain::{TeamCaptainResponse, VecTeamCaptainResponse},
     utils::prelude_api::*,
 };
-use rocket::post;
+use rocket::get;
 
 #[utoipa::path(
     get,
@@ -15,11 +15,14 @@ use rocket::post;
     ),
     responses(
         (status = 200, description = "Team captain got successfully", body = TeamCaptainResponse),
-        (status = 422, description = "Validation error", body = ApiErrorBody),
+        (status = 401, description = "Unauthorized error"),
         (status = 500, description = "Database error", body = ApiErrorBody),
     ),
+    security(
+        ("bearer_auth" = [])
+    )
 )]
-#[post("/hackathon_2025/team_captain/by_team_id/<team_id>")]
+#[get("/hackathon_2025/team_captain/by_team_id/<team_id>")]
 pub async fn by_team_id(
     pool: &DbState,
     team_id: i32,
@@ -28,7 +31,7 @@ pub async fn by_team_id(
     admin_match.check_admin()?;
 
     Ok(Json(TeamCaptainResponse(
-        crate::diesel::utils::hackathon_2025::team_captain::fetch::by_captain_id(pool, team_id)?,
+        crate::diesel::utils::hackathon_2025::team_captain::fetch::by_team_id(pool, team_id)?,
     )))
 }
 
@@ -38,15 +41,18 @@ pub async fn by_team_id(
     tag = "Hackathon Team Captain 2025",
     operation_id = "fatch_team_captain_by_captain_id",
     params(
-        ("captain_id" = i32, Path, description = "ID of the team to get")
+        ("captain_id" = i32, Path, description = "ID of the captain to get")
     ),
     responses(
         (status = 200, description = "Team captain got successfully", body = TeamCaptainResponse),
-        (status = 422, description = "Validation error", body = ApiErrorBody),
+        (status = 401, description = "Unauthorized error"),
         (status = 500, description = "Database error", body = ApiErrorBody),
     ),
+    security(
+        ("bearer_auth" = [])
+    )
 )]
-#[post("/hackathon_2025/team_captain/by_captain_id/<team_id>")]
+#[get("/hackathon_2025/team_captain/by_captain_id/<team_id>")]
 pub async fn by_captain_id(
     pool: &DbState,
     team_id: i32,
@@ -65,12 +71,15 @@ pub async fn by_captain_id(
     tag = "Hackathon Team Captain 2025",
     operation_id = "fetch_team_captain_all",
     responses(
-        (status = 200, description = "Team captain got successfully", body = Vec<HackathonTeamCaptain2025Queryable>),
-        (status = 422, description = "Validation error", body = ApiErrorBody),
+        (status = 200, description = "Team captains got successfully", body = Vec<HackathonTeamCaptain2025Queryable>),
+        (status = 401, description = "Unauthorized error"),
         (status = 500, description = "Database error", body = ApiErrorBody),
     ),
+    security(
+        ("bearer_auth" = [])
+    )
 )]
-#[post("/hackathon_2025/team_captain/all")]
+#[get("/hackathon_2025/team_captain/all")]
 pub async fn all(
     pool: &DbState,
     admin_match: AdminAuthData,

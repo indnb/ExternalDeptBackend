@@ -19,12 +19,12 @@ pub struct UpdateTeam {
 pub struct NewTeamWithPersons {
     pub team: NewTeam,
     pub captain: Captain,
-    pub members: Vec<Member>,
+    pub members: Option<Vec<Member>>,
 }
 
 #[derive(Debug, Deserialize, ToSchema, Clone)]
 pub struct NewTeam {
-    #[schema(example = "1")]
+    #[schema(example = "Team 1")]
     pub name: String,
     #[schema(example = "Education")]
     pub category: HackathonCategory2025Enum,

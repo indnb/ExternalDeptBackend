@@ -9,7 +9,6 @@ pub fn by_data(
     diesel::update(hackathon_team_captain_2025)
         .filter(team_id.eq(data.team_id))
         .set((
-            team_id.eq(&data.team_id),
             captain_id.eq(data.captain_id),
             updated_at.eq(chrono::Utc::now().naive_utc()),
         ))

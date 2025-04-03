@@ -28,7 +28,7 @@ pub fn check_name(
     length: usize,
     error_message: impl AsRef<str>,
 ) -> Result<(), ApiError> {
-    if name.as_ref().less_for(length) {
+    if name.as_ref().less_for(length) && name.as_ref().greater_for(1) {
         Ok(())
     } else {
         Err(ApiError::InvalidName(error_message.as_ref().to_owned()))

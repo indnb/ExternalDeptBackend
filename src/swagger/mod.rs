@@ -29,7 +29,14 @@ use utoipa::{Modify, OpenApi};
             api::hackathon_2025::team::get::by_id,
             api::hackathon_2025::team::put::by_data,
             api::hackathon_2025::team::delete::by_id,
-            // /adnmin/
+            // /hackathon_2025/team_captain/*
+            api::hackathon_2025::team_captain::post::by_data,
+            api::hackathon_2025::team_captain::put::by_data,
+            api::hackathon_2025::team_captain::delete::by_team_id,
+            api::hackathon_2025::team_captain::get::by_team_id,
+            api::hackathon_2025::team_captain::get::by_captain_id,
+            api::hackathon_2025::team_captain::get::all,
+            // /admin/
             api::admin::post::login,
             api::admin::get::get,
             // /other/*

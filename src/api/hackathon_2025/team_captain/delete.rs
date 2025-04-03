@@ -1,5 +1,5 @@
 use crate::utils::prelude_api::*;
-use rocket::post;
+use rocket::delete;
 
 #[utoipa::path(
     delete,
@@ -7,15 +7,18 @@ use rocket::post;
     tag = "Hackathon Team Captain 2025",
     operation_id = "delete_team_captain",
     params(
-        ("team_id" = i32, Path, description = "ID of the team to get")
+        ("team_id" = i32, Path, description = "ID of the team to delete")
     ),
     responses(
-        (status = 200, description = "Team captain got successfully"),
-        (status = 422, description = "Validation error", body = ApiErrorBody),
+        (status = 200, description = "Team captain deleted successfully"),
+        (status = 401, description = "Unauthorized error"),
         (status = 500, description = "Database error", body = ApiErrorBody),
     ),
+    security(
+        ("bearer_auth" = [])
+    )
 )]
-#[post("/hackathon_2025/team_captain/by_team_id/<team_id>")]
+#[delete("/hackathon_2025/team_captain/by_team_id/<team_id>")]
 pub async fn by_team_id(
     pool: &DbState,
     team_id: i32,

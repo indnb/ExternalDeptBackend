@@ -29,7 +29,7 @@ pub async fn all() -> Result<Json<VecUniversity>, ApiError> {
 #[utoipa::path(
     get,
     path = "/api/hackathon_2025/university/by_id/{id}",
-    tag = "Hackathon University 2024",
+    tag = "Hackathon University 2025",
     operation_id = "get_university_by_id",
     params(
         ("id" = i32, Path, description = "ID of the university to fetch")
