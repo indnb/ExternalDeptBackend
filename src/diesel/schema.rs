@@ -2,51 +2,36 @@
 
 pub mod sql_types {
     #[derive(diesel::sql_types::SqlType)]
-    #[diesel(postgres_type(name = "hackathon_category_2024"))]
-    pub struct HackathonCategory2024;
-
-    #[derive(diesel::sql_types::SqlType)]
-    #[diesel(postgres_type(name = "type_media"))]
-    pub struct TypeMedia;
+    #[diesel(postgres_type(name = "hackathon_category_2025"))]
+    pub struct HackathonCategory2025;
 }
 
 diesel::table! {
     use diesel::sql_types::*;
-    use super::sql_types::TypeMedia;
+    use super::sql_types::HackathonCategory2025;
 
-    announcement_banner (id) {
-        id -> Int4,
-        src_url -> Text,
-        type_media -> TypeMedia,
-        #[max_length = 255]
-        description -> Varchar,
-        showing -> Bool,
-        created_at -> Nullable<Timestamp>,
-        updated_at -> Nullable<Timestamp>,
-    }
-}
-
-diesel::table! {
-    use diesel::sql_types::*;
-    use super::sql_types::HackathonCategory2024;
-
-    hackathon_team_2024 (id) {
+    hackathon_team_2025 (id) {
         id -> Int4,
         #[max_length = 255]
         name -> Varchar,
-        category -> HackathonCategory2024,
-        #[max_length = 255]
-        password_registration -> Varchar,
+        category -> HackathonCategory2025,
         count_members -> Int4,
-        #[max_length = 255]
-        nickname_tg -> Varchar,
         created_at -> Nullable<Timestamp>,
         updated_at -> Nullable<Timestamp>,
     }
 }
 
 diesel::table! {
-    hackathon_university_2024 (id) {
+    hackathon_team_captain_2025 (team_id) {
+        team_id -> Int4,
+        captain_id -> Int4,
+        created_at -> Nullable<Timestamp>,
+        updated_at -> Nullable<Timestamp>,
+    }
+}
+
+diesel::table! {
+    hackathon_university_2025 (id) {
         id -> Int4,
         name -> Text,
         name_eng -> Text,
@@ -56,59 +41,31 @@ diesel::table! {
 }
 
 diesel::table! {
-    hackathon_user_2024 (id) {
+    hackathon_user_2025 (id) {
         id -> Int4,
         #[max_length = 50]
         first_name -> Varchar,
         #[max_length = 50]
         last_name -> Varchar,
         #[max_length = 20]
-        phone -> Varchar,
+        phone -> Nullable<Varchar>,
         #[max_length = 255]
-        nickname_tg -> Varchar,
-        university_id -> Nullable<Int4>,
-        team_id -> Nullable<Int4>,
+        nickname_tg -> Nullable<Varchar>,
+        university_id -> Int4,
+        team_id -> Int4,
         created_at -> Nullable<Timestamp>,
         updated_at -> Nullable<Timestamp>,
     }
 }
 
-diesel::table! {
-    news (id) {
-        id -> Int4,
-        description -> Text,
-        preview_id -> Nullable<Int4>,
-        #[max_length = 255]
-        header -> Varchar,
-        created_at -> Nullable<Timestamp>,
-        updated_at -> Nullable<Timestamp>,
-    }
-}
-
-diesel::table! {
-    use diesel::sql_types::*;
-    use super::sql_types::TypeMedia;
-
-    news_media (id) {
-        id -> Int4,
-        src_url -> Text,
-        news_id -> Nullable<Int4>,
-        type_media -> TypeMedia,
-        position -> Int4,
-        created_at -> Nullable<Timestamp>,
-        updated_at -> Nullable<Timestamp>,
-    }
-}
-
-diesel::joinable!(hackathon_user_2024 -> hackathon_team_2024 (team_id));
-diesel::joinable!(hackathon_user_2024 -> hackathon_university_2024 (university_id));
-diesel::joinable!(news_media -> news (news_id));
+diesel::joinable!(hackathon_team_captain_2025 -> hackathon_team_2025 (team_id));
+diesel::joinable!(hackathon_team_captain_2025 -> hackathon_user_2025 (captain_id));
+diesel::joinable!(hackathon_user_2025 -> hackathon_team_2025 (team_id));
+diesel::joinable!(hackathon_user_2025 -> hackathon_university_2025 (university_id));
 
 diesel::allow_tables_to_appear_in_same_query!(
-    announcement_banner,
-    hackathon_team_2024,
-    hackathon_university_2024,
-    hackathon_user_2024,
-    news,
-    news_media,
+    hackathon_team_2025,
+    hackathon_team_captain_2025,
+    hackathon_university_2025,
+    hackathon_user_2025,
 );

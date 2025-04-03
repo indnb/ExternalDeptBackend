@@ -1,6 +1,6 @@
 use crate::api;
 use crate::diesel::configurator::{configuration_database, DbPool};
-use crate::dto::response::hackathon_2024::university::update_university_cached;
+use crate::dto::response::hackathon_2025::university::update_university_cached;
 use crate::swagger::ApiDoc;
 use crate::utils::env_configuration::EnvConfiguration;
 use log::LevelFilter;
@@ -87,27 +87,27 @@ impl Server {
                 routes![
                     // /test/*
                     api::test::get::ping,
-                    // /hackathon_2024/user/*
-                    api::hackathon_2024::user::post::registration_by_tg,
-                    api::hackathon_2024::user::get::all,
-                    api::hackathon_2024::user::put::by_id,
-                    api::hackathon_2024::user::delete::by_id,
-                    api::hackathon_2024::user::get::by_id,
-                    api::hackathon_2024::user::get::by_university,
-                    api::hackathon_2024::user::get::by_team,
-                    // /hackathon_2024/university/*
-                    api::hackathon_2024::university::post::create,
-                    api::hackathon_2024::university::post::create_by_vec,
-                    api::hackathon_2024::university::get::all,
-                    api::hackathon_2024::university::get::by_id,
-                    api::hackathon_2024::university::put::by_id,
-                    api::hackathon_2024::university::delete::by_id,
-                    // /hackathon_2024/team/*
-                    api::hackathon_2024::team::post::create,
-                    api::hackathon_2024::team::get::all,
-                    api::hackathon_2024::team::get::by_id,
-                    api::hackathon_2024::team::put::by_data,
-                    api::hackathon_2024::team::delete::by_id,
+                    // /hackathon_2025/user/*
+                    api::hackathon_2025::user::post::create,
+                    api::hackathon_2025::user::get::all,
+                    api::hackathon_2025::user::put::by_id,
+                    api::hackathon_2025::user::delete::by_id,
+                    api::hackathon_2025::user::get::by_id,
+                    api::hackathon_2025::user::get::by_university,
+                    api::hackathon_2025::user::get::by_team,
+                    // /hackathon_2025/university/*
+                    api::hackathon_2025::university::post::create,
+                    api::hackathon_2025::university::post::create_by_vec,
+                    api::hackathon_2025::university::get::all,
+                    api::hackathon_2025::university::get::by_id,
+                    api::hackathon_2025::university::put::by_id,
+                    api::hackathon_2025::university::delete::by_id,
+                    // /hackathon_2025/team/*
+                    api::hackathon_2025::team::post::registration,
+                    api::hackathon_2025::team::get::all,
+                    api::hackathon_2025::team::get::by_id,
+                    api::hackathon_2025::team::put::by_data,
+                    api::hackathon_2025::team::delete::by_id,
                     // /adnmin/
                     api::admin::post::login,
                     api::admin::get::get,

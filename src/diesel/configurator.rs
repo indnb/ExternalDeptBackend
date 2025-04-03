@@ -1,6 +1,6 @@
 use super::prelude::*;
-use crate::diesel::models::hackathon_2024::university::HackathonUniversity2024Insertable;
-use crate::diesel::schema::hackathon_university_2024;
+use crate::diesel::models::hackathon_2025::university::HackathonUniversity2024Insertable;
+use crate::diesel::schema::hackathon_university_2025;
 use crate::error::api_error::ApiError;
 use crate::utils::constants::diesel::MIGRATIONS;
 use crate::utils::env_configuration::EnvConfiguration;
@@ -71,7 +71,7 @@ pub fn configuration_database() -> DbPool {
 }
 
 fn load_csv(pool: &DbPool) {
-    let count_current_university = hackathon_university_2024::table
+    let count_current_university = hackathon_university_2025::table
         .count()
         .get_result::<i64>(&mut get_connection(pool).unwrap())
         .unwrap();
@@ -95,7 +95,7 @@ fn load_csv(pool: &DbPool) {
         rows.push(new_row);
     }
 
-    diesel::insert_into(hackathon_university_2024::table)
+    diesel::insert_into(hackathon_university_2025::table)
         .values(&rows)
         .execute(&mut get_connection(pool).unwrap())
         .unwrap();

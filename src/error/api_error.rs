@@ -104,6 +104,14 @@ pub enum ApiError {
     }))]
     InvalidPassword(String),
 
+    #[error("Invalid university ID: {0}")]
+    #[schema(example = json!({
+        "status": 400,
+        "code": "E3006",
+        "message": "Invalid university ID: 0"
+    }))]
+    InvalidUniversityId(String),
+
     // E4***
     #[error("Failed to encode data: {0}")]
     #[schema(example = json!({
@@ -292,6 +300,14 @@ pub enum ApiError {
         "message": "Failed to delete team by ID: Not found team"
     }))]
     FailedToDeleteTeamById(String),
+
+    #[error("Failed to execute transaction: {0}")]
+    #[schema(example = json!({
+        "status": 500,
+        "code": "E7007",
+        "message": "Failed to execute transaction: Database error"
+    }))]
+    FailedTransaction(String),
 }
 
 impl ApiError {
@@ -310,6 +326,7 @@ impl ApiError {
             ApiError::InvalidTelegramNickname(_) => "E3003",
             ApiError::InvalidName(_) => "E3004",
             ApiError::InvalidPassword(_) => "E3005",
+            ApiError::InvalidUniversityId(_) => "E3006",
 
             ApiError::FailedToEncodeData(_) => "E4001",
             ApiError::FailedToDecodeData(_) => "E4002",
@@ -337,6 +354,7 @@ impl ApiError {
             ApiError::FailedToUpdateTeamByData(_) => "E7004",
             ApiError::InvalidTeamMembersCount(_) => "E7005",
             ApiError::FailedToDeleteTeamById(_) => "E7006",
+            ApiError::FailedTransaction(_) => "E7007",
         }
     }
 
@@ -354,7 +372,8 @@ impl ApiError {
             | ApiError::InvalidEmail(_)
             | ApiError::InvalidTelegramNickname(_)
             | ApiError::InvalidName(_)
-            | ApiError::InvalidPassword(_) => Status::BadRequest,
+            | ApiError::InvalidPassword(_)
+            | ApiError::InvalidUniversityId(_) => Status::BadRequest,
 
             ApiError::FailedToEncodeData(_)
             | ApiError::FailedToDecodeData(_)
@@ -381,7 +400,8 @@ impl ApiError {
             | ApiError::FailedToGetAllTeams(_)
             | ApiError::FailedToGetTeamById(_)
             | ApiError::InvalidTeamMembersCount(_)
-            | ApiError::FailedToDeleteTeamById(_) => Status::InternalServerError,
+            | ApiError::FailedToDeleteTeamById(_)
+            | ApiError::FailedTransaction(_) => Status::InternalServerError,
         }
     }
 }
