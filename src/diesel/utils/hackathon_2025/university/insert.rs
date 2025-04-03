@@ -1,9 +1,9 @@
-use crate::diesel::models::hackathon_2025::university::HackathonUniversity2024Insertable;
+use crate::diesel::models::hackathon_2025::university::HackathonUniversity2025Insertable;
 use crate::diesel::prelude::*;
 
 pub fn new(
     db_pool: &State<DbPool>,
-    data: HackathonUniversity2024Insertable,
+    data: HackathonUniversity2025Insertable,
 ) -> Result<i32, ApiError> {
     let mut db_connection = get_connection(db_pool)?;
     diesel::insert_into(crate::diesel::schema::hackathon_university_2025::table)
@@ -15,7 +15,7 @@ pub fn new(
 
 pub fn new_by_vec(
     db_pool: &State<DbPool>,
-    data: Vec<HackathonUniversity2024Insertable>,
+    data: Vec<HackathonUniversity2025Insertable>,
 ) -> Result<i32, ApiError> {
     let mut db_connection = get_connection(db_pool)?;
     diesel::insert_into(crate::diesel::schema::hackathon_university_2025::table)

@@ -104,6 +104,7 @@ impl Server {
                     api::hackathon_2025::university::delete::by_id,
                     // /hackathon_2025/team/*
                     api::hackathon_2025::team::post::registration,
+                    api::hackathon_2025::team::post::create,
                     api::hackathon_2025::team::get::all,
                     api::hackathon_2025::team::get::by_id,
                     api::hackathon_2025::team::put::by_data,

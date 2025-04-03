@@ -8,6 +8,7 @@ use log::error;
 use serde::de::DeserializeOwned;
 use serde::Serialize;
 
+#[allow(dead_code)]
 pub fn hashing_password(value: impl AsRef<str>) -> Result<String, ApiError> {
     hash(value.as_ref(), DEFAULT_COST).map_err(|err| {
         error!("Error hashing password: {err:?}");
@@ -15,6 +16,7 @@ pub fn hashing_password(value: impl AsRef<str>) -> Result<String, ApiError> {
     })
 }
 
+#[allow(dead_code)]
 pub fn verify_password(password: impl AsRef<str>, hash: impl AsRef<str>) -> Result<bool, ApiError> {
     verify(password.as_ref(), hash.as_ref()).map_err(|err| {
         error!("Error verifying password: {err:?}");

@@ -1,4 +1,4 @@
-use crate::diesel::models::hackathon_2025::university::HackathonUniversity2024Insertable;
+use crate::diesel::models::hackathon_2025::university::HackathonUniversity2025Insertable;
 use crate::diesel::prelude::*;
 use crate::diesel::schema::hackathon_university_2025::dsl::hackathon_university_2025;
 use crate::diesel::schema::hackathon_university_2025::{id, name, name_eng, updated_at};
@@ -6,7 +6,7 @@ use crate::diesel::schema::hackathon_university_2025::{id, name, name_eng, updat
 pub fn by_id(
     db_pool: &State<DbPool>,
     university_id: i32,
-    data: HackathonUniversity2024Insertable,
+    data: HackathonUniversity2025Insertable,
 ) -> Result<i32, ApiError> {
     diesel::update(hackathon_university_2025.filter(id.eq(university_id)))
         .set((

@@ -5,7 +5,7 @@ use utoipa::ToSchema;
 
 #[derive(Debug, Queryable, Serialize, ToSchema, Clone)]
 #[diesel(table_name = crate::diesel::schema::hackathon_university_2025)]
-pub struct HackathonUniversity2024Queryable {
+pub struct HackathonUniversity2025Queryable {
     #[schema(example = "1")]
     pub id: i32,
     #[schema(example = "Інноваційний університет")]
@@ -20,7 +20,7 @@ pub struct HackathonUniversity2024Queryable {
 
 #[derive(Insertable, Debug, Deserialize, Serialize, ToSchema)]
 #[diesel(table_name = crate::diesel::schema::hackathon_university_2025)]
-pub struct HackathonUniversity2024Insertable {
+pub struct HackathonUniversity2025Insertable {
     #[schema(example = "Інноваційний університет")]
     pub name: String,
     #[schema(example = "Innovation University")]

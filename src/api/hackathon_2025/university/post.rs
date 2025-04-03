@@ -24,6 +24,7 @@ pub async fn create(
     admin_match: AdminAuthData,
 ) -> Result<(), ApiError> {
     admin_match.check_admin()?;
+
     let id = crate::diesel::utils::hackathon_2025::university::insert::new(
         db_pool,
         data.into_inner().0,

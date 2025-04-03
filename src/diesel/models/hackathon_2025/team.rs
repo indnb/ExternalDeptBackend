@@ -22,7 +22,7 @@ pub struct HackathonTeam2025Queryable {
 
 #[derive(Insertable, Debug, Deserialize, Serialize, utoipa::ToSchema)]
 #[diesel(table_name = crate::diesel::schema::hackathon_team_2025)]
-pub struct HackathonTeam2024Insertable {
+pub struct HackathonTeam2025Insertable {
     #[schema(example = "Team 1")]
     pub name: String,
     #[schema(example = "Education")]

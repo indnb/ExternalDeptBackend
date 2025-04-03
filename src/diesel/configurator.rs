@@ -1,5 +1,5 @@
 use super::prelude::*;
-use crate::diesel::models::hackathon_2025::university::HackathonUniversity2024Insertable;
+use crate::diesel::models::hackathon_2025::university::HackathonUniversity2025Insertable;
 use crate::diesel::schema::hackathon_university_2025;
 use crate::error::api_error::ApiError;
 use crate::utils::constants::diesel::MIGRATIONS;
@@ -87,7 +87,7 @@ fn load_csv(pool: &DbPool) {
 
     for result in rdr.records() {
         let record = result.unwrap();
-        let new_row = HackathonUniversity2024Insertable {
+        let new_row = HackathonUniversity2025Insertable {
             name: record.get(0).unwrap().to_string(),
             name_eng: record.get(1).unwrap().to_string(),
         };

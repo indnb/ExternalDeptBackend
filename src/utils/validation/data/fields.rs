@@ -45,6 +45,7 @@ pub fn check_phone(phone: impl AsRef<str>, error_message: impl AsRef<str>) -> Re
     }
 }
 
+#[allow(dead_code)]
 pub fn check_password(
     password: impl AsRef<str>,
     length: usize,
