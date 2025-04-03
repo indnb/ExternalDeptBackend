@@ -25,9 +25,13 @@ pub async fn by_id(
     data: Json<User>,
     id: i32,
     admin_match: AdminAuthData,
-) -> Result<String, ApiError> {
+) -> Result<(), ApiError> {
     admin_match.check_admin()?;
     let data = data.into_inner();
-    crate::diesel::utils::hackathon_2025::user::update::by_id(db_pool, id, &data.0)?;
-    Ok(format!("Successfully updated hackathon_user_2025"))
+
+    let id = crate::diesel::utils::hackathon_2025::user::update::by_id(db_pool, id, &data.0)?;
+
+    info!("Successfully updated hackathon_user_2025 {}", id);
+
+    Ok(())
 }

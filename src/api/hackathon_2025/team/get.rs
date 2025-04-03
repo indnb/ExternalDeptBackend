@@ -5,12 +5,15 @@ use rocket::get;
 #[utoipa::path(
     get,
     path = "/api/hackathon_2025/team/all",
-    tag = "Hackathon Team 2024",
+    tag = "Hackathon Team 2025",
     operation_id = "get_all_team",
     responses(
         (status = 200, description = "All team get successfully", body = Vec<Team>),
         (status = 500, description = "Database error", body = ApiErrorBody),
     ),
+    security(
+        ("bearer_auth" = [])
+    )
 )]
 #[get("/hackathon_2025/team/all")]
 pub async fn all(db_pool: &DbState) -> Result<Json<VecTeam>, ApiError> {

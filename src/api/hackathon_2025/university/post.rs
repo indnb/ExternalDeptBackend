@@ -6,7 +6,7 @@ use rocket::post;
 #[utoipa::path(
     post,
     path = "/api/hackathon_2025/university/create",
-    request_body = University, tag = "Hackathon University 2024",
+    request_body = University, tag = "Hackathon University 2025",
     operation_id = "create_university",
     responses(
         (status = 200, description = "University created successfully"),

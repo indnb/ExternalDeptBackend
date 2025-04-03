@@ -6,7 +6,7 @@ use rocket::get;
 #[utoipa::path(
     get,
     path = "/api/hackathon_2025/user/all",
-    tag = "Hackathon User 2024",
+    tag = "Hackathon User 2025",
     operation_id = "get_all_user",
     responses(
         (status = 200, description = "All user fetched successfully", body = Vec<User>),
@@ -27,7 +27,7 @@ pub async fn all(db_pool: &DbState, admin_match: AdminAuthData) -> Result<Json<V
 #[utoipa::path(
     get,
     path = "/api/hackathon_2025/user/by_id/{id}",
-    tag = "Hackathon User 2024",
+    tag = "Hackathon User 2025",
     operation_id = "get_user_by_id",
     params(
         ("id" = i32, Path, description = "ID of the user to fetch")
@@ -85,7 +85,7 @@ pub async fn by_university(
 #[utoipa::path(
     get,
     path = "/api/hackathon_2025/user/by_team/{id}",
-    tag = "Hackathon User 2024",
+    tag = "Hackathon User 2025",
     operation_id = "get_user_by_team",
     params(
         ("id" = i32, Path, description = "ID of the user`s team to fetch")

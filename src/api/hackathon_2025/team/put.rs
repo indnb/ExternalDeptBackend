@@ -5,7 +5,7 @@ use rocket::put;
 #[utoipa::path(
     put,
     path = "/api/hackathon_2025/team/by_data",
-    tag = "Hackathon Team 2024",
+    tag = "Hackathon Team 2025",
     request_body = TeamUpdateData,
     operation_id = "put_team_by_data",
     responses(

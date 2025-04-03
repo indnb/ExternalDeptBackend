@@ -6,7 +6,7 @@ use rocket::delete;
 #[utoipa::path(
     delete,
     path = "/api/hackathon_2025/university/by_id/{id}",
-    tag = "Hackathon University 2024",
+    tag = "Hackathon University 2025",
     operation_id = "delete_university_by_id", 
     responses(
         (status = 200, description = "University deleted successfully"),

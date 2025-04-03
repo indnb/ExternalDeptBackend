@@ -6,7 +6,7 @@ use rocket::put;
 #[utoipa::path(
     put,
     path = "/api/hackathon_2025/university/by_id/{id}",
-    request_body = University, tag = "Hackathon University 2024",
+    request_body = University, tag = "Hackathon University 2025",
     operation_id = "put_university_by_id",
     params(
         ("id" = i32, Path, description = "ID of the university to update")

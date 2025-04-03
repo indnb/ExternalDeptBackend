@@ -5,17 +5,20 @@ use rocket::post;
 
 #[utoipa::path(
     post,
-    path = "/api/hackathon_2025/user/registration_by_tg",
+    path = "/api/hackathon_2025/user/create",
     request_body = User,
     tag = "Hackathon User 2025",
-    operation_id = "user_registration_by_tg",
+    operation_id = "user_create",
     responses(
         (status = 200, description = "User registration successfully"),
         (status = 422, description = "Validation error", body = ApiErrorBody),
         (status = 500, description = "Database error", body = ApiErrorBody),
     ),
+    security(
+        ("bearer_auth" = [])
+    )
 )]
-#[post("/hackathon_2025/user/registration_by_tg", data = "<data>")]
+#[post("/hackathon_2025/user/create", data = "<data>")]
 pub async fn create(
     db_pool: &DbState,
     data: Json<User>,

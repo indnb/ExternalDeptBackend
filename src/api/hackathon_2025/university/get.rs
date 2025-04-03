@@ -7,7 +7,7 @@ use rocket::get;
 #[utoipa::path(
     get,
     path = "/api/hackathon_2025/university/all",
-    tag = "Hackathon University 2024",
+    tag = "Hackathon University 2025",
     operation_id = "get_all_university",
     responses(
         (status = 200, description = "All university fetched successfully", body = Vec<University>),

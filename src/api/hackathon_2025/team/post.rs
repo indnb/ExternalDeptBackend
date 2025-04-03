@@ -104,6 +104,9 @@ pub async fn registration(
         (status = 422, description = "Validation error", body = ApiErrorBody),
         (status = 500, description = "Database error", body = ApiErrorBody),
     ),
+    security(
+        ("bearer_auth" = [])
+    )
 )]
 #[post("/hackathon_2025/team/registration", data = "<data>")]
 pub async fn create(
