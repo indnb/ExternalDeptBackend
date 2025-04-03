@@ -22,21 +22,13 @@ pub enum ApiError {
     }))]
     FailedToGenerateAdminToken(String),
 
-    #[error("Invalid admin name: {0}")]
+    #[error("Invalid admin: {0}")]
     #[schema(example = json!({
         "status": 400,
         "code": "E1002",
-        "message": "Invalid admin name: JohnDoe123"
+        "message": "Invalid admin"
     }))]
-    InvalidAdminName(String),
-
-    #[error("Invalid admin password: {0}")]
-    #[schema(example = json!({
-        "status": 400,
-        "code": "E1003",
-        "message": "Invalid admin password: p4ssW0rd!"
-    }))]
-    InvalidAdminPassword(String),
+    InvalidAdmin(String),
 
     #[error("Unauthorized admin access: {0}")]
     #[schema(example = json!({
@@ -314,10 +306,9 @@ impl ApiError {
     pub fn code(&self) -> &'static str {
         match self {
             ApiError::FailedToGenerateAdminToken(_) => "E1001",
-            ApiError::InvalidAdminName(_) => "E1002",
-            ApiError::InvalidAdminPassword(_) => "E1003",
-            ApiError::AdminUnauthorized(_) => "E1004",
-            ApiError::AdminHeaderMismatch(_) => "E1005",
+            ApiError::InvalidAdmin(_) => "E1002",
+            ApiError::AdminUnauthorized(_) => "E1003",
+            ApiError::AdminHeaderMismatch(_) => "E1004",
 
             ApiError::FailedDatabaseConnection(_) => "E2001",
 
@@ -361,7 +352,7 @@ impl ApiError {
     pub fn status(&self) -> Status {
         match self {
             ApiError::FailedToGenerateAdminToken(_) => Status::InternalServerError,
-            ApiError::InvalidAdminName(_) | ApiError::InvalidAdminPassword(_) => Status::BadRequest,
+            ApiError::InvalidAdmin(_) => Status::BadRequest,
             ApiError::AdminUnauthorized(_) | ApiError::AdminHeaderMismatch(_) => {
                 Status::Unauthorized
             }

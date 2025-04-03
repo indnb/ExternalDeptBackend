@@ -10,7 +10,7 @@ use rocket::post;
     tag = "Hackathon User 2025",
     operation_id = "user_create",
     responses(
-        (status = 200, description = "User registration successfully"),
+        (status = 200, description = "User created successfully"),
         (status = 422, description = "Validation error", body = ApiErrorBody),
         (status = 500, description = "Database error", body = ApiErrorBody),
     ),

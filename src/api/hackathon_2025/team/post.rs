@@ -18,7 +18,7 @@ use rocket::post;
     tag = "Hackathon Team 2025",
     operation_id = "registration_team",
     responses(
-        (status = 200, description = "Team created successfully"),
+        (status = 200, description = "Team registrated successfully"),
         (status = 422, description = "Validation error", body = ApiErrorBody),
         (status = 500, description = "Database error", body = ApiErrorBody),
     ),
