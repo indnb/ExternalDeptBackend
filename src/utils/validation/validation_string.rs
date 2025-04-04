@@ -12,6 +12,16 @@ lazy_static::lazy_static! {
     pub static ref HAS_UPPERCASE: Regex = Regex::new(r"[A-Z]").unwrap();
 }
 
+pub fn force_init_regex() {
+    let _ = &*EMAIL_REGEX;
+    let _ = &*NICKNAME_REGEX;
+    let _ = &*PHONE_REGEX;
+    let _ = &*HAS_DIGIT;
+    let _ = &*HAS_SYMBOL;
+    let _ = &*HAS_LOWERCASE;
+    let _ = &*HAS_UPPERCASE;
+}
+
 pub trait Validate {
     #[allow(dead_code)]
     fn less_for(&self, len: usize) -> bool;
@@ -30,6 +40,9 @@ pub trait Validate {
 
     #[allow(dead_code)]
     fn is_password(&self, max_len: usize) -> bool;
+
+    #[allow(dead_code)]
+    fn is_has_symbol(&self) -> bool;
 }
 
 impl<T: AsRef<str>> Validate for T {
@@ -64,5 +77,9 @@ impl<T: AsRef<str>> Validate for T {
             && HAS_SYMBOL.is_match(input)
             && HAS_LOWERCASE.is_match(input)
             && HAS_UPPERCASE.is_match(input)
+    }
+
+    fn is_has_symbol(&self) -> bool {
+        HAS_SYMBOL.is_match(self.as_ref())
     }
 }

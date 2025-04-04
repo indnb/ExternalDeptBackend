@@ -35,6 +35,17 @@ pub fn check_name(
     }
 }
 
+pub fn check_hasnt_symbol(
+    name: impl AsRef<str>,
+    error_message: impl AsRef<str>,
+) -> Result<(), ApiError> {
+    if !name.as_ref().is_has_symbol() {
+        Ok(())
+    } else {
+        Err(ApiError::InvalidName(error_message.as_ref().to_owned()))
+    }
+}
+
 pub fn check_phone(phone: impl AsRef<str>, error_message: impl AsRef<str>) -> Result<(), ApiError> {
     if phone.as_ref().is_phone() {
         Ok(())

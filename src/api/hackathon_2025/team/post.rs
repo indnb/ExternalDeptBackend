@@ -35,8 +35,8 @@ pub async fn registration(
     check_team_members_count(new_team.members.as_ref().map(|vev| vev.len()).unwrap_or(0))?;
     check_name(
         &new_team.team.name,
-        30,
-        format!("Team name greater for {} symbol", 30).as_str(),
+        50,
+        format!("Team name greater for {} symbol", 50).as_str(),
     )?;
 
     async fn user_validate(user: &HackathonUser2025Insertable) -> Result<(), ApiError> {
@@ -133,8 +133,8 @@ pub async fn create(
 
     check_name(
         &new_team.name,
-        30,
-        format!("Team name greater for {} symbol", 30).as_str(),
+        50,
+        format!("Team name greater for {} symbol", 50).as_str(),
     )?;
 
     let id = crate::diesel::utils::hackathon_2025::team::insert::new(pool, new_team)?;

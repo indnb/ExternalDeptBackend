@@ -3,6 +3,7 @@ use crate::diesel::configurator::{configuration_database, DbPool};
 use crate::dto::response::hackathon_2025::university::update_university_cached;
 use crate::swagger::ApiDoc;
 use crate::utils::env_configuration::EnvConfiguration;
+use crate::utils::validation::validation_string::force_init_regex;
 use log::LevelFilter;
 use rocket::figment::Figment;
 use rocket::{routes, Config, State};
@@ -16,6 +17,8 @@ pub struct Server;
 impl Server {
     pub async fn run() {
         Server::configure_logging();
+
+        force_init_regex();
 
         let config = Server::get_server_config().expect("Failed to configure Rocket server");
         let cors = Server::configure_cors();
