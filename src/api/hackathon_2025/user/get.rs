@@ -58,7 +58,7 @@ pub async fn by_id(
 #[utoipa::path(
     get,
     path = "/api/hackathon_2025/user/by_university/{id}",
-    tag = "Hackathon User 2024",
+    tag = "Hackathon User 2025",
     operation_id = "get_user_by_university",
     params(
         ("id" = i32, Path, description = "ID of the user`s university to fetch")
