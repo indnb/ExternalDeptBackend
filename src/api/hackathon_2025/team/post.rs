@@ -64,15 +64,14 @@ pub async fn registration(
 
     let id = connection
         .transaction::<_, Box<dyn Error>, _>(|tx| {
-            let team_id =
-                crate::diesel::utils::hackathon_2025::team::insert::new_tx(tx, insert_team)?;
+            let team_id = crate::diesel::utils::hackathon_2025::team::insert::new(tx, insert_team)?;
 
             captain.team_id = team_id;
 
             let captain_id =
-                crate::diesel::utils::hackathon_2025::user::insert::new_tx(tx, captain)?;
+                crate::diesel::utils::hackathon_2025::user::insert::new(tx, captain, -1)?;
 
-            crate::diesel::utils::hackathon_2025::team_captain::insert::new_tx(
+            crate::diesel::utils::hackathon_2025::team_captain::insert::new(
                 tx,
                 HackathonTeamCaptain2025Insertable {
                     team_id,
@@ -89,16 +88,20 @@ pub async fn registration(
                     member.team_id = team_id;
                     member
                 })
-                .try_for_each(|member| -> Result<(), ApiError> {
-                    crate::diesel::utils::hackathon_2025::user::insert::new_tx(tx, member)?;
+                .enumerate()
+                .try_for_each(|(i, member)| -> Result<(), ApiError> {
+                    crate::diesel::utils::hackathon_2025::user::insert::new(tx, member, i as i32)?;
                     Ok(())
                 })?;
 
             Ok(team_id)
         })
         .map_err(|err| {
-            log::error!("Failed to create team: {}", err);
-            ApiError::FailedTransaction("Failed to create team".to_string())
+            if let Ok(api_error) = err.downcast::<ApiError>() {
+                *api_error
+            } else {
+                ApiError::FailedTransaction("Transaction failed".to_string())
+            }
         })?;
 
     info!("Succeed insert new hackathon 2025 team with id, {}", id);
@@ -137,7 +140,9 @@ pub async fn create(
         format!("Team name greater for {} symbol", 50).as_str(),
     )?;
 
-    let id = crate::diesel::utils::hackathon_2025::team::insert::new(pool, new_team)?;
+    let mut conn = get_connection(pool)?;
+
+    let id = crate::diesel::utils::hackathon_2025::team::insert::new(&mut conn, new_team)?;
 
     info!("Succeed insert new hackathon 2025 team with id, {}", id);
 

@@ -316,6 +316,22 @@ pub enum ApiError {
         "message": "Failed to delete team captain by data: Not found"
     }))]
     FailedToUpdateTeamCaptainByData(String),
+
+    #[error("Failed to insert team because of dublicate phone: {0}")]
+    #[schema(example = json!({
+        "status": 500,
+        "code": "E70010",
+        "message": "Failed to insert team because of dublicate phone: +123456789"
+    }))]
+    DublicatePhone(String),
+
+    #[error("Failed to insert team because of dublicate nickname: {0}")]
+    #[schema(example = json!({
+        "status": 500,
+        "code": "E70011",
+        "message": "Failed to insert team because of dublicate nickname: @nickname"
+    }))]
+    DublicateNicknameTg(String),
 }
 
 impl ApiError {
@@ -364,6 +380,8 @@ impl ApiError {
             ApiError::FailedTransaction(_) => "E7007",
             ApiError::FailedToDeleteTeamCaptainByTeamId(_) => "E7008",
             ApiError::FailedToUpdateTeamCaptainByData(_) => "E7009",
+            ApiError::DublicatePhone(_) => "E70010",
+            ApiError::DublicateNicknameTg(_) => "E70011",
         }
     }
 
@@ -382,7 +400,9 @@ impl ApiError {
             | ApiError::InvalidTelegramNickname(_)
             | ApiError::InvalidName(_)
             | ApiError::InvalidPassword(_)
-            | ApiError::InvalidUniversityId(_) => Status::BadRequest,
+            | ApiError::InvalidUniversityId(_)
+            | ApiError::DublicatePhone(_)
+            | ApiError::DublicateNicknameTg(_) => Status::BadRequest,
 
             ApiError::FailedToEncodeData(_)
             | ApiError::FailedToDecodeData(_)

@@ -1,3 +1,4 @@
+use crate::diesel::prelude::get_connection;
 use crate::dto::request::hackathon_2025::user::NewUser;
 use crate::utils::prelude_api::*;
 use crate::utils::validation;
@@ -31,7 +32,9 @@ pub async fn create(
 
     validation::data::hackathon_2025::user::field(&data)?;
 
-    let id = crate::diesel::utils::hackathon_2025::user::insert::new(db_pool, data)?;
+    let mut conn = get_connection(db_pool)?;
+
+    let id = crate::diesel::utils::hackathon_2025::user::insert::new(&mut conn, data, -1)?;
 
     info!("Succeed create user with id {id}");
 

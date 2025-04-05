@@ -1,3 +1,4 @@
+use crate::diesel::prelude::get_connection;
 use crate::dto::request::hackathon_2025::team_captain::TeamCaptain;
 use crate::utils::prelude_api::*;
 use rocket::post;
@@ -25,8 +26,10 @@ pub async fn by_data(
 ) -> Result<(), ApiError> {
     admin_match.check_admin()?;
 
+    let conn = &mut get_connection(pool)?;
+
     let data = data.into_inner();
-    let id = crate::diesel::utils::hackathon_2025::team_captain::insert::new(pool, data.into())?;
+    let id = crate::diesel::utils::hackathon_2025::team_captain::insert::new(conn, data.into())?;
 
     info!(
         "Succeed insert new hackathon 2025 team captain with team id, {}",
