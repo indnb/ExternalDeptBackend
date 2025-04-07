@@ -49,8 +49,8 @@ CREATE TRIGGER update_hackathon_team_updated_at
 CREATE TABLE hackathon_user_2025
 (
     id            SERIAL PRIMARY KEY,
-    first_name    VARCHAR(50)  NOT NULL,
-    last_name     VARCHAR(50)  NOT NULL,
+    first_name    VARCHAR(100)  NOT NULL,
+    last_name     VARCHAR(200)  NOT NULL,
     phone         VARCHAR(20)  DEFAULT NULL UNIQUE,
     nickname_tg   VARCHAR(255) DEFAULT NULL UNIQUE,
     university_id INT NULL,

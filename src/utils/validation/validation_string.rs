@@ -7,7 +7,7 @@ lazy_static::lazy_static! {
         Regex::new(r"^[a-zA-Z0-9](?:[a-zA-Z0-9_]{3,30}[a-zA-Z0-9])?$").unwrap();
     pub static ref PHONE_REGEX: Regex = Regex::new(r"^(\+380|0)\d{9}$").unwrap();
     pub static ref HAS_DIGIT: Regex = Regex::new(r"\d").unwrap();
-    pub static ref HAS_SYMBOL: Regex = Regex::new(r"[!@#$%^&*()_+=\-{}\[\]|\\:;'<>,.?/~`]").unwrap();
+    pub static ref HAS_SYMBOL_WITH_OUT_DESH: Regex = Regex::new(r"[!@#$%^&*()_+=\{}\[\]|\\:;'<>,.?/~`]").unwrap();
     pub static ref HAS_LOWERCASE: Regex = Regex::new(r"[a-z]").unwrap();
     pub static ref HAS_UPPERCASE: Regex = Regex::new(r"[A-Z]").unwrap();
 }
@@ -17,7 +17,7 @@ pub fn force_init_regex() {
     let _ = &*NICKNAME_REGEX;
     let _ = &*PHONE_REGEX;
     let _ = &*HAS_DIGIT;
-    let _ = &*HAS_SYMBOL;
+    let _ = &*HAS_SYMBOL_WITH_OUT_DESH;
     let _ = &*HAS_LOWERCASE;
     let _ = &*HAS_UPPERCASE;
 }
@@ -74,12 +74,12 @@ impl<T: AsRef<str>> Validate for T {
         }
 
         HAS_DIGIT.is_match(input)
-            && HAS_SYMBOL.is_match(input)
+            && HAS_SYMBOL_WITH_OUT_DESH.is_match(input)
             && HAS_LOWERCASE.is_match(input)
             && HAS_UPPERCASE.is_match(input)
     }
 
     fn is_has_symbol(&self) -> bool {
-        HAS_SYMBOL.is_match(self.as_ref())
+        HAS_SYMBOL_WITH_OUT_DESH.is_match(self.as_ref())
     }
 }

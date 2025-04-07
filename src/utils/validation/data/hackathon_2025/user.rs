@@ -15,7 +15,7 @@ pub fn field(new_user: &HackathonUser2025Insertable) -> Result<(), ApiError> {
 
     check_name(
         new_user.first_name.as_str(),
-        20,
+        100,
         format!("First name length greater {} symbol", new_user.first_name),
     )?;
 
@@ -26,7 +26,7 @@ pub fn field(new_user: &HackathonUser2025Insertable) -> Result<(), ApiError> {
 
     check_name(
         new_user.last_name.as_str(),
-        20,
+        200,
         format!(
             "Lastname name length greater {} symbol",
             new_user.first_name
